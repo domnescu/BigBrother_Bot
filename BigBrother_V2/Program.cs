@@ -207,7 +207,8 @@ namespace BigBrother_V2
             ListOfCommands.Add(new Nuran());
             ListOfCommands.Add(new Introduction());
             ListOfCommands.Add(new NrOfUsersInDistribution());
-#endregion
+            ListOfCommands.Add(new Source());
+            #endregion
         }
     }
 }

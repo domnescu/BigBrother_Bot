@@ -5,42 +5,45 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte
 {
+    /// <summary>
+    /// Объект с информацией о пользователе который написал
+    /// </summary>
     class User
     {
         /// <summary>
-        /// 
+        /// Имя пользователя
         /// </summary>
         public string FirstName { get; set; }
         /// <summary>
-        /// 
+        /// Фамилия пользователя
         /// </summary>
         public string LastName { get; set; }
         /// <summary>
-        /// 
+        /// Имя пользователя в родительном падеже
         /// </summary>
         public string FirstNameGen { get; set; }
         /// <summary>
-        /// 
-        /// </summary>C:\Users\maxim\source\repos\BigBrother_V2\BigBrother_V2\Vkontakte\User.cs
+        /// Фамилия пользователя в родительном падеже
+        /// </summary>
         public string LastNameGen { get; set; }
         /// <summary>
-        /// 
+        /// Пол пользователя
         /// </summary>
         public VkNet.Enums.Sex Sex { get; set; }
         /// <summary>
-        /// 
+        /// Короткая ссылка на страницу пользователя
         /// </summary>
         public string Domain { get; set; }
         /// <summary>
-        /// 
+        /// Является ли пользователь Администратором сообщества
         /// </summary>
         public bool IsAdmin { get; set; }
         /// <summary>
-        /// 
+        /// Идентификатор пользователя
         /// </summary>
         public long Id { get; set; }
         /// <summary>
-        /// 
+        /// Имя и Фамилия пользователя
         /// </summary>
         public string FullName { get; set; }
 

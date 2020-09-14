@@ -15,7 +15,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 
         public override async void Execute(Message message, VkApi client)
         {
-            @params = null;
+            @params = new MessagesSendParams();
             Database db = new Database();
             User user = new User(message.FromId.Value, client);
             Random rnd = new Random();

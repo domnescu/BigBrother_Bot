@@ -7,6 +7,11 @@ namespace BigBrother_V2
 {
     class EventsOn00 : IJob
     {
+        /// <summary>
+        /// Данная функция выполняется ежедневно в 00:00
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public Task Execute(IJobExecutionContext context)
         {
             Database database = new Database();
@@ -26,6 +31,9 @@ namespace BigBrother_V2
         }
     }
 
+    /// <summary>
+    /// Расписание запуска ф-ции в 00:00
+    /// </summary>
     class EventsOn00Scheduler
     {
         public static async void Start()

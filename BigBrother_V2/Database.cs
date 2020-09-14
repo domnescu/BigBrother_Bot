@@ -320,10 +320,10 @@ namespace BigBrother_V2
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="column"></param>
-        /// <param name="cell"></param>
-        /// <param name="NrOfColumn"></param>
+        /// <param name="table">Название таблицы</param>
+        /// <param name="column">Название столбца</param>
+        /// <param name="cell">Данные в одной из ячеек из таблицы</param>
+        /// <param name="NrOfColumn">Номер номер столбца из которого стоит извлечь данные</param>
         /// <returns></returns>
         public string GetString(string table, string column, string cell, int NrOfColumn)
         {
@@ -340,7 +340,7 @@ namespace BigBrother_V2
             return location;
         }
         /// <summary>
-        /// 
+        /// Данный метод формирует группирует голоса из таблицы Votes по оперу
         /// </summary>
         /// <returns></returns>
         public string GetVoteStatus()
@@ -406,7 +406,7 @@ namespace BigBrother_V2
             botDataBase.Close();
         }
         /// <summary>
-        /// 
+        /// Получение списка Типов угроз
         /// </summary>
         /// <returns></returns>
         public List<string> GetWarningTypes()
@@ -423,11 +423,11 @@ namespace BigBrother_V2
             botDataBase.Close();
             return list;
         }
-
         /// <summary>
-        /// 
+        /// Получение списка угроз конкретного типа
         /// </summary>
-        /// <returns></returns>
+        /// <param name="Type">Тип угроз</param>
+        /// <returns>Список угроз</returns>
         public List<string> GetWarnings(string Type)
         {
             List<string> list = new List<string>();

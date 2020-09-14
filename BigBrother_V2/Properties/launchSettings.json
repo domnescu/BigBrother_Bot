@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "BigBrother_V2": {
+      "commandName": "Project",
+      "sqlDebugging": false,
+      "nativeDebugging": false
+    }
+  }
+}

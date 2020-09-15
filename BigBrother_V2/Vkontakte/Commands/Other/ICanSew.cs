@@ -18,7 +18,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             Database db = new Database();
             User user = new User(message.PeerId.Value, client);
             db.AddToDB("INSERT INTO WhoSew (domain) VALUES ('[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]')");
-            @params.Message = "Хорошо, я запомнил что ты делаешь начерт или инжеграф";
+            @params.Message = "Хорошо, я запомнил что ты можешь шить";
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);

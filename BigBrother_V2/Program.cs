@@ -208,6 +208,9 @@ namespace BigBrother_V2
             ListOfCommands.Add(new Introduction());
             ListOfCommands.Add(new NrOfUsersInDistribution());
             ListOfCommands.Add(new Source());
+            ListOfCommands.Add(new ICanSew());
+            ListOfCommands.Add(new WhoCanSew());
+            ListOfCommands.Add(new IFinishSew());
             #endregion
         }
     }

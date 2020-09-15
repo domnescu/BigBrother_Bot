@@ -17,7 +17,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             Database db = new Database();
             string text = message.Text.ToLower();
             bool ContainsFood = db.CheckText(text, "CaffeteriaFilter");
-            if (ContainsFood && Regex.Match(text, @"[^a-zA-Zа-яА-ЯёЁ., \t\v\r\n\f)(\\\/]").Success==false)
+            if (ContainsFood && db.CheckText(message.Text.ToLower(),"CaffetetiaFilter2") && Regex.Match(text, @"[^a-zA-Zа-яА-ЯёЁ., \t\v\r\n\f)(\\\/]").Success==false)
             {
                 if (text.StartsWith("на завтрак "))
                 {
@@ -57,7 +57,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             {
                 @params.Message = db.RandomResponse("AltSymbols");
             }
-            else
+            else if (db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2")==false)
+            {
+                @params.Message = db.RandomResponse("CaffeteriaAltFilter");
+            } else 
                 @params.Message = db.RandomResponse("NotEat");
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();

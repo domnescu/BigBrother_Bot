@@ -32,6 +32,7 @@ namespace BigBrother_V2.Vkontakte.Donates
             DonatesResponse donatesResponse = JsonSerializer.Deserialize<DonatesResponse>(response);
             @params.RandomId = new Random().Next();
             @params.PeerId = long.Parse(db.GetWorkingVariable("MainMakara"));
+            int NrOfActualDonates = 0;
             int sum = 0;
             foreach (var donate in donatesResponse.donates)
             {
@@ -43,6 +44,7 @@ namespace BigBrother_V2.Vkontakte.Donates
                     sum += donate.sum;
                     User user = new User(donate.uid, client);
                     @params.Message += "[id" + user.Id + "|@" + user.Domain + "], ";
+                    NrOfActualDonates++;
                 }
             }
             int numberOFhours = (int)(sum / 0.32);
@@ -68,7 +70,7 @@ namespace BigBrother_V2.Vkontakte.Donates
             else
                 hours = "час";
             string NrOfUsers;
-            if (donatesResponse.count > 1)
+            if (NrOfActualDonates > 1)
                 NrOfUsers = "вам";
             else
                 NrOfUsers = "тебе";

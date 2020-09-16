@@ -22,7 +22,6 @@ namespace BigBrother_V2
         /// <summary>
         /// Лазейка для добавление данных в БД по средствам сообщений ВК
         /// полученное сообщение обрабатывается как SQL запрос, 
-        /// 
         /// </summary>
         /// <param name="Text"></param>
         public bool AddToDB(string Text)
@@ -42,10 +41,10 @@ namespace BigBrother_V2
             return true;
         }
         /// <summary>
-        /// 
+        /// Возвращение рандомного ответа из указанной группы ответов
         /// </summary>
-        /// <param name="group"></param>
-        /// <returns></returns>
+        /// <param name="group">Группа ответов</param>
+        /// <returns>Рандомная строка</returns>
         public string RandomResponse(string group)
         {
             botDataBase.Open();
@@ -60,10 +59,10 @@ namespace BigBrother_V2
             return list[new Random().Next(list.Count)];
         }
         /// <summary>
-        /// 
+        /// Получение списка строк из таблица
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="column"></param>
+        /// <param name="table">Название таблицы</param>
+        /// <param name="column">Номер столбца из которого нужно получить данные</param>
         /// <returns></returns>
         public List<long> GetListLong(string table, int column = 0)
         {
@@ -121,11 +120,12 @@ namespace BigBrother_V2
             return true;
         }
         /// <summary>
-        /// 
+        /// Проверка текста на содержание элементов из таблицы
         /// </summary>
-        /// <param name="text"></param>
-        /// <param name="table"></param>
-        /// <returns></returns>
+        /// <param name="text">Текст который следует проверить</param>
+        /// <param name="table">Таблица с значениями которой нужно сравнивать</param>
+        /// <returns>True - если в тексте содержится элемент из таблицы
+        /// False - Если в тексте не содержится не один элемент из таблицы</returns>
         public bool CheckText(string text, string table)
         {
             botDataBase.Open();
@@ -146,10 +146,10 @@ namespace BigBrother_V2
             return false;
         }
         /// <summary>
-        /// 
+        /// Обновление рабочих значений рабочих переменных
         /// </summary>
-        /// <param name="variable"></param>
-        /// <param name="value"></param>
+        /// <param name="variable">Название переменной</param>
+        /// <param name="value">Значение переменной</param>
         public void SetWorkingVariable(string variable, string value)
         {
             botDataBase.Open();
@@ -165,10 +165,10 @@ namespace BigBrother_V2
             botDataBase.Close();
         }
         /// <summary>
-        /// 
+        /// Получение рабочих значений рабочих переменных
         /// </summary>
-        /// <param name="variable"></param>
-        /// <returns></returns>
+        /// <param name="variable">Название переменной</param>
+        /// <returns>Значение переменной</returns>
         public string GetWorkingVariable(string variable)
         {
             string temp = null;
@@ -185,9 +185,9 @@ namespace BigBrother_V2
             return temp;
         }
         /// <summary>
-        /// 
+        /// Очистка таблицы от всех элементов
         /// </summary>
-        /// <param name="table"></param>
+        /// <param name="table">название таблицы</param>
         public void CleanTable(string table)
         {
             botDataBase.Open();
@@ -196,10 +196,10 @@ namespace BigBrother_V2
             botDataBase.Close();
         }
         /// <summary>
-        /// 
+        /// Получение списка строк из таблицы
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="column"></param>
+        /// <param name="table">Название таблицы из которой нужно извлечь данные</param>
+        /// <param name="column">Столбец таблицы из которого нужно извлечь данные</param>
         /// <returns></returns>
         public List<string> GetListString(string table, int column = 0)
         {
@@ -216,11 +216,11 @@ namespace BigBrother_V2
             return list;
         }
         /// <summary>
-        /// 
+        /// Получение списка по типу Ключ - Значение из таблицы БД
         /// </summary>
-        /// <param name="table"></param>
-        /// <param name="column0"></param>
-        /// <param name="column1"></param>
+        /// <param name="table">Имя таблицы</param>
+        /// <param name="column0">Номер первого столбца</param>
+        /// <param name="column1">Номер второго столбца</param>
         /// <returns></returns>
         public Dictionary<string, string> GetDictionaryString(string table, int column0 = 0, int column1 = 1)
         {
@@ -237,10 +237,10 @@ namespace BigBrother_V2
             return pairs;
         }
         /// <summary>
-        /// 
+        /// Получение числа строк в таблице БД
         /// </summary>
-        /// <param name="table"></param>
-        /// <returns></returns>
+        /// <param name="table">Имя таблицы</param>
+        /// <returns>Число строк</returns>
         public int GetNrOfElements(string table)
         {
             botDataBase.Open();
@@ -268,12 +268,13 @@ namespace BigBrother_V2
             return name;
         }
         /// <summary>
-        /// 
+        /// Проверка таблицы на наличие указанного Значения
         /// </summary>
-        /// <param name="value"></param>
-        /// <param name="table"></param>
-        /// <param name="column"></param>
-        /// <returns></returns>
+        /// <param name="value">Значение которое требуется найти</param>
+        /// <param name="table">Таблица в которой следует искать</param>
+        /// <param name="column">Номер столбца в котором следует искать</param>
+        /// <returns>True - если искомое значение найдено в таблице
+        /// False - если искомое значение не найдено в таблице</returns>
         public bool CheckInt64(long value, string table, int column = 0)
         {
             botDataBase.Open();
@@ -294,10 +295,10 @@ namespace BigBrother_V2
             return false;
         }
         /// <summary>
-        /// 
+        /// Добавление голоса за опера
         /// </summary>
-        /// <param name="UserID"></param>
-        /// <param name="operName"></param>
+        /// <param name="UserID">Идентификатор пользователя</param>
+        /// <param name="operName">Имя опера, за которого голосовал пользователь</param>
         public void AddVote(long UserID, string operName)
         {
             botDataBase.Open();
@@ -306,10 +307,10 @@ namespace BigBrother_V2
             botDataBase.Close();
         }
         /// <summary>
-        /// 
+        /// Обновление информации по угрозам
         /// </summary>
-        /// <param name="Type"></param>
-        /// <param name="location"></param>
+        /// <param name="Type">Тип угрозы</param>
+        /// <param name="location">Местоположение угрозы</param>
         public void InfoUpdate(string Type, string location)
         {
             botDataBase.Open();
@@ -318,7 +319,7 @@ namespace BigBrother_V2
             botDataBase.Close();
         }
         /// <summary>
-        /// 
+        /// Получучение строки из таблицы БД
         /// </summary>
         /// <param name="table">Название таблицы</param>
         /// <param name="column">Название столбца</param>

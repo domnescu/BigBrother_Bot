@@ -41,19 +41,20 @@ namespace BigBrother_V2.Vkontakte.Commands
             client.Messages.Send(@params);
         }
         /// <summary>
-        /// 
+        /// Асинхронная отправка сообщений 100 пользователям одновременно.
+        /// Асинхронность используется для того, чтобы во время отправки сообщений, одновременно формировался следующий список из 100 человек
         /// </summary>
-        /// <param name="params"></param>
-        /// <param name="client"></param>
+        /// <param name="params">Параметры сообщения</param>
+        /// <param name="client">Клиент через который следует отправить сообщения</param>
         public async Task SendToUsersIds(MessagesSendParams @params, VkApi client)
         {
             await client.Messages.SendToUserIdsAsync(@params);
         }
         /// <summary>
-        /// 
+        /// Метод отвечающий за массовые рассылки сообщений
         /// </summary>
-        /// <param name="params"></param>
-        /// <param name="client"></param>
+        /// <param name="params">Параметры сообщения</param>
+        /// <param name="client">Клиент через который следует отправить сообщения</param>
         public async Task MessageDistribution(MessagesSendParams @params, VkApi client)
         {
             @params.PeerId = null;

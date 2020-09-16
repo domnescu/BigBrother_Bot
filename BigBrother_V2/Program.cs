@@ -105,9 +105,9 @@ namespace BigBrother_V2
             }
         }
         /// <summary>
-        /// Асинхронный меребор команд
+        /// Асинхронный перебор команд
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">Сообщение</param>
         static async void ProcessingMessage(Message message)
         {
             foreach (var command in ListOfCommands)
@@ -118,8 +118,8 @@ namespace BigBrother_V2
         /// <summary>
         /// Асинхронная проверка сообщения, на соответствие команды
         /// </summary>
-        /// <param name="command"></param>
-        /// <param name="message"></param>
+        /// <param name="command">Команда</param>
+        /// <param name="message">Сообщение</param>
         /// <returns></returns>
         static async Task CheckCommandsAsync(Command command, Message message)
         {

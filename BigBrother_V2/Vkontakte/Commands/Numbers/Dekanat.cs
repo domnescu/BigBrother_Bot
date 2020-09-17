@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Numbers
 {
-    class DekanatNumber:Command
+    class DekanatNumber : Command
     {
         public override string Name => "Номер Деканата";
 

@@ -67,7 +67,8 @@ namespace BigBrother_V2
                             update.MessageNew.Message.Text = update.MessageNew.Message.Text.Replace("[club187905748|*bigbrother_bot] ", "");
                             update.MessageNew.Message.Text = update.MessageNew.Message.Text.Replace("[club187905748|@bigbrother_bot] ", "");
                             ProcessingMessageAsync(update.MessageNew.Message);
-                        } else if (update.Type == GroupUpdateType.MessageDeny)
+                        }
+                        else if (update.Type == GroupUpdateType.MessageDeny)
                         {
                             Database db = new Database();
                             db.DeleteChat(update.MessageDeny.UserId.Value);
@@ -135,7 +136,7 @@ namespace BigBrother_V2
             BotClient.Authorize(new ApiAuthParams() { AccessToken = db.GetWorkingVariable("BigBroKey") });
             DonateScheduler.Start();
             EventsOn00Scheduler.Start();
-#region Инициализация команд
+            #region Инициализация команд
 #if DEBUG
             ListOfCommands.Add(new ClearCommand());
 #endif

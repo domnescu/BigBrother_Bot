@@ -5,7 +5,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class IFinishPrint:Command
+    class IFinishPrint : Command
     {
         public override string Name => "Пустая Команда";
 
@@ -15,7 +15,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             Database db = new Database();
             User user = new User(message.PeerId.Value, client);
-            bool Succes = db.AddToDB("DELETE FROM WhoPrint WHERE domain='[id" + user.Id + "|" + user.FirstName+" "+ user.LastName + "]';");
+            bool Succes = db.AddToDB("DELETE FROM WhoPrint WHERE domain='[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]';");
 
             if (Succes)
                 @params.Message = "Готово, я тебя удалил из списка людей которые могут сделать начерт или инжеграф";

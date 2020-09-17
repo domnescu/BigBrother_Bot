@@ -5,7 +5,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class IFinishPaint:Command
+    class IFinishPaint : Command
     {
         public override string Name => "Пустая Команда";
 
@@ -16,7 +16,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             Database db = new Database();
             User user = new User(message.PeerId.Value, client);
             bool Succes = db.AddToDB("DELETE FROM WhoPaint WHERE domain='[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]';");
-            if(Succes)
+            if (Succes)
                 @params.Message = "Готово, я тебя удалил из списка людей которые могут сделать начерт или инжеграф";
             else
                 @params.Message = "Так тебя и нет в списке людей которые могут сделать начерт или инжеграф";

@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class IFinishSew:Command
+    class IFinishSew : Command
     {
         public override string Name => "Пустая Команда";
         MessagesSendParams @params = new MessagesSendParams();

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.Attachments;
@@ -8,7 +6,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Cards
 {
-    class KartaMagnit:Command
+    class KartaMagnit : Command
     {
 
         public override string Name => "Карта Магнита";

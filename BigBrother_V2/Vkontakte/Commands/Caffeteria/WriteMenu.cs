@@ -17,7 +17,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             Database db = new Database();
             string text = message.Text.ToLower();
             bool ContainsFood = db.CheckText(text, "CaffeteriaFilter");
-            if (ContainsFood && db.CheckText(message.Text.ToLower(),"CaffetetiaFilter2")==false && Regex.Match(text, @"[^a-zA-Zа-яА-ЯёЁ., \t\v\r\n\f)(\\\/-]").Success==false)
+            if (ContainsFood && db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2") == false && Regex.Match(text, @"[^a-zA-Zа-яА-ЯёЁ., \t\v\r\n\f)(\\\/-]").Success == false)
             {
                 if (text.StartsWith("на завтрак "))
                 {
@@ -53,14 +53,16 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                     db.AddToMenu(text.Replace("сейчас в столовой ", ""), time);
                     @params.Message = "БлЭт! Надеюсь я ничего не перепутал и все правильно запомнил...у вас же сейчас " + time + "?";
                 }
-            } else if (Regex.Match(text, @"^.*[^A-zА-яЁё].*$").Success)
+            }
+            else if (Regex.Match(text, @"^.*[^A-zА-яЁё].*$").Success)
             {
                 @params.Message = db.RandomResponse("AltSymbols");
             }
             else if (db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2"))
             {
                 @params.Message = db.RandomResponse("CaffeteriaAltFilter");
-            } else 
+            }
+            else
                 @params.Message = db.RandomResponse("NotEat");
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();

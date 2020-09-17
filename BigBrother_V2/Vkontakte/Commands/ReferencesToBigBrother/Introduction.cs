@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class Introduction:Command
+    class Introduction : Command
     {
         public override string Name => "Знакомство с бб";
 
@@ -25,7 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if ((text.Contains("знакомст") || text.Contains("знакомь")) && db.CheckText(text,"BotNames"))
+            if ((text.Contains("знакомст") || text.Contains("знакомь")) && db.CheckText(text, "BotNames"))
                 return true;
             return false;
         }

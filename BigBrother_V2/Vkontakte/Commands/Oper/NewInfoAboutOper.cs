@@ -43,7 +43,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                         operinfoupdate = warningType + " " + PossibleLocations[i] + " из ";
                         for (int k = i + 1; k < PossibleLocations.Count; k++)
                         {
-                            if (text.Contains(PossibleLocations[k]) 
+                            if (text.Contains(PossibleLocations[k])
                                 && PossibleLocations[k] != PossibleLocations[i])
                             {
                                 operinfoupdate += PossibleLocations[k];
@@ -83,8 +83,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             string text = message.Text.ToLower();
             if ((((text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("ушла")
                 || text.StartsWith("ушли") || text.StartsWith("вышли") || text.StartsWith("вышла")) &&
-                text.Length < 15 && text.Contains("?") == false && text.Contains("не ") == false && text.Contains("нет") == false) 
-                || text == "вернулся") && Regex.Replace(text, @"[^\d]+", "").Length < 5 && message.Payload==null && text.Length<15)
+                text.Length < 15 && text.Contains("?") == false && text.Contains("не ") == false && text.Contains("нет") == false)
+                || text == "вернулся") && Regex.Replace(text, @"[^\d]+", "").Length < 5 && message.Payload == null && text.Length < 15)
                 return true;
             return false;
         }

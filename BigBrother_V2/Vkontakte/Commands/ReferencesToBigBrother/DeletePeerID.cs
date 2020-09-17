@@ -8,7 +8,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class DeletePeerID:Command
+    class DeletePeerID : Command
     {
         public override string Name => "Удаление диалога из БД";
 

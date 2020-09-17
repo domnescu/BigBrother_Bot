@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using VkNet;
+﻿using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 

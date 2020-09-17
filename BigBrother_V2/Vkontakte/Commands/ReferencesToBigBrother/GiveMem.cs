@@ -18,7 +18,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override void Execute(Message message, VkApi client)
         {
             Database db = new Database();
-            List<long> memes= db.GetListLong("memes");
+            List<long> memes = db.GetListLong("memes");
             Wall wall = new Wall
             {
                 FromId = -179011410,

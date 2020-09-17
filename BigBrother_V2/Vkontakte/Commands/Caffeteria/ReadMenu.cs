@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
 {
-    class ReadMenu:Command
+    class ReadMenu : Command
     {
         public override string Name => "Чтение меню столовой из БД";
 
@@ -18,16 +16,19 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             Database db = new Database();
             string text = message.Text.ToLower();
             string answer = null;
-            if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("завтрак")) || message.Payload== "{\"caffeteria\":\"morning\"}")
+            if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("завтрак")) || message.Payload == "{\"caffeteria\":\"morning\"}")
             {
                 answer = db.GetMenu("завтрак");
-            }else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("обед")) || message.Payload == "{\"caffeteria\":\"day\"}")
+            }
+            else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("обед")) || message.Payload == "{\"caffeteria\":\"day\"}")
             {
                 answer = db.GetMenu("обед");
-            }else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("ужин")) || message.Payload == "{\"caffeteria\":\"eavning\"}")
+            }
+            else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("ужин")) || message.Payload == "{\"caffeteria\":\"eavning\"}")
             {
                 answer = db.GetMenu("ужин");
-            }else if ((text.StartsWith("что") || text.StartsWith("чем") || text.StartsWith("чё") || text.StartsWith("че")) && (text.Contains("столов") || text.Contains("рестора") || text.Contains("кормят")))
+            }
+            else if ((text.StartsWith("что") || text.StartsWith("чем") || text.StartsWith("чё") || text.StartsWith("че")) && (text.Contains("столов") || text.Contains("рестора") || text.Contains("кормят")))
             {
                 int hour = DateTime.Now.Hour;
                 if (hour - 1 <= 8 && hour + 1 >= 8)
@@ -57,8 +58,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (((text.StartsWith("что") || text.StartsWith("чем") || text.StartsWith("чё") || text.StartsWith("че")) && ((text.Contains("столов") 
-                || text.Contains("рестора") || text.Contains("кормят")) || text.Contains("завтрак") || text.Contains("обед") || text.Contains("ужин"))) || message.Payload!=null && message.Payload.Contains("caffeteria"))
+            if (((text.StartsWith("что") || text.StartsWith("чем") || text.StartsWith("чё") || text.StartsWith("че")) && ((text.Contains("столов")
+                || text.Contains("рестора") || text.Contains("кормят")) || text.Contains("завтрак") || text.Contains("обед") || text.Contains("ужин"))) || message.Payload != null && message.Payload.Contains("caffeteria"))
                 return true;
             return false;
         }

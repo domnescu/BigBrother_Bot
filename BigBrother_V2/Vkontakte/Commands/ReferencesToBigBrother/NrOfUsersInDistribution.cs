@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class NrOfUsersInDistribution:Command
+    class NrOfUsersInDistribution : Command
     {
 
         public override string Name => "Тестовая команда";
@@ -28,7 +27,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if (text.Contains("сколько") && text.Contains("людей") && text.Contains("подписа") && db.CheckText(text,"BotNames"))
+            if (text.Contains("сколько") && text.Contains("людей") && text.Contains("подписа") && db.CheckText(text, "BotNames"))
                 return true;
             return false;
         }

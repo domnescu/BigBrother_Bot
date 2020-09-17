@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class ListOfCommands:Command
+    class ListOfCommands : Command
     {
         public override string Name => "Список комманд";
 

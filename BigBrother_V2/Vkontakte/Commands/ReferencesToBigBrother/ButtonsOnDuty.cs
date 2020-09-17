@@ -122,7 +122,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                         Buttons = buttons
                     };
                     @params.Keyboard = keyboard1;
-                    @params.Message = "Кнопка на которой написано \""+location+"\" отправляет мне инфу о том что опер в \""+location+"\"";
+                    @params.Message = "Кнопка на которой написано \"" + location + "\" отправляет мне инфу о том что опер в \"" + location + "\"";
                     @params.PeerId = message.PeerId.Value;
                     @params.RandomId = new Random().Next();
                     Send(@params, client);

@@ -27,8 +27,8 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             string Text = message.Text.Remove(0, 19);
             string StartOfText = user.Sex switch
             {
-                VkNet.Enums.Sex.Male => "[id" + user.Id + " | " + user.FirstName + " " + user.LastName + "] просил передать: \n",
-                VkNet.Enums.Sex.Female => "[id" + user.Id + " | " + user.FirstName + " " + user.LastName + "] просила передать: \n",
+                VkNet.Enums.Sex.Male => "[id" + user.Id + " |" + user.FirstName + " " + user.LastName + "] просил передать: \n",
+                VkNet.Enums.Sex.Female => "[id" + user.Id + " |" + user.FirstName + " " + user.LastName + "] просила передать: \n",
                 VkNet.Enums.Sex.Unknown => "Существо неопознонного пола, именующее себя как [id" + user.Id + " | " + user.FirstName + " " + user.LastName + "], просило передать: \n",
                 _ => "Какая-то неведомая хуйня, просила передать: \n",
             };

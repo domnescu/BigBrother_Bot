@@ -17,7 +17,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             Database db = new Database();
             string text = message.Text.ToLower();
             bool ContainsFood = db.CheckText(text, "CaffeteriaFilter");
-            if (ContainsFood && db.CheckText(message.Text.ToLower(),"CaffetetiaFilter2")==false && Regex.Match(text, @"[^a-zA-Zа-яА-ЯёЁ., \t\v\r\n\f)(\\\/]").Success==false)
+            if (ContainsFood && db.CheckText(message.Text.ToLower(),"CaffetetiaFilter2")==false && Regex.Match(text, @"[^a-zA-Zа-яА-ЯёЁ., \t\v\r\n\f)(\\\/-]").Success==false)
             {
                 if (text.StartsWith("на завтрак "))
                 {

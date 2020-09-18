@@ -72,6 +72,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             }
             @params.UserIds = null;
             @params.PeerId = message.PeerId.Value;
+            @params.Attachments = null;
             @params.Message = "Я отправил, всем кто подписаны на мою инфу.";
             Send(@params, client);
         }

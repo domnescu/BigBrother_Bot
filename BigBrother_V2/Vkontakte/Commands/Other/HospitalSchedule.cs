@@ -18,7 +18,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             {
                 OwnerId = -187905748,
                 AlbumId = 267692087,
-                Id = 457239036
+                Id = 457239070
             };
             @params.PeerId = message.PeerId;
             @params.Message = "64 Поликлиника";

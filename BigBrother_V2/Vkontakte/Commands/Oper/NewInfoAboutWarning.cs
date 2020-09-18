@@ -96,7 +96,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if ((text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false && text.Contains("пойдёт") == false
+            if ((text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false && text.Contains("через") == false && text.Contains("пойдёт") == false
                 && text.Contains("что") == false && text.Contains("не ") == false && text.Contains("кто-нибудь") == false && text.Contains("кто-то") == false
                 && (db.CheckText(text, "WarningList") || text.StartsWith("ень")) && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5) || (message.Payload != null && message.Payload.Contains("location")))
                 return true;

@@ -14,27 +14,39 @@ namespace BigBrother_V2.Vkontakte.Commands
 
         public override void Execute(Message message, VkApi client)
         {
-            DateTime myDateTime;
+            DateTime myDateTime = DateTime.Now;
             string Text = message.Text.ToLower();
             string answer;
             //Если сообщение пользователя начинается и содержит "будет" или "следу"
             //к текущей дате добавляется одна неделя.
-            if (Text.Contains("будет") || Text.Contains("следу"))
+            if ((Text.Contains("будет") || Text.Contains("следу")) && DateTime.Now.DayOfWeek != DayOfWeek.Saturday && DateTime.Now.DayOfWeek != DayOfWeek.Sunday)
             {
-                myDateTime = DateTime.Now.AddDays(7);
+                myDateTime = myDateTime.AddDays(7);
                 answer = "Будет ";
             }
             else
             {
-                myDateTime = DateTime.Now;
                 answer = "Сейчас ";
             }
             //получение номера недели
             int week = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(myDateTime, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+            string IsEven;
+            string IsNotEven;
             if (week % 2 == 0)
-                answer += week.ToString() + " неделя. Значит она чётная";
+            {
+                IsNotEven = "нечётная";
+                IsEven = "чётная";
+            }
             else
-                answer += week.ToString() + " неделя. Значит она нечетная";
+            {
+                IsNotEven = "чётная";
+                IsEven = "нечётная";
+            }
+            answer += week.ToString() + " неделя. Значит она " + IsEven;
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+            {
+                answer = "Сейчас " + IsEven + " неделя. С понедельника начнётся " + IsNotEven + " неделя.";
+            }
             @params.PeerId = message.PeerId.Value;
             @params.Message = answer;
             @params.RandomId = new Random().Next();

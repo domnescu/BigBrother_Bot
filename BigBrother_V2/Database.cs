@@ -443,5 +443,26 @@ namespace BigBrother_V2
             botDataBase.Close();
             return list;
         }
+        /// <summary>
+        /// Если пользователь ранее не отправлял СПАМ, добавляем его в базу данны, если отправлял даём добро на Кик этого пользователя из беседы
+        /// </summary>
+        /// <param name="UserID">Идентификатор пользователя</param>
+        /// <param name="ChatID">Идентификатор беседы</param>
+        /// <returns>true - если пользователя нужно исключить из беседы</returns>
+        public bool KickUser(long UserID, long ChatID)
+        {
+            botDataBase.Open();
+            bool response =false;
+            command = new SQLiteCommand("SELECT count(*) FROM SPAM WHERE ChatID=" + ChatID + " AND UserID=" + UserID + ";", botDataBase);
+            int countRows = Convert.ToInt32(command.ExecuteScalar());
+            if (countRows == 0)
+            {
+                command = new SQLiteCommand("INSERT INTO SPAM (ChatID,UserID) VALUES (" + ChatID + ", " + UserID + ");", botDataBase);
+            }
+            else response = true;
+            command.ExecuteNonQuery();
+            botDataBase.Close();
+            return response;
+        }
     }
 }

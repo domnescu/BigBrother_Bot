@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using VkNet;
 using VkNet.Model;
+using VkNet.Model.Attachments;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
@@ -14,7 +15,28 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
         public override void Execute(Message message, VkApi client)
         {
-            @params.Message = "Для таких сообщений, есть отдельаня беседа. \n https://vk.me/join/AJQ1d5A_1grjDZ0ArYPhk0rr";
+            User user = new User(message.FromId.Value, client);
+            Database db = new Database();
+            if (message.PeerId.Value > 2000000000)
+            {
+                if (db.KickUser(message.FromId.Value, message.PeerId.Value - 2000000000))
+                {
+                    try
+                    {
+                        client.Messages.RemoveChatUser((ulong)message.PeerId.Value - 2000000000, message.FromId.Value);
+                        @params.Message = "Несите нового! Этот не понял с первого раза!";
+                    } catch (VkNet.Exception.CannotBlacklistYourselfException)
+                    {
+                        @params.Message = "Дайте мне права Администатора в беседе! Я хочу кикнуть эту мразь!";
+                    }
+                }
+                else
+                {
+                    @params.Message = user.FirstName + ", для таких сообщений, есть отдельаня беседа. Если попробуешь ещё раз отправить что-то подобное, я тебя кикну.\n https://vk.me/join/AJQ1d5A_1grjDZ0ArYPhk0rr";
+                }
+            }
+            else
+                @params.Message = "Нахрен ты мне в личку эту хрень отправил ? Ты что совсем тупой ?";
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);
@@ -22,12 +44,33 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
         public override bool Contatins(Message message)
         {
-            string text = message.Text.ToLower();
             Regex regex = new Regex(@"([0-9]+.?[ \t\v\r\n\f]?((ру?б?)|(₽+)))+");
-            MatchCollection matches = regex.Matches(text);
-            if (matches.Count > 1 && text.Contains("раз") == false)
-                return true;
-            return false;
+            if (message.Attachments.Count == 0)
+            {
+                string text = message.Text.ToLower();
+                MatchCollection matches = regex.Matches(text);
+                if (matches.Count > 1 && text.Contains("раз") == false)
+                    return true;
+                return false;
+            } else
+            {
+                string text = message.Text.ToLower();
+                MatchCollection matches = regex.Matches(text);
+                if (matches.Count > 1 && text.Contains("раз") == false)
+                    return true;
+                foreach (var attach in message.Attachments)
+                {
+                    if (attach.Type == typeof(Wall))
+                    {
+                        Wall wallPost = (Wall)attach.Instance;
+                        text = wallPost.Text;
+                        matches = regex.Matches(text);
+                        if (matches.Count > 1 && text.Contains("раз") == false)
+                            return true;
+                    }
+                }
+                return false;
+            }
         }
     }
 }

@@ -62,15 +62,15 @@ namespace BigBrother_V2.Vkontakte.Commands
                                         }
                                     }
                                     TextForSaveInfo = LocationForSave + "\nВремя получения информации " + DateTime.Now.ToString("HH:mm");
-                                    db.InfoUpdate(type, TextForSaveInfo);
-                                    @params.DisableMentions = true;
-                                    @params.Message = LocationForSave + "\n эту информацию я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
-                                    await MessageDistribution(@params, client);
+                                    db.InfoUpdate(type, TextForSaveInfo); 
                                     @params.UserIds = null;
                                     @params.PeerId = message.PeerId.Value;
                                     @params.RandomId = new Random().Next();
                                     @params.Message = "Вот что я запомнил:\n" + LocationForSave;
                                     Send(@params, client);
+                                    @params.DisableMentions = true;
+                                    @params.Message = LocationForSave + "\n эту информацию я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
+                                    await MessageDistribution(@params, client);
                                     long MainMakara = long.Parse(db.GetWorkingVariable("MainMakara"));
                                     if (message.PeerId.Value != MainMakara)
                                     {
@@ -89,7 +89,12 @@ namespace BigBrother_V2.Vkontakte.Commands
                 }
             }
             else
+            {
                 @params.Message = "К сожалению, мне запретили обрабатывать такую информацию из пересланных сообщений.";
+                @params.PeerId = message.PeerId.Value;
+                @params.RandomId = new Random().Next();
+                Send(@params, client);
+            }
         }
 
         public override bool Contatins(Message message)

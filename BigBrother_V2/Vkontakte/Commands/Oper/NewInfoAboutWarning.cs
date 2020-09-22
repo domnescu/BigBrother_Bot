@@ -79,13 +79,13 @@ namespace BigBrother_V2.Vkontakte.Commands
                                         @params.Message = LocationForSave + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
                                         Send(@params, client);
                                     }
-                                    goto EndFor;
+                                    goto EndForeach;
 
                                 }
                             }
                         }
                     }
-                EndFor: { };
+                EndForeach: { };
                 }
             }
             else

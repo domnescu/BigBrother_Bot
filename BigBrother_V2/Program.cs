@@ -215,6 +215,9 @@ namespace BigBrother_V2
             ListOfCommands.Add(new IKnowMath());
             ListOfCommands.Add(new WhoKnowMath());
             ListOfCommands.Add(new IFinishMath());
+            ListOfCommands.Add(new IKnowTermeh());
+            ListOfCommands.Add(new WhoKnowTermeh());
+            ListOfCommands.Add(new IFinishTermeh());
             #endregion
         }
     }

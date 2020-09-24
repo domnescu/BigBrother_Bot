@@ -212,6 +212,9 @@ namespace BigBrother_V2
             ListOfCommands.Add(new ICanSew());
             ListOfCommands.Add(new WhoCanSew());
             ListOfCommands.Add(new IFinishSew());
+            ListOfCommands.Add(new IKnowMath());
+            ListOfCommands.Add(new WhoKnowMath());
+            ListOfCommands.Add(new IFinishMath());
             #endregion
         }
     }

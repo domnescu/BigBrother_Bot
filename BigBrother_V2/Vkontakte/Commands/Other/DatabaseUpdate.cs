@@ -30,8 +30,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                     answer = "Произошла ошибка при удалении элемента из базы данных - проверь правильность ввода!";
                 else if (message.Text.ToLower().StartsWith("update") && Succes)
                     answer = "Элемент из базы данных успешно обновлён.";
+                else if (message.Text.ToLower().StartsWith("update") && !Succes)
+                        answer = "Видимо ты где-то ошибся. В базе данных всё осталось в прежнем состоянии.";
+                else if(message.Text.ToLower().StartsWith("create") && Succes)
+                    answer = "Таблица успешно создана.";
                 else
-                    answer = "Видимо ты где-то ошибся. В базе данных всё осталось в прежнем состоянии.";
+                    answer = "Что-то пошло не так. Посмотри, может где-то есть очепятка.";
             }
             else if (message.Type == null)
             {

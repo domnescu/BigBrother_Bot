@@ -55,7 +55,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.StartsWith("insert") || text.StartsWith("update") || text.StartsWith("delete"))
+            if (text.StartsWith("insert") || text.StartsWith("update") || text.StartsWith("delete") || text.StartsWith("create"))
                 return true;
             return false;
         }

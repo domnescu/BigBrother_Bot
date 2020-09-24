@@ -16,6 +16,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
+            Database db = new Database();
             if (new Random().Next() % 2 == 0)
             {
                 @params.Message = "Мой псевдорандомайзер говорит что тебе надо пиздовать на пары)";
@@ -26,8 +27,8 @@ namespace BigBrother_V2.Vkontakte.Commands
                 @params.Message = "Рандом говорит пинать хуи. Щяс я его немного исправлю и будет выдавать правильный результат.";
                 Send(@params, client);
                 @params.RandomId = new Random().Next();
-                Thread.Sleep(7500);
-                @params.Message = "Сложный этот ваш генератор псевдослучайных чисел, я его упростил немного :) теперь он всегда будет выдавать 1 (это значит что надо идти на пары)";
+                Thread.Sleep(new Random().Next(0,100)*100);
+                @params.Message = db.RandomResponse("GoToPairs");
                 Send(@params, client);
 
             }

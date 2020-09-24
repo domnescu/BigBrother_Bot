@@ -25,8 +25,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.Contains("не") == false && (text.Contains("знаю") || text.Contains("понимаю") || text.Contains("делаю")) && (text.Contains("вышмат") || text.Contains("матем") 
-                || text.Contains("матан"))) && message.PeerId.Value < 2000000000)
+            if ((text.Contains("не") == false && (text.Contains("знаю") || text.Contains("понимаю") || text.Contains("делаю") || (text.Contains("могу") && text.Contains("помочь"))) 
+                && (text.Contains("вышмат") || text.Contains("матем") || text.Contains("матан"))) && message.PeerId.Value < 2000000000)
                 return true;
             return false;
         }

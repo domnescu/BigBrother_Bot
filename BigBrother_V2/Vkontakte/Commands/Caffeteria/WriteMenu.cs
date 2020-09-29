@@ -34,7 +34,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                     db.AddToMenu(text.Replace("на ужин ", ""), "ужин");
                     @params.Message = "Ну всё, теперь можете спрашивать меня что у вас на ужин :)";
                 }
-                else if (text.StartsWith("сейчас в столовой "))
+                else if (text.StartsWith("сейчас в столовой ") || text.StartsWith("в столовой "))
                 {
                     int hour = DateTime.Now.Hour;
                     string time = null;
@@ -50,7 +50,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                     {
                         time = "ужин";
                     }
-                    db.AddToMenu(text.Replace("сейчас в столовой ", ""), time);
+                    if(text.StartsWith(""))
+                        db.AddToMenu(text.Replace("сейчас в столовой ", ""), time);
+                    else
+                        db.AddToMenu(text.Replace("в столовой ", ""), time);
                     @params.Message = "БлЭт! Надеюсь я ничего не перепутал и все правильно запомнил...у вас же сейчас " + time + "?";
                 }
             }

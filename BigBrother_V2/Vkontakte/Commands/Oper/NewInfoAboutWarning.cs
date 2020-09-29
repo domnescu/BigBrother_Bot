@@ -21,7 +21,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                 List<string> Types = db.GetWarningTypes();
                 List<string> Locations = db.GetListString("PossibleLocations");
                 User user = new User(message.FromId.Value, client);
-                string text = message.Text.ToLower();
+                string text =" " + message.Text.ToLower();
                 foreach (var type in Types)
                 {
                     List<string> Warnings = db.GetWarnings(type);
@@ -32,7 +32,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                             for (int i = 0; i < Locations.Count; i++)
                             {
                                 string CurrentOper = db.GetWorkingVariable("CurrentOper");
-                                if (text.Contains(Locations[i].ToLower()) || text.StartsWith("ень") || (message.Payload != null && message.Payload.Contains(Locations[i])))
+                                if (text.Contains(Locations[i].ToLower()) || (message.Payload != null && message.Payload.Contains(Locations[i])))
                                 {
                                     string WarningType = type; //костыль для "красивого" сохранения информации
                                     string TextForSaveInfo;
@@ -99,11 +99,11 @@ namespace BigBrother_V2.Vkontakte.Commands
 
         public override bool Contatins(Message message)
         {
-            string text = message.Text.ToLower();
+            string text =" "+ message.Text.ToLower();
             Database db = new Database();
             if ((text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false && text.Contains("через") == false && text.Contains("пойдёт") == false
                 && text.Contains("что") == false && text.Contains("не ") == false && text.Contains("кто-нибудь") == false && text.Contains("кто-то") == false
-                && (db.CheckText(text, "WarningList") || text.StartsWith("ень")) && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5) || (message.Payload != null && message.Payload.Contains("location")))
+                && (db.CheckText(text, "WarningList")) && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5) || (message.Payload != null && message.Payload.Contains("location")))
                 return true;
             return false;
         }

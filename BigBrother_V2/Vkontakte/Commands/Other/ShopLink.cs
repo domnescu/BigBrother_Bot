@@ -49,14 +49,14 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             {
                 string text = message.Text.ToLower();
                 MatchCollection matches = regex.Matches(text);
-                if (matches.Count > 1 && text.Contains("раз") == false)
+                if (matches.Count > 1 && text.Contains("раз") == false && text.Contains("рота") == false)
                     return true;
                 return false;
             } else
             {
                 string text = message.Text.ToLower();
                 MatchCollection matches = regex.Matches(text);
-                if (matches.Count > 1 && text.Contains("раз") == false)
+                if (matches.Count > 1 && text.Contains("раз") == false && text.Contains("рота") == false)
                     return true;
                 foreach (var attach in message.Attachments)
                 {
@@ -65,7 +65,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                         Wall wallPost = (Wall)attach.Instance;
                         text = wallPost.Text;
                         matches = regex.Matches(text);
-                        if (matches.Count > 1 && text.Contains("раз") == false)
+                        if (matches.Count > 1 && text.Contains("раз") == false && text.Contains("рота") == false)
                             return true;
                     }
                 }

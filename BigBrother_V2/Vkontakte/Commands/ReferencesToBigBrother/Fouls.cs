@@ -24,7 +24,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if (text.Contains("id") == false && db.CheckText(text, "fouls") && ((message.PeerId.Value < 2000000000 && db.CheckText(text, "WarningList") == false)
+            if (text.Contains("id") == false && db.CheckText(text, "fouls") && ((message.PeerId.Value < 2000000000 &&text.Contains("ты") && db.CheckText(text, "WarningList") == false)
                 || db.CheckText(text, "BotNames")))
                 return true;
             return false;

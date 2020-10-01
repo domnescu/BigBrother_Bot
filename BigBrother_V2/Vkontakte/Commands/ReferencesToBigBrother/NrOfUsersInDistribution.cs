@@ -16,10 +16,19 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override void Execute(Message message, VkApi client)
         {
             Database database = new Database();
-            List<long> users = database.GetListLong("Chats");
+            List<long> conversations = database.GetListLong("Chats");
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
-            @params.Message = "Сейчас на мою рассылку подписаны " + users.Count.ToString() + " людей и бесед";
+            int users = 0;
+            int Chats =0;
+            foreach(var PeerID in conversations)
+            {
+                if (PeerID < 2000000000)
+                    users++;
+                else
+                    Chats++;
+            }
+            @params.Message = "Сейчас на мою рассылку подписаны " + users + " людей и "+ Chats + " бесед";
             Send(@params, client);
         }
 

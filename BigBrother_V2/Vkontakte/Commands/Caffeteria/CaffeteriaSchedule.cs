@@ -18,8 +18,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             Photo photo_attach = new Photo
             {
                 OwnerId = -187905748,
-                //AlbumId = 267692087,
-                AlbumId = 457239103,
+                AlbumId = 267692087,
                 Id = 457239071
             };
             @params.PeerId = message.PeerId;

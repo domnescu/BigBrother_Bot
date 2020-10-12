@@ -18,9 +18,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             bool Succes = db.AddToDB("DELETE FROM WhoPrint WHERE domain='[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]';");
 
             if (Succes)
-                @params.Message = "Готово, я тебя удалил из списка людей которые могут сделать начерт или инжеграф";
+                @params.Message = "Готово, я тебя удалил из списка людей которые могут распечатать.";
             else
-                @params.Message = "Так тебя и нет в списке людей которые могут сделать начерт или инжеграф";
+                @params.Message = "Так тебя и нет в списке людей которые могут распечатать";
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);
@@ -29,7 +29,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.Contains("могу") && text.Contains("печата") && text.Contains("не")) && message.PeerId.Value < 2000000000)
+            if (text.Contains("печата") && text.Contains("не") && message.PeerId.Value < 2000000000)
                 return true;
             return false;
         }

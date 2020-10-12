@@ -22,7 +22,14 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             var BlackList = client.Groups.GetBanned(187905748);
             foreach(var BannedUser in BlackList)
             {
-                if(BannedUser)
+                if (BannedUser.Profile.Id == user.Id)
+                {
+                    @params.PeerId = message.PeerId.Value;
+                    @params.RandomId = new Random().Next();
+                    @params.Message = db.RandomResponse("RestrictMessageDistribution");
+                    Send(@params, client);
+                    return;
+                }
             }
             List<long> ListOfConversations = db.GetListLong("Chats");
             List<long> Users = new List<long>();
@@ -80,6 +87,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             @params.Attachments = null;
             @params.Message = "Я отправил, всем кто подписаны на мою инфу.";
             Send(@params, client);
+            @params = null;
         }
 
         public override bool Contatins(Message message)

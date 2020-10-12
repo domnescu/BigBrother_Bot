@@ -19,6 +19,11 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             Database db = new Database();
             User user = new User(message.FromId.Value, client);
             Random rnd = new Random();
+            var BlackList = client.Groups.GetBanned(187905748);
+            foreach(var BannedUser in BlackList)
+            {
+                if(BannedUser)
+            }
             List<long> ListOfConversations = db.GetListLong("Chats");
             List<long> Users = new List<long>();
             List<long> Chats = new List<long>();

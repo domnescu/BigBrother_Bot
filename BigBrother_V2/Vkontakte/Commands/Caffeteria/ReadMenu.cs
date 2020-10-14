@@ -21,12 +21,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             if (DateTime.Now.Hour > 19 || message.Text.ToLower().Contains("завтра"))
             {
                 day = dateTime.AddDays(1).DayOfWeek.ToString();
-                Today = "Сегодня ";
+                Today = "Завтра ";
             }
             else
             {
                 day = dateTime.DayOfWeek.ToString();
-                Today = "Завтра ";
+                Today = "Сегодня ";
             }
             string answer = null;
 

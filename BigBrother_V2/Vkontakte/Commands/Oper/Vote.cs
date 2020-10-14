@@ -20,8 +20,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             @params.Attachments = null;
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
+            string text = message.Text.ToLower().Replace("опер", "");
             int NrOfVotes = db.GetNrOfElements("Votes");
-            if (NrOfVotes <= 5 && db.GetWorkingVariable("VoteAcces") == "open" && message.Type != null)
+            if (NrOfVotes <= 5 && db.GetWorkingVariable("VoteAcces") == "open" && message.Type != null && db.CheckText(text, "WarningList"))
             {
                 Dictionary<string, string> OperList = db.GetDictionaryString("WarningList");
                 if (db.CheckInt64(user.Id, "Votes"))
@@ -40,15 +41,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                 string oper = null;
                 foreach (var _oper in OperList)
                 {
-                    if (message.Text.ToLower().Contains(_oper.Key.ToLower()))
+                    if (text.Contains(_oper.Key.ToLower()))
                     {
                         if (_oper.Value == "опер" && _oper.Key != "опер")
                             oper = _oper.Key;
-                        else if (_oper.Key == "опер")
-                        {
-                            continue;
-                        }
-                        else
+                        else 
                         {
                             @params.Message = "А я считаю что " + _oper.Key + " это " + _oper.Value + ", а не опер.";
                             Send(@params, client);
@@ -96,14 +93,15 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                     }
                 }
             }
-            else if (message.Type != null)
+            else if (message.Type != null && db.CheckText(text, "WarningList"))
             {
                 @params.Message = "Голосование закрыто";
                 Send(@params, client);
             }
-            else
+            else if(message.Type==null)
             {
                 @params.Message = user.FirstName + ", мне показалось или кто-то попытался меня обмануть?";
+                Send(@params, client);
             }
         }
 

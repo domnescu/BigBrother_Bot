@@ -15,33 +15,47 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
         {
             Database db = new Database();
             string text = message.Text.ToLower();
+            DateTime dateTime = DateTime.Now;
+            string day;
+            string Today;
+            if (DateTime.Now.Hour > 19 || message.Text.ToLower().Contains("завтра"))
+            {
+                day = dateTime.AddDays(1).DayOfWeek.ToString();
+                Today = "Сегодня ";
+            }
+            else
+            {
+                day = dateTime.DayOfWeek.ToString();
+                Today = "Завтра ";
+            }
             string answer = null;
+
             if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("завтрак")) || message.Payload == "{\"caffeteria\":\"morning\"}")
             {
-                answer = db.GetMenu("завтрак");
+                answer = Today + "на завтрак: " + db.GetMenu("завтрак", day);
             }
             else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("обед")) || message.Payload == "{\"caffeteria\":\"day\"}")
             {
-                answer = db.GetMenu("обед");
+                answer = Today + "на обед: " + db.GetMenu("обед", day);
             }
             else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("ужин")) || message.Payload == "{\"caffeteria\":\"eavning\"}")
             {
-                answer = db.GetMenu("ужин");
+                answer = Today + "на ужин: " + db.GetMenu("ужин", day);
             }
             else if ((text.StartsWith("что") || text.StartsWith("чем") || text.StartsWith("чё") || text.StartsWith("че")) && (text.Contains("столов") || text.Contains("рестора") || text.Contains("кормят")))
             {
                 int hour = DateTime.Now.Hour;
                 if (hour - 1 <= 8 && hour + 1 >= 8)
                 {
-                    answer = db.GetMenu("завтрак");
+                    answer = Today + "на завтрак: " + db.GetMenu("завтрак", day);
                 }
                 else if (hour - 2 <= 12 && hour + 3 >= 12)
                 {
-                    answer = db.GetMenu("обед");
+                    answer = Today + "на обед: " + db.GetMenu("обед", day);
                 }
                 else if (hour - 3 <= 18 && hour + 1 >= 18)
                 {
-                    answer = db.GetMenu("ужин");
+                    answer = Today + "на ужин: " + db.GetMenu("ужин", day);
                 }
             }
             if (answer == null)
@@ -49,7 +63,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                 @params.Message = db.RandomResponse("RandomCaffeteria");
             }
             else
-                @params.Message = "Я, конечно, могу ошибаться, но, кажется, в столовой:\n" + answer;
+                @params.Message = answer;
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);

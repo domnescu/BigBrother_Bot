@@ -366,13 +366,10 @@ namespace BigBrother_V2
         /// <param name="time">Время приёма пищи</param>
         /// <returns>Информация о приёме пищи, о котором спрашивает пользователь. Если такая информация отсутствует в БД
         /// возвращается одна из случайных фраз, в которых бот просит чтобы ему сказали чем кормят в столовой</returns>
-        public string GetMenu(string time)
+        public string GetMenu(string time, string day)
         {
             string answerCaffeteria = null;
             botDataBase.Open();
-            DateTime dateTime = DateTime.Now;
-            //переменная в которой храниться день недели в виде строки (string)
-            string day = DateTime.Now.Hour > 19 ? dateTime.AddDays(1).DayOfWeek.ToString() : dateTime.DayOfWeek.ToString();
             command = new SQLiteCommand("SELECT *  FROM CaffeteriaMemory WHERE Day='" + day + "' AND Time='" + time + "';", botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())

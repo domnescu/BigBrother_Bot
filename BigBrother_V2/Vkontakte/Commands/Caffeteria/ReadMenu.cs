@@ -18,7 +18,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             DateTime dateTime = DateTime.Now;
             string day;
             string Today;
-            if (DateTime.Now.Hour > 19 || message.Text.ToLower().Contains("завтра") || message.Text.ToLower().Contains("завтрак")==false)
+            if (DateTime.Now.Hour > 19 || message.Text.ToLower().Contains("завтра ") || message.Text.ToLower().EndsWith("завтра"))
             {
                 day = dateTime.AddDays(1).DayOfWeek.ToString();
                 Today = "Завтра ";

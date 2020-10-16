@@ -45,7 +45,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                     {
                         if (_oper.Value == "опер" && _oper.Key != "опер")
                             oper = _oper.Key;
-                        else 
+                        else
                         {
                             @params.Message = "А я считаю что " + _oper.Key + " это " + _oper.Value + ", а не опер.";
                             Send(@params, client);
@@ -98,7 +98,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                 @params.Message = "Голосование закрыто";
                 Send(@params, client);
             }
-            else if(message.Type==null)
+            else if (message.Type == null)
             {
                 @params.Message = user.FirstName + ", мне показалось или кто-то попытался меня обмануть?";
                 Send(@params, client);
@@ -109,8 +109,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if ((text.StartsWith("сказать") || (text.Contains("опер") && text.Contains("где") == false && text.Contains("кто") == false && text.Length < 16 && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false))
-                && db.CheckText(text, "WarningList") && text.Contains("?") == false)
+            if ((text.StartsWith("сказать") || (text.Contains("опер") && text.Contains("где") == false && text.Contains("кто") == false && text.Length < 16
+                && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false)) && text.Contains("?") == false)
                 return true;
             return false;
         }

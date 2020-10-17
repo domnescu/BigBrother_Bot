@@ -218,6 +218,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new IKnowTermeh());
             ListOfCommands.Add(new WhoKnowTermeh());
             ListOfCommands.Add(new IFinishTermeh());
+            ListOfCommands.Add(new CleanDataBase());
             #endregion
         }
     }

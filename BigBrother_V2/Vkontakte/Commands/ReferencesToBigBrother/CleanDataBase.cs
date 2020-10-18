@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using VkNet;
-using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
@@ -18,7 +17,7 @@ namespace BigBrother_V2.Vkontakte.Commands
             User user = new User(message.FromId.Value, client);
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
-            if (user.IsAdmin)
+            if (user.IsAdmin && message.Type != null)
             {
                 @params.Message = "Хорошо товарищ Администратор, как закончу, отпишусь.";
                 Send(@params, client);
@@ -26,7 +25,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                 @params.Message = "Из базы данных удалены следующие люди: \n";
                 Database db = new Database();
                 List<long> Chats = db.GetListLong("Chats");
-                var conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 200});
+                var conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 200 });
                 foreach (var conversationAndLastMessage in conversations.Items)
                 {
                     ulong LastMessageId = (ulong)conversationAndLastMessage.Conversation.OutRead;
@@ -43,7 +42,13 @@ namespace BigBrother_V2.Vkontakte.Commands
                     }
                 }
                 Send(@params, client);
-            } else
+            }
+            if (message.Type == null)
+            {
+                @params.Message = user.FirstName +" ты за кого меня принимаешь? Только непосредственно администраторы могут использовать эту команду.";
+                Send(@params, client);
+            }
+            else
             {
                 @params.Message = "Товарищ курсант, вы кем себя возомнили ?";
                 Send(@params, client);
@@ -54,7 +59,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             Database db = new Database();
             string text = message.Text.ToLower();
-            if (text.Contains("почисти") && (text.Contains("бд") || text.Contains("базу")) && db.CheckText(text,"BotNames"))
+            if (text.Contains("почисти") && (text.Contains("бд") || text.Contains("базу")) && db.CheckText(text, "BotNames"))
                 return true;
             return false;
         }

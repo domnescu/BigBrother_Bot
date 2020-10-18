@@ -26,15 +26,15 @@ namespace BigBrother_V2.Vkontakte.Commands
                 @params.Message = "Из базы данных удалены следующие люди: \n";
                 Database db = new Database();
                 List<long> Chats = db.GetListLong("Chats");
-                var conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 200, Filter = GetConversationFilter.Unread });
+                var conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 200});
                 foreach (var conversationAndLastMessage in conversations.Items)
                 {
-                    ulong LastMessageId = (ulong)conversationAndLastMessage.Conversation.LastMessageId;
+                    ulong LastMessageId = (ulong)conversationAndLastMessage.Conversation.OutRead;
                     var messages = client.Messages.GetById(new[] { LastMessageId }, new[] { "" });
                     foreach (var LastUnreadMessage in messages)
                     {
 
-                        if ((DateTime.Now - LastUnreadMessage.Date).Value.Days > 30 && LastUnreadMessage.PeerId.Value < 2000000000 && Chats.Contains(LastUnreadMessage.PeerId.Value))
+                        if ((DateTime.Now - LastUnreadMessage.Date).Value.TotalDays > 14 && LastUnreadMessage.PeerId.Value < 2000000000 && Chats.Contains(LastUnreadMessage.PeerId.Value))
                         {
                             User UserInMessageDistribution = new User(LastUnreadMessage.PeerId.Value, client);
                             @params.Message += "[id" + UserInMessageDistribution.Id + "|" + user.FullName + "]\n";

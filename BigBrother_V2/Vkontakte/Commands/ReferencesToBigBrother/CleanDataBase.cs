@@ -38,7 +38,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                         if ((DateTime.Now - LastUnreadMessage.Date).Value.TotalDays > 14 && LastUnreadMessage.PeerId.Value < 2000000000 && Chats.Contains(LastUnreadMessage.PeerId.Value))
                         {
                             User UserInMessageDistribution = new User(LastUnreadMessage.PeerId.Value, client);
-                            @params.Message += "[id" + UserInMessageDistribution.Id + "|" + user.FullName + "]\n";
+                            @params.Message += "[id" + UserInMessageDistribution.Id + "|" + UserInMessageDistribution.FullName + "]\n";
                             MessagesSendParams sendParams = new MessagesSendParams();
                             sendParams.PeerId = UserInMessageDistribution.Id;
                             sendParams.RandomId = new Random().Next();

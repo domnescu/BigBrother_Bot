@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using VkNet;
+using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
+using VkNet.Model.Keyboard;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands
@@ -37,6 +39,43 @@ namespace BigBrother_V2.Vkontakte.Commands
                         {
                             User UserInMessageDistribution = new User(LastUnreadMessage.PeerId.Value, client);
                             @params.Message += "[id" + UserInMessageDistribution.Id + "|" + user.FullName + "]\n";
+                            MessagesSendParams sendParams = new MessagesSendParams();
+                            sendParams.PeerId = UserInMessageDistribution.Id;
+                            sendParams.RandomId = new Random().Next();
+                            if (user.Sex == VkNet.Enums.Sex.Male)
+                            {
+                                sendParams.Message = user.FirstName + ", ты больше 14 дней не читал мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
+                            } else if (user.Sex == VkNet.Enums.Sex.Female)
+                            {
+                                sendParams.Message = user.FirstName + ", ты больше 14 дней не читала мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
+                            }
+                            else
+                            {
+                                sendParams.Message = user.FirstName + ", ты больше 14 дней не читалО мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
+                            }
+
+                            var buttons = new List<List<MessageKeyboardButton>>
+                            {
+                                new List<MessageKeyboardButton>()
+                                {
+                                    new MessageKeyboardButton
+                                    {
+                                        Action = new MessageKeyboardButtonAction
+                                        {
+                                            Type = KeyboardButtonActionType.Text,
+                                            Label = "Пересылай инфу"
+                                        },
+                                        Color = KeyboardButtonColor.Primary
+                                    }
+                                }
+                            };
+                            sendParams.Keyboard = new MessageKeyboard
+                            {
+                                Inline = false,
+                                OneTime = false,
+                                Buttons = buttons
+                            };
+                            Send(sendParams, client);
                             db.DeleteChat(LastUnreadMessage.PeerId.Value);
                         }
                     }
@@ -45,7 +84,7 @@ namespace BigBrother_V2.Vkontakte.Commands
             }
             if (message.Type == null)
             {
-                @params.Message = user.FirstName +" ты за кого меня принимаешь? Только непосредственно администраторы могут использовать эту команду.";
+                @params.Message = user.FirstName + " ты за кого меня принимаешь? Только непосредственно администраторы могут использовать эту команду.";
                 Send(@params, client);
             }
             else

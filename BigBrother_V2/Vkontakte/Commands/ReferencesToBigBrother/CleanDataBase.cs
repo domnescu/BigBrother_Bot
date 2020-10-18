@@ -44,14 +44,14 @@ namespace BigBrother_V2.Vkontakte.Commands
                             sendParams.RandomId = new Random().Next();
                             if (user.Sex == VkNet.Enums.Sex.Male)
                             {
-                                sendParams.Message = user.FirstName + ", ты больше 14 дней не читал мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
+                                sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читал мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
                             } else if (user.Sex == VkNet.Enums.Sex.Female)
                             {
-                                sendParams.Message = user.FirstName + ", ты больше 14 дней не читала мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
+                                sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читала мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
                             }
                             else
                             {
-                                sendParams.Message = user.FirstName + ", ты больше 14 дней не читалО мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
+                                sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читалО мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
                             }
 
                             var buttons = new List<List<MessageKeyboardButton>>

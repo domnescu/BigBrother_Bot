@@ -20,7 +20,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             @params.Attachments = null;
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
-            string text = message.Text.ToLower().Replace("опер", "");
+            string text = " " + message.Text.ToLower().Replace("опер", "");
             int NrOfVotes = db.GetNrOfElements("Votes");
             if (NrOfVotes <= 5 && db.GetWorkingVariable("VoteAcces") == "open" && message.Type != null && db.CheckText(text, "WarningList"))
             {

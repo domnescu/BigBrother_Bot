@@ -219,6 +219,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new WhoKnowTermeh());
             ListOfCommands.Add(new IFinishTermeh());
             ListOfCommands.Add(new CleanDataBase());
+            ListOfCommands.Add(new KartaPlovdiv());
             #endregion
         }
     }

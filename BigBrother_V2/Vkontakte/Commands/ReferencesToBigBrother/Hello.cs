@@ -18,9 +18,9 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             if (user.IsAdmin)
                 text = "Здравья желаю товарищ Администратор!";
             else if (user.Sex == VkNet.Enums.Sex.Female)
-                text = "Здравствуйте мадмуазель " + user.FirstName;
+                text = "Здравствуйте мадмуазель, " + user.FirstName;
             else if (user.Sex == VkNet.Enums.Sex.Male)
-                text = "Здравствуйте господин " + user.FirstName;
+                text = "Здравствуйте господин, " + user.FirstName;
             else
                 text = "Ну привет, неопозднанное существо";
             @params.PeerId = message.PeerId;

@@ -72,7 +72,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (((text.StartsWith("что") || text.StartsWith("чем") || text.StartsWith("чё") || text.StartsWith("че")) && ((text.Contains("столов")
+            if (((text.Contains("что ") || text.Contains("чем ") || text.Contains("чё ") || text.Contains("че ")) && ((text.Contains("столов")
                 || text.Contains("рестора") || text.Contains("кормят")) || text.Contains("завтрак") || text.Contains("обед") || text.Contains("ужин"))) || message.Payload != null && message.Payload.Contains("caffeteria"))
                 return true;
             return false;

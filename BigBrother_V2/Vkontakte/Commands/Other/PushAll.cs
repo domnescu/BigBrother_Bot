@@ -27,7 +27,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if (text.Contains("@all") && db.CheckInt64(message.PeerId.Value, "IgnoreAll"))
+            if (text.Contains("@all") && db.CheckInt64(message.PeerId.Value, "IgnoreAll")==false)
                 return true;
             return false;
         }

@@ -221,6 +221,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new CleanDataBase());
             ListOfCommands.Add(new KartaPlovdiv());
             ListOfCommands.Add(new PushAll());
+            ListOfCommands.Add(new DisableReactionFor_PushAll());
             #endregion
         }
     }

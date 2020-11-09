@@ -26,7 +26,8 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("@all"))
+            Database db = new Database();
+            if (text.Contains("@all") && db.CheckInt64(message.PeerId.Value, "IgnoreAll"))
                 return true;
             return false;
         }

@@ -19,33 +19,40 @@ namespace BigBrother_V2.Vkontakte.Commands
             string answer;
             //Если сообщение пользователя начинается и содержит "будет" или "следу"
             //к текущей дате добавляется одна неделя.
-            if ((Text.Contains("будет") || Text.Contains("следу")) && DateTime.Now.DayOfWeek != DayOfWeek.Saturday && DateTime.Now.DayOfWeek != DayOfWeek.Sunday)
+            if(message.FromId.Value== 135310203 || message.FromId.Value== 241324442)
             {
-                myDateTime = myDateTime.AddDays(7);
-                answer = "Будет ";
-            }
-            else
+                User user = new User(message.FromId.Value, client);
+                answer = user.FirstName + ", ты говорил что состоишь в секте Нечётной недели поэтому для тебя — Нечётная неделя.";
+            } else
             {
-                answer = "Сейчас ";
-            }
-            //получение номера недели
-            int week = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(myDateTime, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
-            string IsEven;
-            string IsNotEven;
-            if (week % 2 == 0)
-            {
-                IsNotEven = "нечётная";
-                IsEven = "чётная";
-            }
-            else
-            {
-                IsNotEven = "чётная";
-                IsEven = "нечётная";
-            }
-            answer += week.ToString() + " неделя. Значит она " + IsEven;
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
-            {
-                answer = "Сейчас " + IsEven + " неделя. С понедельника начнётся " + IsNotEven + " неделя.";
+                if ((Text.Contains("будет") || Text.Contains("следу")) && DateTime.Now.DayOfWeek != DayOfWeek.Saturday && DateTime.Now.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    myDateTime = myDateTime.AddDays(7);
+                    answer = "Будет ";
+                }
+                else
+                {
+                    answer = "Сейчас ";
+                }
+                //получение номера недели
+                int week = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(myDateTime, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+                string IsEven;
+                string IsNotEven;
+                if (week % 2 == 0)
+                {
+                    IsNotEven = "нечётная";
+                    IsEven = "чётная";
+                }
+                else
+                {
+                    IsNotEven = "чётная";
+                    IsEven = "нечётная";
+                }
+                answer += week.ToString() + " неделя. Значит она " + IsEven;
+                if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    answer = "Сейчас " + IsEven + " неделя. С понедельника начнётся " + IsNotEven + " неделя.";
+                }
             }
             @params.PeerId = message.PeerId.Value;
             @params.Message = answer;

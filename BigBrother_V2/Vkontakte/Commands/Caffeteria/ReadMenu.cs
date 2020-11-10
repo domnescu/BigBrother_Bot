@@ -18,6 +18,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             DateTime dateTime = DateTime.Now;
             string day;
             string Today;
+            string ResponseFromDB = null;
             if (DateTime.Now.Hour > 19 || message.Text.ToLower().Contains("завтра ") || message.Text.ToLower().EndsWith("завтра"))
             {
                 day = dateTime.AddDays(1).DayOfWeek.ToString();
@@ -32,33 +33,39 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
 
             if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("завтрак")) || message.Payload == "{\"caffeteria\":\"morning\"}")
             {
-                answer = Today + "на завтрак: " + db.GetMenu("завтрак", day);
+                ResponseFromDB= db.GetMenu("завтрак", day);
+                answer = Today + "на завтрак: " + ResponseFromDB;
             }
             else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("обед")) || message.Payload == "{\"caffeteria\":\"day\"}")
             {
-                answer = Today + "на обед: " + db.GetMenu("обед", day);
+                ResponseFromDB= db.GetMenu("обед", day);
+                answer = Today + "на обед: " + ResponseFromDB;
             }
             else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("ужин")) || message.Payload == "{\"caffeteria\":\"eavning\"}")
             {
-                answer = Today + "на ужин: " + db.GetMenu("ужин", day);
+                ResponseFromDB= db.GetMenu("ужин", day);
+                answer = Today + "на ужин: " + ResponseFromDB;
             }
             else if ((text.StartsWith("что") || text.StartsWith("чем") || text.StartsWith("чё") || text.StartsWith("че")) && (text.Contains("столов") || text.Contains("рестора") || text.Contains("кормят")))
             {
                 int hour = DateTime.Now.Hour;
                 if (hour - 1 <= 8 && hour + 1 >= 8)
                 {
-                    answer = Today + "на завтрак: " + db.GetMenu("завтрак", day);
+                    ResponseFromDB= db.GetMenu("завтрак", day);
+                    answer = Today + "на завтрак: " + ResponseFromDB;
                 }
                 else if (hour - 2 <= 12 && hour + 3 >= 12)
                 {
-                    answer = Today + "на обед: " + db.GetMenu("обед", day);
+                    ResponseFromDB = db.GetMenu("обед", day);
+                    answer = Today + "на обед: " + ResponseFromDB;
                 }
                 else if (hour - 3 <= 18 && hour + 1 >= 18)
                 {
-                    answer = Today + "на ужин: " + db.GetMenu("ужин", day);
+                    ResponseFromDB = db.GetMenu("ужин", day);
+                    answer = Today + "на ужин: " + ResponseFromDB;
                 }
             }
-            if (answer == null)
+            if (ResponseFromDB == null)
             {
                 @params.Message = db.RandomResponse("RandomCaffeteria");
             }

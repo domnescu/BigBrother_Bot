@@ -18,25 +18,22 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
-            if (message.PeerId.Value > 2000000000)
+            var members = client.Messages.GetConversationMembers(message.PeerId.Value);
+            foreach (var member in members.Items)
             {
-                var members = client.Messages.GetConversationMembers(message.PeerId.Value);
-                foreach (var member in members.Items)
+                if (member.MemberId == message.FromId.Value)
                 {
-                    if (member.MemberId == message.FromId.Value)
+                    if (member.IsAdmin)
                     {
-                        if (member.IsAdmin)
-                        {
-                            @params.Message = "Окей, в данной беседе, я буду игнорировать @all.";
-                            Database db = new Database();
-                            db.AddToDB("INSERT INTO IgnoreAll (PeerID) VALUES (" + message.PeerId.Value + ")");
-                        }
-                        else
-                        {
-                            @params.Message = "Только Администратор беседы может сказать мне отключить реакцию на @all.";
-                        }
-                        Send(@params, client);
+                        @params.Message = "Окей, в данной беседе, я буду игнорировать @all.";
+                        Database db = new Database();
+                        db.AddToDB("INSERT INTO IgnoreAll (PeerID) VALUES (" + message.PeerId.Value + ")");
                     }
+                    else
+                    {
+                        @params.Message = "Только Администратор беседы может сказать мне отключить реакцию на @all.";
+                    }
+                    Send(@params, client);
                 }
             }
         }
@@ -45,7 +42,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if (text.Contains("all") && text.Contains("игнорируй") && db.CheckText(text, "BotNames"))
+            if (text.Contains("all") && text.Contains("игнорируй") && db.CheckText(text, "BotNames") && message.PeerId.Value > 2000000000)
                 return true;
             return false;
         }

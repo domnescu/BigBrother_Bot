@@ -17,7 +17,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             User user = new User(message.FromId.Value, client);
             Database db = new Database();
-            if (message.PeerId.Value > 2000000000)
+            if (message.PeerId.Value > 2000000000 && message.FromId.Value>0)
             {
                 if (db.KickUser(message.FromId.Value, message.PeerId.Value - 2000000000))
                 {
@@ -25,7 +25,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                     {
                         client.Messages.RemoveChatUser((ulong)message.PeerId.Value - 2000000000, message.FromId.Value);
                         @params.Message = "Несите нового! Этот не понял с первого раза!";
-                    } catch (VkNet.Exception.CannotBlacklistYourselfException)
+                    } catch
                     {
                         @params.Message = "Дайте мне права Администатора в беседе! Я хочу кикнуть эту мразь!";
                     }
@@ -35,8 +35,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                     @params.Message = user.FirstName + ", для таких сообщений, есть отдельаня беседа. Если попробуешь ещё раз отправить что-то подобное, я тебя кикну.\n https://vk.me/join/AJQ1d5A_1grjDZ0ArYPhk0rr";
                 }
             }
-            else
+            else if (message.PeerId.Value< 2000000000)
                 @params.Message = "Нахрен ты мне в личку эту хрень отправил ? Ты что совсем тупой ?";
+            else if (message.FromId.Value<0 && message.Type==null)
+                @params.Message = "Вы блять серьёзно ? Вы написали бота чтобы он отправлял сообщения о продаже ?";
+            else if (message.FromId.Value < 0 && message.Type != null)
+                @params.Message = "Бляяя...да вы заебали уже! Вам чё сука одной беседы не хватает для продажи своей хуйни ? Вы паблики создаёте, пересылаете посты с их стены...Лучше бы вы так упорно учились!";
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);

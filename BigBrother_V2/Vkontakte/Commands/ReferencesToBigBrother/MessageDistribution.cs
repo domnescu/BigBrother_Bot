@@ -20,7 +20,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             User user = new User(message.FromId.Value, client);
             Random rnd = new Random();
             var BlackList = client.Groups.GetBanned(187905748);
-            foreach(var BannedUser in BlackList)
+            foreach (var BannedUser in BlackList)
             {
                 if (BannedUser.Profile.Id == user.Id)
                 {
@@ -34,7 +34,6 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             List<long> ListOfConversations = db.GetListLong("Chats");
             List<long> Users = new List<long>();
             List<long> Chats = new List<long>();
-            int count = 1;
             List<MediaAttachment> mediaAttachments = new List<MediaAttachment>();
             string Text = message.Text.Remove(0, 19);
             string StartOfText = user.Sex switch
@@ -52,6 +51,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             }
             @params.Message = Text;
             @params.Attachments = mediaAttachments;
+            int count = 1;
             foreach (var peerID in ListOfConversations)
             {
                 if (peerID < 2000000000)
@@ -62,7 +62,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     {
                         @params.UserIds = Users;
                         @params.RandomId = rnd.Next();
-                        await SendToUsersIds(@params, client);
+                        await client.Messages.SendToUserIdsAsync(@params);
                         count = 1;
                         Users.Clear();
                     }
@@ -74,7 +74,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             }
             @params.UserIds = Users;
             @params.RandomId = rnd.Next();
-            await SendToUsersIds(@params, client);
+            await client.Messages.SendToUserIdsAsync(@params);
             foreach (var peerID in Chats)
             {
                 @params.RandomId = rnd.Next();

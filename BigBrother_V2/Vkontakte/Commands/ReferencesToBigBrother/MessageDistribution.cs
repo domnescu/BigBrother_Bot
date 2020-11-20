@@ -61,7 +61,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     if (count == 100)
                     {
                         @params.UserIds = Users;
-                        @params.RandomId = 0;
+                        @params.RandomId = rnd.Next();
                         await client.Messages.SendToUserIdsAsync(@params);
                         count = 1;
                         Users.Clear();
@@ -73,7 +73,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                 }
             }
             @params.UserIds = Users;
-            @params.RandomId = 0;
+            @params.RandomId = rnd.Next();
             await client.Messages.SendToUserIdsAsync(@params);
             foreach (var peerID in Chats)
             {

@@ -4,6 +4,12 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <NeutralLanguage>ru</NeutralLanguage>
+    <Configurations>Debug;Release;PreRelease</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='PreRelease|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>false</Optimize>
   </PropertyGroup>
 
   <ItemGroup>

@@ -21,7 +21,19 @@ namespace BigBrother_V2.Vkontakte.Commands
                 List<string> Types = db.GetWarningTypes();
                 List<string> Locations = db.GetListString("PossibleLocations");
                 User user = new User(message.FromId.Value, client);
-                string text =" " + message.Text.ToLower();
+                var BlackList = client.Groups.GetBanned(187905748);
+                foreach (var BannedUser in BlackList)
+                {
+                    if (BannedUser.Profile.Id == user.Id)
+                    {
+                        @params.PeerId = message.PeerId.Value;
+                        @params.RandomId = new Random().Next();
+                        @params.Message = db.RandomResponse("RestrictMessageDistribution");
+                        Send(@params, client);
+                        return;
+                    }
+                }
+                string text = " " + message.Text.ToLower();
                 foreach (var type in Types)
                 {
                     List<string> Warnings = db.GetWarnings(type);
@@ -62,7 +74,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                                         }
                                     }
                                     TextForSaveInfo = LocationForSave + "\nВремя получения информации " + DateTime.Now.ToString("HH:mm");
-                                    db.InfoUpdate(type, TextForSaveInfo); 
+                                    db.InfoUpdate(type, TextForSaveInfo);
                                     @params.UserIds = null;
                                     @params.PeerId = message.PeerId.Value;
                                     @params.RandomId = new Random().Next();
@@ -99,12 +111,12 @@ namespace BigBrother_V2.Vkontakte.Commands
 
         public override bool Contatins(Message message)
         {
-            string text =" "+ message.Text.ToLower();
+            string text = " " + message.Text.ToLower();
             Database db = new Database();
             if ((text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false &&
-                text.Contains("через") == false && text.Contains("пойдёт") == false && text.Contains("что") == false && text.Contains("не ") == false && 
+                text.Contains("через") == false && text.Contains("пойдёт") == false && text.Contains("что") == false && text.Contains("не ") == false &&
                 text.Contains("возможно") == false && text.Contains("сказал") == false && text.Contains("надо") == false && text.Contains("кто-нибудь") == false &&
-                text.Contains("кто-то") == false && text.Length<100 && (db.CheckText(text, "WarningList")) && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5) || (message.Payload != null && message.Payload.Contains("location")))
+                text.Contains("кто-то") == false && text.Length < 100 && (db.CheckText(text, "WarningList")) && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5) || (message.Payload != null && message.Payload.Contains("location")))
                 return true;
             return false;
         }

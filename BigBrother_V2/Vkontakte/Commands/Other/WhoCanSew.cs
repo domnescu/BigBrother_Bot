@@ -33,7 +33,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("кто") && text.Contains("шить"))
+            if (text.Contains("кто") && text.Contains(" шить"))
                 return true;
             return false;
         }

@@ -179,11 +179,11 @@ namespace BigBrother_V2
             ListOfCommands.Add(new ShopLink());
             ListOfCommands.Add(new MessageDistribution());
             ListOfCommands.Add(new SavePeerID());
-            ListOfCommands.Add(new Vote());
-            ListOfCommands.Add(new WhereIsOper());
-            ListOfCommands.Add(new NewInfoAboutWarning());
-            ListOfCommands.Add(new NewInfoAboutOper());
-            ListOfCommands.Add(new WhoIsOper());
+            //ListOfCommands.Add(new Vote());
+            //ListOfCommands.Add(new WhereIsOper());
+            //ListOfCommands.Add(new NewInfoAboutWarning());
+            //ListOfCommands.Add(new NewInfoAboutOper());
+            //ListOfCommands.Add(new WhoIsOper());
             ListOfCommands.Add(new StatusVote());
             ListOfCommands.Add(new ChangeOper());
             ListOfCommands.Add(new ChangeVoteStatus());

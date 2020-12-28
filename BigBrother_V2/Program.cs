@@ -224,6 +224,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new DisableReactionFor_PushAll());
             ListOfCommands.Add(new DekanatMail());
             ListOfCommands.Add(new ChesnokMail());
+            ListOfCommands.Add(new BlackTea());
             #endregion
         }
     }

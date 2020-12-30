@@ -89,8 +89,8 @@ namespace BigBrother_V2.Vkontakte.Commands
                                         if (message.PeerId.Value != MainMakara)
                                         {
                                             @params.PeerId = MainMakara;
-                                            @params.RandomId = random.Next();
-                                            @params.Message = operinfoupdate + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
+                                            @params.RandomId = new Random().Next();
+                                            @params.Message = LocationForSave + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
                                             Send(@params, client);
                                         }
                                     }

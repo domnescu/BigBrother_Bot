@@ -1,6 +1,7 @@
 ﻿using BigBro.Vk.Donates;
 using Quartz;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -30,8 +31,6 @@ namespace BigBrother_V2.Vkontakte.Donates
             var webClient = new WebClient();
             var response = webClient.DownloadString(db.GetWorkingVariable("DonateString"));
             DonatesResponse donatesResponse = JsonSerializer.Deserialize<DonatesResponse>(response);
-            @params.RandomId = new Random().Next();
-            @params.PeerId = long.Parse(db.GetWorkingVariable("MainMakara"));
             int NrOfActualDonates = 0;
             int sum = 0;
             foreach (var donate in donatesResponse.donates)
@@ -77,7 +76,15 @@ namespace BigBrother_V2.Vkontakte.Donates
 
             @params.Message += "большое спасибо за донат, благодоря " + NrOfUsers + " я могу находится на сервере ещё " + numberOfdays + " " + days + " и " + numberOFhours + " " + hours;
             if (NewDonate)
-                client.Messages.Send(@params);
+            {
+                List<long> Chats = db.GetListLong("MainMakara");
+                foreach(var chat in Chats)
+                {
+                    @params.RandomId = new Random().Next();
+                    @params.PeerId = chat;
+                    client.Messages.Send(@params);
+                }
+            }
             return null;
         }
 

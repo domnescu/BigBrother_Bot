@@ -77,13 +77,16 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                     @params.PeerId = message.PeerId.Value;
                     @params.RandomId = random.Next();
                     Send(@params, client);
-                    long MainMakara = long.Parse(db.GetWorkingVariable("MainMakara"));
-                    if (message.PeerId.Value != MainMakara)
+                    List<long> MainMakaraChats = db.GetListLong("MainMakara");
+                    foreach (var MainMakara in MainMakaraChats)
                     {
-                        @params.PeerId = MainMakara;
-                        @params.RandomId = random.Next();
-                        @params.Message = operinfoupdate + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
-                        Send(@params, client);
+                        if (message.PeerId.Value != MainMakara)
+                        {
+                            @params.PeerId = MainMakara;
+                            @params.RandomId = random.Next();
+                            @params.Message = operinfoupdate + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
+                            Send(@params, client);
+                        }
                     }
                     return;
                 }

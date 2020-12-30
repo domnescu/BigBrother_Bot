@@ -83,13 +83,16 @@ namespace BigBrother_V2.Vkontakte.Commands
                                     @params.DisableMentions = true;
                                     @params.Message = LocationForSave + "\n эту информацию я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
                                     await MessageDistribution(@params, client);
-                                    long MainMakara = long.Parse(db.GetWorkingVariable("MainMakara"));
-                                    if (message.PeerId.Value != MainMakara)
+                                    List<long> MainMakaraChats = db.GetListLong("MainMakara");
+                                    foreach (var MainMakara in MainMakaraChats)
                                     {
-                                        @params.PeerId = MainMakara;
-                                        @params.RandomId = new Random().Next();
-                                        @params.Message = LocationForSave + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
-                                        Send(@params, client);
+                                        if (message.PeerId.Value != MainMakara)
+                                        {
+                                            @params.PeerId = MainMakara;
+                                            @params.RandomId = random.Next();
+                                            @params.Message = operinfoupdate + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
+                                            Send(@params, client);
+                                        }
                                     }
                                     goto EndForeach;
 

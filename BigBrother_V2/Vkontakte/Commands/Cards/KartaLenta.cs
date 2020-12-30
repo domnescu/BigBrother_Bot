@@ -32,7 +32,7 @@ namespace BigBrother_V2.Vkontakte.Commands
             {
                 OwnerId = -187905748,
                 AlbumId = 267692087,
-                Id = 457239019
+                Id = 457239113
             };
             @params.PeerId = message.PeerId;
             @params.Message = text;

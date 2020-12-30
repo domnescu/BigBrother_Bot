@@ -18,13 +18,16 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             User user = new User(message.FromId.Value, client);
             if (message.Type == VkNet.Enums.MessageType.Received && user.IsAdmin)
             {
-                if (message.PeerId.Value < 2000000000)
+                if (message.PeerId.Value > 2000000000)
                 {
                     database.AddToDB("INSERT INTO MainMakara (PeerID) VALUES (" + message.PeerId +");");
                     database.SetWorkingVariable("MainMakara", message.PeerId.Value.ToString());
                     @params.Message = "Сделано! Теперь я буду знать что это общая беседа Макары";
                 }
-                @params.Message = "Балбес! Ты мне в личку это пишешь ? серьёзно ? Афигеть ты дурень!";
+                else
+                {
+                    @params.Message = "Балбес! Ты мне в личку это пишешь ? серьёзно ? Афигеть ты дурень!";
+                }
             }
             else if (message.Type == null)
             {

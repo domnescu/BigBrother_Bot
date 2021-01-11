@@ -30,19 +30,19 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 {
                     @params.Message = "Хрен знает что ты такое! Бери карту и съебись нахуй отсюда!";
                 }
+                Photo photo_attach = new Photo
+                {
+                    OwnerId = -187905748,
+                    AlbumId = 267692087,
+                    Id = 457239060
+                };
+                @params.Attachments = new[] { photo_attach };
             }
             else
             {
                 @params.Message = user.FirstName + ", карты магазинов доступны только в ЛС.";
             }
-            Photo photo_attach = new Photo
-            {
-                OwnerId = -187905748,
-                AlbumId = 267692087,
-                Id = 457239060
-            };
             @params.PeerId = message.PeerId;
-            @params.Attachments = new[] { photo_attach };
             @params.RandomId = new Random().Next();
             Send(@params, client);
         }

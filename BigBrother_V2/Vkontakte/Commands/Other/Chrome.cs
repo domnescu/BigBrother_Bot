@@ -14,7 +14,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
         public override void Execute(Message message, VkApi client)
         {
-            @params.Message = "https://www.instagram.com/chrome_krh/ Расскажет вам все секреты ведения бизнеса, в частности про то как, инвестировать деньги " +
+            @params.Message = "https://www.instagram.com/chrome_krh/ Расскажет вам все секреты ведения бизнеса, в частности про то, как инвестировать деньги " +
                 "и не получить нихрена взамен.";
             @params.DisableMentions = true;
             @params.DontParseLinks = true;

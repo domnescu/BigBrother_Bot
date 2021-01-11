@@ -2,6 +2,7 @@
 using Quartz.Impl;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using VkNet;
 using VkNet.Model;
@@ -147,8 +148,8 @@ namespace BigBrother_V2
             ITrigger trigger = TriggerBuilder.Create()  // создаем триггер
                 .WithIdentity("trigger2", "group2")     // идентифицируем триггер с именем и группой
                 .StartNow()                            // запуск сразу после начала выполнения
-                .WithCronSchedule("* 0 * * * ?")                  // бесконечное повторение
-                .Build();                               // создаем триггер
+                .WithCronSchedule("0-1 0 * * * ?")                  // бесконечное повторение
+                .Build();                              // создаем триггер
 
             await scheduler.ScheduleJob(job, trigger);        // начинаем выполнение работы
         }

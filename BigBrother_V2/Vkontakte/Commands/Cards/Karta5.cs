@@ -14,19 +14,24 @@ namespace BigBrother_V2.Vkontakte.Commands
 
         public override void Execute(Message message, VkApi client)
         {
-            string text;
             User user = new User(message.FromId.Value, client);
-            if (user.Sex == VkNet.Enums.Sex.Male)
+            if(message.PeerId.Value< 2000000000)
             {
-                text = user.FirstName + ", Карта Пятёрочки, специально для тебя";
-            }
-            else if (user.Sex == VkNet.Enums.Sex.Female)
+                if (user.Sex == VkNet.Enums.Sex.Male)
+                {
+                    @params.Message = user.FirstName + ", Карта Пятёрочки, специально для тебя";
+                }
+                else if (user.Sex == VkNet.Enums.Sex.Female)
+                {
+                    @params.Message = user.FirstName + ", давай договоримся, я тебе карту Пятёрочки, а ты поделишься со мной вкусняшками. Как тебе предложение ? ";
+                }
+                else
+                {
+                    @params.Message = "Существо неопознанного пола, немедленно покинь магазин! Мало кому нравятся существа неопознанного пола";
+                }
+            } else
             {
-                text = user.FirstName + ", давай договоримся, я тебе карту Пятёрочки, а ты поделишься со мной вкусняшками. Как тебе предложение ? ";
-            }
-            else
-            {
-                text = "Существо неопознанного пола, немедленно покинь магазин! Мало кому нравятся существа неопознанного пола";
+                @params.Message = user.FirstName + ", карты магазинов доступны только в ЛС.";
             }
             Photo photo_attach = new Photo
             {
@@ -35,7 +40,6 @@ namespace BigBrother_V2.Vkontakte.Commands
                 Id = 457239062
             };
             @params.PeerId = message.PeerId;
-            @params.Message = text;
             @params.Attachments = new[] { photo_attach };
             @params.RandomId = new Random().Next();
             Send(@params, client);

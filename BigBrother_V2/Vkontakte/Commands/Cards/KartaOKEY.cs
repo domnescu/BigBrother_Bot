@@ -15,19 +15,25 @@ namespace BigBrother_V2.Vkontakte.Commands
 
         public override void Execute(Message message, VkApi client)
         {
-            string text;
             User user = new User(message.FromId.Value, client);
-            if (user.Sex == VkNet.Enums.Sex.Male)
+            if (message.PeerId.Value < 2000000000)
             {
-                text = user.FirstName + ", Окей, держи карту ОКЕЙ";
-            }
-            else if (user.Sex == VkNet.Enums.Sex.Female)
-            {
-                text = user.FirstName + ", ты далеко забрела! Может тебе стоит вернуться обратно ?";
+                if (user.Sex == VkNet.Enums.Sex.Male)
+                {
+                    @params.Message = user.FirstName + ", Окей, держи карту ОКЕЙ";
+                }
+                else if (user.Sex == VkNet.Enums.Sex.Female)
+                {
+                    @params.Message = user.FirstName + ", ты далеко забрела! Может тебе стоит вернуться обратно ?";
+                }
+                else
+                {
+                    @params.Message = "Я по камерам слежу за тобой, немедленно поставь обратно!";
+                }
             }
             else
             {
-                text = "Я по камерам слежу за тобой, немедленно поставь обратно!";
+                @params.Message = user.FirstName + ", карты магазинов доступны только в ЛС.";
             }
             Photo photo_attach = new Photo
             {
@@ -36,7 +42,6 @@ namespace BigBrother_V2.Vkontakte.Commands
                 Id = 457239022
             };
             @params.PeerId = message.PeerId;
-            @params.Message = text;
             @params.Attachments = new[] { photo_attach };
             @params.RandomId = new Random().Next();
             Send(@params, client);

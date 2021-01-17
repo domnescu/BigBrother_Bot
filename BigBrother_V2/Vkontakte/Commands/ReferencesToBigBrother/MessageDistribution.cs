@@ -11,11 +11,10 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
     {
         public override string Name => "Рассылка сообщений";
 
-        MessagesSendParams @params = new MessagesSendParams();
 
         public override async void Execute(Message message, VkApi client)
         {
-            @params = new MessagesSendParams();
+            MessagesSendParams @params = new MessagesSendParams();
             Database db = new Database();
             User user = new User(message.FromId.Value, client);
             Random rnd = new Random();
@@ -88,7 +87,6 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             @params.RandomId = rnd.Next();
             @params.Message = "Я отправил, всем кто подписаны на мою инфу.";
             Send(@params, client);
-            @params = null;
         }
 
         public override bool Contatins(Message message)

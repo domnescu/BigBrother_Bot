@@ -10,10 +10,10 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Карта Карусели";
 
-        MessagesSendParams @params = new MessagesSendParams();
         public override void Execute(Message message, VkApi client)
         {
             User user = new User(message.FromId.Value, client);
+            MessagesSendParams @params = new MessagesSendParams();
             if (message.PeerId.Value < 2000000000)
             {
                 if (user.Sex == VkNet.Enums.Sex.Male)

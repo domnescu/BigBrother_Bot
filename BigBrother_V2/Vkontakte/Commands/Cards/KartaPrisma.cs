@@ -10,10 +10,10 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Карта Призмы";
 
-        MessagesSendParams @params = new MessagesSendParams();
 
         public override void Execute(Message message, VkApi client)
         {
+            MessagesSendParams @params = new MessagesSendParams();
             User user = new User(message.FromId.Value, client);
             if (message.PeerId.Value < 2000000000)
             {

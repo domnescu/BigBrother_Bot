@@ -18,7 +18,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
         {
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
-            @params.Message = "Почта деканата - dekanatoif@mail.ru";
+            if (message.FromId.Value == 143676891)
+                @params.Message = "Да ты уже заебал! Я уже заебался отправлять тебе почту деканата";
+            else
+                @params.Message = "Почта деканата - dekanatoif@mail.ru";
             Send(@params, client);
         }
 

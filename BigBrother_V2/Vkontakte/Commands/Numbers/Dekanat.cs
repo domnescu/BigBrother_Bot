@@ -16,7 +16,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
         public override void Execute(Message message, VkApi client)
         {
             @params.PeerId = message.PeerId;
-            @params.Message = Number;
+            if (message.FromId.Value == 143676891)
+                @params.Message = "Специально для тебя, существует поиск по сообщениям.";
+            else
+                @params.Message = Number;
             @params.RandomId = new Random().Next();
             Send(@params, client);
         }

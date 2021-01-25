@@ -38,7 +38,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                 int week = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(myDateTime, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
                 string IsEven;
                 string IsNotEven;
-                if (week % 2 == 0)
+                if (week % 2 == 1)
                 {
                     IsNotEven = "нечётная";
                     IsEven = "чётная";
@@ -48,7 +48,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                     IsNotEven = "чётная";
                     IsEven = "нечётная";
                 }
-                answer += week.ToString() + " неделя. Значит она " + IsEven;
+                answer += IsEven + " неделя";
                 if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
                 {
                     answer = "Сейчас " + IsEven + " неделя. С понедельника начнётся " + IsNotEven + " неделя.";

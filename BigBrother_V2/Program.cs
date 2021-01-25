@@ -205,7 +205,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new HospitalSchedule());
             ListOfCommands.Add(new DeletePeerID());
             ListOfCommands.Add(new ThisIsMainMakara());
-            ListOfCommands.Add(new Nuran());
+            //ListOfCommands.Add(new Nuran());
             ListOfCommands.Add(new Introduction());
             ListOfCommands.Add(new NrOfUsersInDistribution());
             ListOfCommands.Add(new Source());

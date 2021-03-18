@@ -226,6 +226,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new ChesnokMail());
             ListOfCommands.Add(new BlackTea());
             ListOfCommands.Add(new Chrome());
+            ListOfCommands.Add(new MedChasti());
             #endregion
         }
     }

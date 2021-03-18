@@ -25,7 +25,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
             answer += new SorokinaNumber().Number + "\n\n";
             answer += new UchebCentrElizarNumber().Number + "\n\n";
             answer += new Voen_CafedraNomber().Number + "\n\n";
-            answer += new ZamDekNumber().Number + "\n";
+            answer += new ZamDekNumber().Number + "\n\n";
+            answer += new MedChasti().Number + "\n";
             @params.PeerId = message.PeerId;
             @params.Message = answer;
             @params.RandomId = new Random().Next();

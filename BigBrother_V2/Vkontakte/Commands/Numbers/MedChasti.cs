@@ -26,7 +26,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("медсанчасть") || text.Contains("медчасть") || text.Contains("медпункт")))
+            if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("медсанчаст") || text.Contains("медчаст") || text.Contains("медпункт")))
                 return true;
             return false;
         }

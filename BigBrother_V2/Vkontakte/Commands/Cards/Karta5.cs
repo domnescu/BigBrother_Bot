@@ -15,31 +15,25 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             MessagesSendParams @params = new MessagesSendParams();
             User user = new User(message.FromId.Value, client);
-            if(message.PeerId.Value< 2000000000)
+            if (user.Sex == VkNet.Enums.Sex.Male)
             {
-                if (user.Sex == VkNet.Enums.Sex.Male)
-                {
-                    @params.Message = user.FirstName + ", Карта Пятёрочки, специально для тебя";
-                }
-                else if (user.Sex == VkNet.Enums.Sex.Female)
-                {
-                    @params.Message = user.FirstName + ", давай договоримся, я тебе карту Пятёрочки, а ты поделишься со мной вкусняшками. Как тебе предложение ? ";
-                }
-                else
-                {
-                    @params.Message = "Существо неопознанного пола, немедленно покинь магазин! Мало кому нравятся существа неопознанного пола";
-                }
-                Photo photo_attach = new Photo
-                {
-                    OwnerId = -187905748,
-                    AlbumId = 267692087,
-                    Id = 457239062
-                };
-                @params.Attachments = new[] { photo_attach };
-            } else
-            {
-                @params.Message = user.FirstName + ", карты магазинов доступны только в ЛС.";
+                @params.Message = user.FirstName + ", Карта Пятёрочки, специально для тебя";
             }
+            else if (user.Sex == VkNet.Enums.Sex.Female)
+            {
+                @params.Message = user.FirstName + ", давай договоримся, я тебе карту Пятёрочки, а ты поделишься со мной вкусняшками. Как тебе предложение ? ";
+            }
+            else
+            {
+                @params.Message = "Существо неопознанного пола, немедленно покинь магазин! Мало кому нравятся существа неопознанного пола";
+            }
+            Photo photo_attach = new Photo
+            {
+                OwnerId = -187905748,
+                AlbumId = 267692087,
+                Id = 457239062
+            };
+            @params.Attachments = new[] { photo_attach };
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();
             Send(@params, client);

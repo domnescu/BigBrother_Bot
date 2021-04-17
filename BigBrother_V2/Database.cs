@@ -441,7 +441,7 @@ namespace BigBrother_V2
             return list;
         }
         /// <summary>
-        /// Если пользователь ранее не отправлял СПАМ, добавляем его в базу данны, если отправлял даём добро на Кик этого пользователя из беседы
+        /// Если пользователь ранее не отправлял СПАМ, добавляем его в базу данных, если отправлял даём добро на Кик этого пользователя из беседы
         /// </summary>
         /// <param name="UserID">Идентификатор пользователя</param>
         /// <param name="ChatID">Идентификатор беседы</param>
@@ -449,7 +449,7 @@ namespace BigBrother_V2
         public bool KickUser(long UserID, long ChatID)
         {
             botDataBase.Open();
-            bool response =false;
+            bool response = false;
             command = new SQLiteCommand("SELECT count(*) FROM SPAM WHERE ChatID=" + ChatID + " AND UserID=" + UserID + ";", botDataBase);
             int countRows = Convert.ToInt32(command.ExecuteScalar());
             if (countRows == 0)
@@ -460,6 +460,52 @@ namespace BigBrother_V2
             command.ExecuteNonQuery();
             botDataBase.Close();
             return response;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userID"></param>
+        public void UserUsedCommandIncrease(long userID)
+        {
+            botDataBase.Open();
+            command = new SQLiteCommand("SELECT count(*) FROM ComandsFromUser WHERE UserID=" + userID + ";", botDataBase);
+            int countRows = Convert.ToInt32(command.ExecuteScalar());
+            if (countRows == 0)
+            {
+                command = new SQLiteCommand("INSERT INTO ComandsFromUser (UserID,Commands) VALUES (" + userID + ",1);", botDataBase);
+            }
+            else
+            {
+                command = new SQLiteCommand("UPDATE ComandsFromUser SET Commands=Commands+1 WHERE UserID=" + userID + ";", botDataBase);
+            }
+            command.ExecuteNonQuery();
+            botDataBase.Close();
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public int NrOfCommandsFromUser(long UserID)
+        {
+            int UsedCommands = -1;
+            botDataBase.Open();
+            command = new SQLiteCommand("SELECT * FROM ComandsFromUser WHERE UserID='" + UserID + "';", botDataBase);
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                try
+                {
+                    UsedCommands = reader.GetInt32(1);
+                }
+                catch
+                {
+                    UsedCommands = -1;
+                }
+            }
+            reader.Close();
+            botDataBase.Close();
+            return UsedCommands;
         }
     }
 }

@@ -20,9 +20,9 @@ namespace BigBrother_V2
         /// <returns></returns>
         public Task Execute(IJobExecutionContext context)
         {
+            Database database = new Database();
             if (DateTime.Now.Hour == 00)
             {
-                Database database = new Database();
                 database.CleanTable("Votes");
                 database.SetWorkingVariable("VoteAcces", "open");
                 Dictionary<string, string> warnings = database.GetDictionaryString("WarningList");
@@ -35,7 +35,7 @@ namespace BigBrother_V2
                         database.InfoUpdate(warning.Value, tempString);
                     }
                 }
-            }
+            } 
             else if ((DateTime.Now.Day == 31 && DateTime.Now.Month == 12) || (DateTime.Now.Day == 01 && DateTime.Now.Month == 01))
             {
                 VkApi client = new VkApi();
@@ -129,6 +129,8 @@ namespace BigBrother_V2
                     client.Messages.Send(@params);
                 }
             }
+            database.CleanTable("ComandsFromUser");
+
             return null;
         }
     }

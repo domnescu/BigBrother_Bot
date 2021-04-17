@@ -6,6 +6,7 @@ using BigBrother_V2.Vkontakte.Commands.Oper;
 using BigBrother_V2.Vkontakte.Commands.Other;
 using BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother;
 using BigBrother_V2.Vkontakte.Donates;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VkNet;
@@ -125,7 +126,25 @@ namespace BigBrother_V2
         static async Task CheckCommandsAsync(Command command, Message message)
         {
             if (command.Contatins(message))
-                await Task.Run(() => command.Execute(message, BotClient));
+            {
+                Database db = new Database();
+                db.UserUsedCommandIncrease(message.FromId.Value);
+                if (db.NrOfCommandsFromUser(message.FromId.Value) < 10)
+                {
+                    await Task.Run(() => command.Execute(message, BotClient));
+                }
+                else if (db.NrOfCommandsFromUser(message.FromId.Value) == 10)
+                {
+                    Vkontakte.User user = new Vkontakte.User(message.FromId.Value, BotClient);
+                    BotClient.Messages.Send(new MessagesSendParams
+                    {
+                        RandomId = new Random().Next(),
+                        PeerId = message.PeerId,
+                        Message = "[id" + user.Id + "|" + user.Domain + "] превышен лимит команд за час. Все твои команды будут игнорироваться в течение часа.",
+                    });
+                }
+
+            }
         }
         /// <summary>
         /// В данном методе происходит добавление всех команд в список ListOfCommands и авторизация бота

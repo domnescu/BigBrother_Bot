@@ -67,7 +67,10 @@ namespace BigBrother_V2
                             //убираем упоминания бота из текста.
                             update.MessageNew.Message.Text = update.MessageNew.Message.Text.Replace("[club187905748|*bigbrother_bot] ", "");
                             update.MessageNew.Message.Text = update.MessageNew.Message.Text.Replace("[club187905748|@bigbrother_bot] ", "");
-                            ProcessingMessageAsync(update.MessageNew.Message);
+                            Database db = new Database();
+                            int timer = int.Parse(db.GetWorkingVariable("TimeOut"));
+                            if(DateTime.Now.Minute>=timer)
+                                ProcessingMessageAsync(update.MessageNew.Message);
                         }
                         else if (update.Type == GroupUpdateType.MessageDeny)
                         {
@@ -246,6 +249,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new BlackTea());
             ListOfCommands.Add(new Chrome());
             ListOfCommands.Add(new MedChasti());
+            ListOfCommands.Add(new TimeOut());
             #endregion
         }
     }

@@ -162,14 +162,14 @@ namespace BigBrother_V2
 #if DEBUG
             ListOfCommands.Add(new ClearCommand());
 #endif
-            ListOfCommands.Add(new KartaLenta());
+            //ListOfCommands.Add(new KartaLenta());
             ListOfCommands.Add(new Karta5());
-            ListOfCommands.Add(new KartaOKEY());
-            ListOfCommands.Add(new KartaPrisma());
-            ListOfCommands.Add(new KartaKaruseli());
-            ListOfCommands.Add(new KartaIKEA());
-            ListOfCommands.Add(new KartaPerekrestok());
-            ListOfCommands.Add(new KartaMagnit());
+            //ListOfCommands.Add(new KartaOKEY());
+            //ListOfCommands.Add(new KartaPrisma());
+            //ListOfCommands.Add(new KartaKaruseli());
+            //ListOfCommands.Add(new KartaIKEA());
+            //ListOfCommands.Add(new KartaPerekrestok());
+            //ListOfCommands.Add(new KartaMagnit());
             ListOfCommands.Add(new DekanNumber());
             ListOfCommands.Add(new ChesnokNumber());
             ListOfCommands.Add(new DocumentovodNumber());
@@ -241,7 +241,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new WhoKnowTermeh());
             ListOfCommands.Add(new IFinishTermeh());
             ListOfCommands.Add(new CleanDataBase());
-            ListOfCommands.Add(new KartaPlovdiv());
+            //ListOfCommands.Add(new KartaPlovdiv());
             //ListOfCommands.Add(new PushAll());
             //ListOfCommands.Add(new DisableReactionFor_PushAll());
             ListOfCommands.Add(new DekanatMail());
@@ -250,6 +250,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new Chrome());
             ListOfCommands.Add(new MedChasti());
             ListOfCommands.Add(new TimeOut());
+            ListOfCommands.Add(new Cards());
             #endregion
         }
     }

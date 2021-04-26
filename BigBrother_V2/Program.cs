@@ -251,6 +251,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new MedChasti());
             ListOfCommands.Add(new TimeOut());
             ListOfCommands.Add(new Cards());
+            ListOfCommands.Add(new PasspornNumber());
             #endregion
         }
     }

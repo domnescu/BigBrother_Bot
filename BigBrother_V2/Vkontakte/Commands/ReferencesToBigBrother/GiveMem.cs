@@ -37,7 +37,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if (text.Contains("мем") && text.Contains("дай") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames")))
+            if (text.Contains("мем") && (text.Contains("дай") || text.Contains("кинь"))  && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames")))
                 return true;
             return false;
         }

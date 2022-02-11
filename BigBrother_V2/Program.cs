@@ -302,6 +302,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new Cards());
             ListOfCommands.Add(new PasspornNumber());
             ListOfCommands.Add(new TelegramLink());
+            ListOfCommands.Add(new BuisnessMakara());
             #endregion
             #region Telegram Commands
 #if DEBUG

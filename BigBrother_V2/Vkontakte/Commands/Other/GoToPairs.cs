@@ -21,7 +21,8 @@ namespace BigBrother_V2.Vkontakte.Commands
             {
                 @params.Message = "Не, ну в приницпе, можно)) Почему бы и нет ?";
                 Send(@params, client);
-            } else
+            }
+            else
             {
                 if (new Random().Next() % 2 == 0)
                 {

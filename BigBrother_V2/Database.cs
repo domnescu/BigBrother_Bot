@@ -64,11 +64,11 @@ namespace BigBrother_V2
         /// <param name="table">Название таблицы</param>
         /// <param name="column">Номер столбца из которого нужно получить данные</param>
         /// <returns></returns>
-        public List<long> GetListLong(string table, int column = 0)
+        public List<long> GetListLong(string table, int column = 0, string condition = "")
         {
             List<long> list = new List<long>();
             botDataBase.Open();
-            command = new SQLiteCommand("SELECT * FROM " + table + ";", botDataBase);
+            command = new SQLiteCommand("SELECT * FROM " + table + " " + condition, botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
@@ -83,12 +83,12 @@ namespace BigBrother_V2
         /// Добавление диалога в БД для рассылки сообщений с информацией о передвижениях опера/чеснока/проверки
         /// </summary>
         /// <param name="peerID">Идентификатор диалога/беседы</param>
-        public bool AddChat(long peerID)
+        public bool AddChat(long peerID, string platform)
         {
             botDataBase.Open();
             try
             {
-                command = new SQLiteCommand("INSERT INTO Chats (PeerID) VALUES (" + peerID + ");", botDataBase);
+                command = new SQLiteCommand("INSERT INTO Chats (PeerID,Platform) VALUES (" + peerID + ",'" + platform + "');", botDataBase);
                 command.ExecuteNonQuery();
             }
             catch
@@ -201,11 +201,11 @@ namespace BigBrother_V2
         /// <param name="table">Название таблицы из которой нужно извлечь данные</param>
         /// <param name="column">Столбец таблицы из которого нужно извлечь данные</param>
         /// <returns></returns>
-        public List<string> GetListString(string table, int column = 0)
+        public List<string> GetListString(string table, int column = 0, string condition = "")
         {
             List<string> list = new List<string>();
             botDataBase.Open();
-            command = new SQLiteCommand("SELECT * FROM " + table, botDataBase);
+            command = new SQLiteCommand("SELECT * FROM " + table + " " + condition, botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {

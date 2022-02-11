@@ -33,17 +33,17 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
 
             if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("завтрак")) || message.Payload == "{\"caffeteria\":\"morning\"}")
             {
-                ResponseFromDB= db.GetMenu("завтрак", day);
+                ResponseFromDB = db.GetMenu("завтрак", day);
                 answer = Today + "на завтрак: " + ResponseFromDB;
             }
             else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("обед")) || message.Payload == "{\"caffeteria\":\"day\"}")
             {
-                ResponseFromDB= db.GetMenu("обед", day);
+                ResponseFromDB = db.GetMenu("обед", day);
                 answer = Today + "на обед: " + ResponseFromDB;
             }
             else if (((text.StartsWith("что") || text.StartsWith("чё")) && text.Contains("ужин")) || message.Payload == "{\"caffeteria\":\"eavning\"}")
             {
-                ResponseFromDB= db.GetMenu("ужин", day);
+                ResponseFromDB = db.GetMenu("ужин", day);
                 answer = Today + "на ужин: " + ResponseFromDB;
             }
             else if ((text.StartsWith("что") || text.StartsWith("чем") || text.StartsWith("чё") || text.StartsWith("че")) && (text.Contains("столов") || text.Contains("рестора") || text.Contains("кормят")))
@@ -51,7 +51,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                 int hour = DateTime.Now.Hour;
                 if (hour - 1 <= 8 && hour + 1 >= 8)
                 {
-                    ResponseFromDB= db.GetMenu("завтрак", day);
+                    ResponseFromDB = db.GetMenu("завтрак", day);
                     answer = Today + "на завтрак: " + ResponseFromDB;
                 }
                 else if (hour - 2 <= 12 && hour + 3 >= 12)

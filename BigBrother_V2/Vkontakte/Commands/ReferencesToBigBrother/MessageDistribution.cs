@@ -18,7 +18,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             Database db = new Database();
             User user = new User(message.FromId.Value, client);
             Random rnd = new Random();
-            var BlackList = client.Groups.GetBanned(187905748);
+            var BlackList = client.Groups.GetBanned(192662250);
             foreach (var BannedUser in BlackList)
             {
                 if (BannedUser.Profile.Id == user.Id)
@@ -37,10 +37,10 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             string Text = message.Text.Remove(0, 19);
             string StartOfText = user.Sex switch
             {
-                VkNet.Enums.Sex.Male => "[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просил передать: \n",
-                VkNet.Enums.Sex.Female => "[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просила передать: \n",
-                VkNet.Enums.Sex.Unknown => "Существо неопознонного пола, именующее себя как [id" + user.Id + " | " + user.FirstName + " " + user.LastName + "], просило передать: \n",
-                _ => "Какая-то неведомая хуйня, просила передать: \n",
+                VkNet.Enums.Sex.Male => "[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просил передать:\n",
+                VkNet.Enums.Sex.Female => "[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просила передать:\n",
+                VkNet.Enums.Sex.Unknown => "Существо неопознонного пола, именующее себя как [id" + user.Id + " | " + user.FirstName + " " + user.LastName + "], просило передать:\n",
+                _ => "Какая-то неведомая хуйня, просила передать:\n",
             };
             @params.DisableMentions = true;
             Text = StartOfText + Text;

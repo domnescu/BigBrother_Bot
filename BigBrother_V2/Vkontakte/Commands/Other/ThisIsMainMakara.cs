@@ -20,7 +20,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             {
                 if (message.PeerId.Value > 2000000000)
                 {
-                    database.AddToDB("INSERT INTO MainMakara (PeerID) VALUES (" + message.PeerId +");");
+                    database.AddToDB("INSERT INTO MainMakara (PeerID) VALUES (" + message.PeerId + ");");
                     database.SetWorkingVariable("MainMakara", message.PeerId.Value.ToString());
                     @params.Message = "Сделано! Теперь я буду знать что это общая беседа Макары";
                 }

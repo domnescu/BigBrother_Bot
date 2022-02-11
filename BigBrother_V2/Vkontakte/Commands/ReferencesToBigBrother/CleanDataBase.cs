@@ -45,7 +45,8 @@ namespace BigBrother_V2.Vkontakte.Commands
                             if (user.Sex == VkNet.Enums.Sex.Male)
                             {
                                 sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читал мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
-                            } else if (user.Sex == VkNet.Enums.Sex.Female)
+                            }
+                            else if (user.Sex == VkNet.Enums.Sex.Female)
                             {
                                 sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читала мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
                             }

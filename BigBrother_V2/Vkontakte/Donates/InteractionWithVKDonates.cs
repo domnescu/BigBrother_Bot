@@ -6,7 +6,6 @@ using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
 using VkNet;
-using VkNet.Model;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Donates
@@ -23,10 +22,9 @@ namespace BigBrother_V2.Vkontakte.Donates
         /// <returns></returns>
         public Task Execute(IJobExecutionContext context)
         {
-            VkApi client = new VkApi();
+            VkApi client = Program.BotClient;
             Database db = new Database();
             bool NewDonate = false;
-            client.Authorize(new ApiAuthParams() { AccessToken = db.GetWorkingVariable("BigBroKey") });
             MessagesSendParams @params = new MessagesSendParams();
             var webClient = new WebClient();
             var response = webClient.DownloadString(db.GetWorkingVariable("DonateString"));
@@ -78,7 +76,7 @@ namespace BigBrother_V2.Vkontakte.Donates
             if (NewDonate)
             {
                 List<long> Chats = db.GetListLong("MainMakara");
-                foreach(var chat in Chats)
+                foreach (var chat in Chats)
                 {
                     @params.RandomId = new Random().Next();
                     @params.PeerId = chat;

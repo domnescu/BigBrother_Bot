@@ -23,7 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if ((text.Contains("команды") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"))) || message.Payload== "{\"command\":\"start\"}" ||  text=="начать")
+            if ((text.Contains("команды") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"))) || message.Payload == "{\"command\":\"start\"}" || text == "начать")
                 return true;
             return false;
         }

@@ -15,7 +15,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             Database db = new Database();
             User user = new User(message.PeerId.Value, client);
-            db.AddToDB("INSERT INTO WhoKnowMath (domain) VALUES ('[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]')");
+            db.AddToDB("INSERT INTO WhoKnowMath (domain,Platform) VALUES ('[id" + user.Id + "|" + user.FullName + "]','VK')");
             @params.Message = "Хорошо, я запомнил что ты можешь помочь с вышматом";
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
@@ -25,7 +25,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.Contains("не") == false && (text.Contains("знаю") || text.Contains("понимаю") || text.Contains("делаю") || (text.Contains("могу") && text.Contains("помочь"))) 
+            if ((text.Contains("не") == false && (text.Contains("знаю") || text.Contains("понимаю") || text.Contains("делаю") || (text.Contains("могу") && text.Contains("помочь")))
                 && (text.Contains("вышмат") || text.Contains("матем") || text.Contains("матан"))) && message.PeerId.Value < 2000000000)
                 return true;
             return false;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BigBrother_V2.Additional;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using VkNet;
@@ -21,18 +22,18 @@ namespace BigBrother_V2.Vkontakte.Commands
                 List<string> Types = db.GetWarningTypes();
                 List<string> Locations = db.GetListString("PossibleLocations");
                 User user = new User(message.FromId.Value, client);
-                var BlackList = client.Groups.GetBanned(187905748);
-                foreach (var BannedUser in BlackList)
-                {
-                    if (BannedUser.Profile.Id == user.Id)
-                    {
-                        @params.PeerId = message.PeerId.Value;
-                        @params.RandomId = new Random().Next();
-                        @params.Message = db.RandomResponse("RestrictMessageDistribution");
-                        Send(@params, client);
-                        return;
-                    }
-                }
+                //var BlackList = client.Groups.GetBanned(187905748);
+                //foreach (var BannedUser in BlackList)
+                //{
+                //    if (BannedUser.Profile.Id == user.Id)
+                //    {
+                //        @params.PeerId = message.PeerId.Value;
+                //        @params.RandomId = new Random().Next();
+                //        @params.Message = db.RandomResponse("RestrictMessageDistribution");
+                //        Send(@params, client);
+                //        return;
+                //    }
+                //}
                 string text = " " + message.Text.ToLower();
                 foreach (var type in Types)
                 {
@@ -69,7 +70,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                                             }
                                             if (j == Locations.Count - 1)
                                             {
-                                                LocationForSave = WarningType + " гуляет где-то!!!";
+                                                LocationForSave = WarningType + " находится в состоянии суперпозиции!!";
                                             }
                                         }
                                     }
@@ -81,8 +82,11 @@ namespace BigBrother_V2.Vkontakte.Commands
                                     @params.Message = "Вот что я запомнил:\n" + LocationForSave;
                                     Send(@params, client);
                                     @params.DisableMentions = true;
-                                    @params.Message = LocationForSave + "\n эту информацию я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
-                                    await MessageDistribution(@params, client);
+                                    @params.Message = LocationForSave + "\nэту информацию я получил из ВК от ";
+                                    StringForLink @string = new StringForLink();
+                                    @string.VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
+                                    @string.Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>";
+                                    await MessageDistribution(@params, client, @string);
                                     List<long> MainMakaraChats = db.GetListLong("MainMakara");
                                     foreach (var MainMakara in MainMakaraChats)
                                     {
@@ -90,7 +94,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                                         {
                                             @params.PeerId = MainMakara;
                                             @params.RandomId = new Random().Next();
-                                            @params.Message = LocationForSave + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
+                                            @params.Message = LocationForSave + "\nэту инфу я получил из ВК от " + @string.VK;
                                             Send(@params, client);
                                         }
                                     }

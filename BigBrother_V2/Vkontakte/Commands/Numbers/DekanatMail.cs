@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
@@ -8,7 +6,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Numbers
 {
-    class DekanatMail:Command
+    class DekanatMail : Command
     {
         public override string Name => "Почта Деканата";
 

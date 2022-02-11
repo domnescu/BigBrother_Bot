@@ -15,7 +15,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             Database db = new Database();
             User user = new User(message.PeerId.Value, client);
-            db.AddToDB("INSERT INTO WhoPrint (domain) VALUES ('[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]')");
+            db.AddToDB("INSERT INTO WhoPrint (domain,Platform) VALUES ('[id" + user.Id + "|" + user.FullName + "]','VK')");
             @params.Message = "Хорошо, я запомнил что ты можешь распечатать";
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();

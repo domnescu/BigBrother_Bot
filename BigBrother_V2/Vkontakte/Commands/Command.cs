@@ -1,6 +1,9 @@
-﻿using System;
+﻿using BigBrother_V2.Additional;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
@@ -54,13 +57,26 @@ namespace BigBrother_V2.Vkontakte.Commands
         /// </summary>
         /// <param name="params">Параметры сообщения</param>
         /// <param name="client">Клиент через который следует отправить сообщения</param>
-        public async Task MessageDistribution(MessagesSendParams @params, VkApi client)
+        public async Task MessageDistribution(MessagesSendParams @params, VkApi client, StringForLink @string=null)
         {
             @params.PeerId = null;
             @params.UserIds = null;
             Database db = new Database();
             Random rnd = new Random();
-            List<long> ListOfConversations = db.GetListLong("Chats");
+
+            List<long> ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
+
+            foreach (var ChatID in ListOfConversations)
+            {
+                Telegram.Bot.Types.Message sentMessage = await Program.botClient.SendTextMessageAsync(
+                    chatId: ChatID,
+                    text: @params.Message + @string.Telegram,
+                    parseMode: ParseMode.Html
+                );
+            }
+            @params.Message += @string.VK;
+            ListOfConversations.Clear();
+            ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
             List<long> Users = new List<long>();
             List<long> Chats = new List<long>();
             int count = 1;

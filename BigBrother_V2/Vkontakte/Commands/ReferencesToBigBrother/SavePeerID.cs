@@ -17,7 +17,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override void Execute(Message message, VkApi client)
         {
             Database database = new Database();
-            bool Succes = database.AddChat(message.PeerId.Value);
+            bool Succes = database.AddChat(message.PeerId.Value,"VK");
             if (message.PeerId.Value < 2000000000)
             {
                 var buttons = new List<List<MessageKeyboardButton>>

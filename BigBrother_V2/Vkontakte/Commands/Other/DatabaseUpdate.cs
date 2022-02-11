@@ -31,10 +31,14 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 else if (message.Text.ToLower().StartsWith("update") && Succes)
                     answer = "Элемент из базы данных успешно обновлён.";
                 else if (message.Text.ToLower().StartsWith("update") && !Succes)
-                        answer = "Видимо ты где-то ошибся. В базе данных всё осталось в прежнем состоянии.";
-                else if(message.Text.ToLower().StartsWith("create") && Succes)
+                    answer = "Видимо ты где-то ошибся. В базе данных всё осталось в прежнем состоянии.";
+                else if (message.Text.ToLower().StartsWith("create") && Succes)
                     answer = "Таблица успешно создана.";
-                else
+                else if (message.Text.ToLower().StartsWith("create") && !Succes)
+                    answer = "При создании таблицы возникла ошибка.";
+                else if (message.Text.ToLower().StartsWith("alter") && Succes)
+                    answer = "Обновление таблицы успешно завершено.";
+                else 
                     answer = "Что-то пошло не так. Посмотри, может где-то есть очепятка.";
             }
             else if (message.Type == null)
@@ -55,7 +59,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.StartsWith("insert") || text.StartsWith("update") || text.StartsWith("delete") || text.StartsWith("create"))
+            if (text.StartsWith("insert") || text.StartsWith("update") || text.StartsWith("delete") || text.StartsWith("create") || text.StartsWith("alter"))
                 return true;
             return false;
         }

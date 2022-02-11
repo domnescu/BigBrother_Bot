@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BigBrother_V2.Additional;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using VkNet;
@@ -18,18 +19,18 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             @params = new MessagesSendParams();
             Database db = new Database();
             User user = new User(message.FromId.Value, client);
-            var BlackList = client.Groups.GetBanned(187905748);
-            foreach (var BannedUser in BlackList)
-            {
-                if (BannedUser.Profile.Id == user.Id)
-                {
-                    @params.PeerId = message.PeerId.Value;
-                    @params.RandomId = new Random().Next();
-                    @params.Message = db.RandomResponse("RestrictMessageDistribution");
-                    Send(@params, client);
-                    return;
-                }
-            }
+            //var BlackList = client.Groups.GetBanned(187905748);
+            //foreach (var BannedUser in BlackList)
+            //{
+            //    if (BannedUser.Profile.Id == user.Id)
+            //    {
+            //        @params.PeerId = message.PeerId.Value;
+            //        @params.RandomId = new Random().Next();
+            //        @params.Message = db.RandomResponse("RestrictMessageDistribution");
+            //        Send(@params, client);
+            //        return;
+            //    }
+            //}
             List<string> PossibleLocations = db.GetListString("PossibleLocations");
             string text = message.Text.ToLower();
             string warningType;
@@ -63,15 +64,18 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                             }
                             if (k == PossibleLocations.Count - 1)
                             {
-                                operinfoupdate = warningType + " гуляет где-то!!!";
+                                operinfoupdate = warningType + " находится в состоянии суперпозиции!!";
                             }
                         }
                     }
                     db.InfoUpdate(warningType, operinfoupdate + "\nВремя получения информации " + DateTime.Now.ToShortTimeString());
                     Random random = new Random();
                     @params.DisableMentions = true;
-                    @params.Message = operinfoupdate + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
-                    await MessageDistribution(@params, client);
+                    @params.Message = operinfoupdate + "\nэту информацию я получил из ВК от ";
+                    StringForLink @string = new StringForLink();
+                    @string.VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
+                    @string.Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>";
+                    await MessageDistribution(@params, client, @string);
                     @params.UserIds = null;
                     @params.Message = "Вот что я запомнил:\n" + operinfoupdate;
                     @params.PeerId = message.PeerId.Value;
@@ -84,7 +88,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                         {
                             @params.PeerId = MainMakara;
                             @params.RandomId = random.Next();
-                            @params.Message = operinfoupdate + " - эту инфу я получил от [id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
+                            @params.Message = operinfoupdate + "\nэту инфу я получил из ВК от " + @string.VK;
                             Send(@params, client);
                         }
                     }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using VkNet;
@@ -9,7 +7,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class TimeOut:Command
+    class TimeOut : Command
     {
         public override string Name => "Включение Тайм-аута";
 
@@ -19,7 +17,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             Database db = new Database();
             User user = new User(message.PeerId.Value, client);
-            if(user.IsAdmin && message.Type != null)
+            if (user.IsAdmin && message.Type != null)
             {
                 if (Regex.Replace(message.Text, @"[^\d]+", "").Length != 0)
                 {
@@ -37,10 +35,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 }
                 else
                     @params.Message = "А ты не хочешь указать на сколько мне нужно отключиться ?";
-            } else if(message.Type==null) 
+            }
+            else if (message.Type == null)
             {
                 @params.Message = "Пересланные сообщения администраторов не обрабатываются.";
-            } else
+            }
+            else
             {
                 @params.Message = "Данная команда доступна только для администраторов.";
             }

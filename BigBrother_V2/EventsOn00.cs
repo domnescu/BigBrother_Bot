@@ -2,10 +2,8 @@
 using Quartz.Impl;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using VkNet;
-using VkNet.Model;
 using VkNet.Model.Attachments;
 using VkNet.Model.RequestParams;
 
@@ -35,12 +33,11 @@ namespace BigBrother_V2
                         database.InfoUpdate(warning.Value, tempString);
                     }
                 }
-            } 
-            else if ((DateTime.Now.Day == 31 && DateTime.Now.Month == 12) || (DateTime.Now.Day == 01 && DateTime.Now.Month == 01))
+            }
+            if ((DateTime.Now.Day == 31 && DateTime.Now.Month == 12) || (DateTime.Now.Day == 01 && DateTime.Now.Month == 01))
             {
-                VkApi client = new VkApi();
+                VkApi client = Program.BotClient;
                 Database db = new Database();
-                client.Authorize(new ApiAuthParams() { AccessToken = db.GetWorkingVariable("BigBroKey") });
                 MessagesSendParams @params = new MessagesSendParams();
                 Audio Track = new Audio();
                 Track.OwnerId = -187905748;
@@ -48,7 +45,8 @@ namespace BigBrother_V2
                 {
                     @params.Message = "Так)) ещё немного и у кого-то начнётся веселье))\nНастоятельно рекомендую слушать песни которые я буду отправлять))" +
                         "99% что поднимут настроение, если не поднимут, то вы ещё недостаточно выпили!!";
-                }else if (DateTime.Now.Day == 31 && DateTime.Now.Hour == 15)
+                }
+                else if (DateTime.Now.Day == 31 && DateTime.Now.Hour == 15)
                 {
                     @params.Message = "С Новым годом! Пусть к чёрту катятся все проблемы! Пусть трезвый Дед Мороз подарит опьяняющее счастье трезвой реальности!" +
                         " Желаю крутых подъёмов в новом году, максимальных доходов, желаемых результатов в делах и невероятно страстных чувств в отношениях!";
@@ -107,7 +105,7 @@ namespace BigBrother_V2
                         " с деньгами, чтобы хватало на многие года вперед. С Новым годом!";
                     Track.Id = 456239032;
                 }
-                else if (DateTime.Now.Day == 01 && DateTime.Now.Hour == 00)
+                else if (DateTime.Now.Day == 01 && DateTime.Now.Hour == 0)
                 {
                     @params.Message = "Желаю в Новом году всем крепкой печени и внутреннего навигатора, чтобы точно знать как вы пришли туда, где проснулись.";
                     Track.Id = 456239028;
@@ -136,7 +134,7 @@ namespace BigBrother_V2
     }
 
     /// <summary>
-    /// Расписание запуска ф-ции в 00:00
+    /// Расписание запуска ф-ции в 00 минут
     /// </summary>
     class EventsOn00Scheduler
     {
@@ -150,7 +148,7 @@ namespace BigBrother_V2
             ITrigger trigger = TriggerBuilder.Create()  // создаем триггер
                 .WithIdentity("trigger2", "group2")     // идентифицируем триггер с именем и группой
                 .StartNow()                            // запуск сразу после начала выполнения
-                .WithCronSchedule("0-1 0 * * * ?")                  // бесконечное повторение
+                .WithCronSchedule("0 0 * * * ?")                  // бесконечное повторение
                 .Build();                              // создаем триггер
 
             await scheduler.ScheduleJob(job, trigger);        // начинаем выполнение работы

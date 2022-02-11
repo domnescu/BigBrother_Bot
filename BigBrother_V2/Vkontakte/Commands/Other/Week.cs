@@ -19,11 +19,12 @@ namespace BigBrother_V2.Vkontakte.Commands
             string answer;
             //Если сообщение пользователя начинается и содержит "будет" или "следу"
             //к текущей дате добавляется одна неделя.
-            if(message.FromId.Value== 135310203 || message.FromId.Value== 241324442)
+            if (message.FromId.Value == 135310203 || message.FromId.Value == 241324442)
             {
                 User user = new User(message.FromId.Value, client);
                 answer = user.FirstName + ", ты говорил что состоишь в секте Нечётной недели поэтому для тебя — Нечётная неделя.";
-            } else
+            }
+            else
             {
                 if ((Text.Contains("будет") || Text.Contains("следу")) && DateTime.Now.DayOfWeek != DayOfWeek.Saturday && DateTime.Now.DayOfWeek != DayOfWeek.Sunday)
                 {

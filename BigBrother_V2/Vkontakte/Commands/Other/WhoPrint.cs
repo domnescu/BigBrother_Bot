@@ -16,14 +16,14 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
 
             Database db = new Database();
-            List<string> list = db.GetListString("WhoPrint");
+            List<string> list = db.GetListString("WhoPrint", condition: "WHERE Platform='VK'");
             @params.Message = "ХЗ! Мне никто не говорил что может распечатать";
             if (list.Count != 0)
             {
                 @params.Message = "Эти люди могут тебе помчь:\n";
                 foreach (var str in list)
                 {
-                    @params.Message += str + "\n";
+                    @params.Message += str + Environment.NewLine;
                 }
             }
             @params.PeerId = message.PeerId.Value;

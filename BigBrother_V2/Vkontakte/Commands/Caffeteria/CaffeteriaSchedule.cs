@@ -19,7 +19,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             {
                 OwnerId = -187905748,
                 AlbumId = 267692087,
-                Id = 457239071
+                Id = 457239125
                 //Id = 457239112
             };
             @params.PeerId = message.PeerId;

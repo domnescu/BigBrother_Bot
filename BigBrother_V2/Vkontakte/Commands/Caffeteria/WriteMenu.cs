@@ -50,7 +50,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                     {
                         time = "ужин";
                     }
-                    if(text.StartsWith(""))
+                    if (text.StartsWith(""))
                         db.AddToMenu(text.Replace("сейчас в столовой ", ""), time);
                     else
                         db.AddToMenu(text.Replace("в столовой ", ""), time);

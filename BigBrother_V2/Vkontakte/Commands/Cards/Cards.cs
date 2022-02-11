@@ -6,11 +6,9 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Cards
 {
-    class Cards:Command
+    class Cards : Command
     {
         public override string Name => "Карты Магазинов";
-
-        MessagesSendParams @params = new MessagesSendParams();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -35,7 +33,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                     {
                         @params.Message = "Зачем тебе мебель ?";
                     }
-                } else if (text.Contains("карусел"))
+                }
+                else if (text.Contains("карусел"))
                 {
                     PhotoID = 457239020;
                     if (user.Sex == VkNet.Enums.Sex.Male)
@@ -50,7 +49,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                     {
                         @params.Message = "Существо неопозднанного пола, немедленно покинь здание в котором ты находишься! За тобой уже выехали!";
                     }
-                } else if (text.Contains("лент"))
+                }
+                else if (text.Contains("лент"))
                 {
                     PhotoID = 457239113;
                     if (user.Sex == VkNet.Enums.Sex.Male)
@@ -131,7 +131,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 }
                 else if (text.Contains("прис") || text.Contains("pris") || text.Contains("приз"))
                 {
-                    PhotoID = 457239024; 
+                    PhotoID = 457239024;
                     if (user.Sex == VkNet.Enums.Sex.Male)
                     {
                         @params.Message = user.FirstName + ", ты просил карту Призмы? Получай)";
@@ -144,7 +144,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                     {
                         @params.Message = "Существо непонятного пола, уйди из Призмы! Не пугай там людей!";
                     }
-                } else
+                }
+                else
                 {
                     PhotoID = 457239114;
                 }
@@ -170,7 +171,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && text.Contains("пятёр")==false && text.Contains("пятер")==false)
+            if ((text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && text.Contains("пятёр") == false && text.Contains("пятер") == false)
                 return true;
             return false;
         }

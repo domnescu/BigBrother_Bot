@@ -15,14 +15,14 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override void Execute(Message message, VkApi client)
         {
             Database db = new Database();
-            List<string> list = db.GetListString("WhoSew");
+            List<string> list = db.GetListString("WhoSew", condition: "WHERE Platform='VK'");
             @params.Message = "Вот хз! мне ещё не говорили";
             if (list.Count != 0)
             {
                 @params.Message = "Кто-то из этих людей точно может шить\n";
                 foreach (var str in list)
                 {
-                    @params.Message += str + "\n";
+                    @params.Message += str + Environment.NewLine;
                 }
             }
             @params.PeerId = message.PeerId.Value;

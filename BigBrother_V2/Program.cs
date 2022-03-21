@@ -330,6 +330,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new BuisnessMakara());
             ListOfCommands.Add(new NewOper());
             ListOfCommands.Add(new AccountingNumber());
+            ListOfCommands.Add(new ShopLink2());
             #endregion
             #region Telegram Commands
 #if DEBUG
@@ -409,6 +410,7 @@ namespace BigBrother_V2
             CommandsTelegram.Add(new SavePeerIDTelegram());
             CommandsTelegram.Add(new DeleteKeyboardTelegram());
             CommandsTelegram.Add(new AccountingTelegram());
+            CommandsTelegram.Add(new ShopLinkTelegram());
             #endregion
             #endregion
         }

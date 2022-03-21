@@ -155,7 +155,7 @@ namespace BigBrother_V2
         /// <param name="command">Команда</param>
         /// <param name="message">Сообщение</param>
         /// <returns></returns>
-        static async Task CheckCommandsAsync(Command command, VkNet.Model.Message message)
+        static Task CheckCommandsAsync(Command command, VkNet.Model.Message message)
         {
             if (command.Contatins(message))
             {
@@ -165,7 +165,18 @@ namespace BigBrother_V2
 #endif
                 if (db.NrOfCommandsFromUser(message.FromId.Value) < 10)
                 {
-                    await Task.Run(() => command.Execute(message, BotClient));
+                    try
+                    {
+                        command.Execute(message, BotClient);
+                    } catch (Exception e)
+                    {
+                        BotClient.Messages.Send(new MessagesSendParams {
+                            PeerId = 235052667,
+                            RandomId = new Random().Next(),
+                            Message= "Произошла ошибка при обработке команд из ВК!!\nОписание ошибки:"+e.Message + "\n\n StackTrace:\n" +e.StackTrace + "Сообщение которое вызвало ошибку:\n"+
+                                message.Text + "\nСообщение пришло от [id"+message.FromId.Value + "|Этого человека]"
+                        });;
+                    }
                 }
                 else if (db.NrOfCommandsFromUser(message.FromId.Value) == 10)
                 {
@@ -179,6 +190,7 @@ namespace BigBrother_V2
                 }
 
             }
+            return Task.CompletedTask;
         }
 
         static async Task HandleUpdateAsync(ITelegramBotClient botClientTelegram, Update update, CancellationToken cancellationToken)

@@ -26,6 +26,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Numbers
             answer += new Voen_CafedraNomberTelegram().Number + "\n\n";
             answer += new ZamDekNumberTelegram().Number + "\n\n";
             answer += new MedChastiTelegram().Number + "\n\n";
+            answer += new AccountingTelegram().Number + "\n\n";
             answer += new PasspornNumberTelegram().Number + "\n";
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,

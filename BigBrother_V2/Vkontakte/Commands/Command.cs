@@ -108,7 +108,12 @@ namespace BigBrother_V2.Vkontakte.Commands
                 @params.RandomId = rnd.Next();
                 @params.UserIds = null;
                 @params.PeerId = peerID;
-                Send(@params, client);
+                try{
+                    Send(@params, client);
+                } catch 
+                {
+                    db.DeleteChat(peerID);
+                }
             }
         }
     }

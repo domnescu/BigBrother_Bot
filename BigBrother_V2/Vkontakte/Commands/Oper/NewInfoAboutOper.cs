@@ -19,18 +19,18 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             @params = new MessagesSendParams();
             Database db = new Database();
             User user = new User(message.FromId.Value, client);
-            //var BlackList = client.Groups.GetBanned(187905748);
-            //foreach (var BannedUser in BlackList)
-            //{
-            //    if (BannedUser.Profile.Id == user.Id)
-            //    {
-            //        @params.PeerId = message.PeerId.Value;
-            //        @params.RandomId = new Random().Next();
-            //        @params.Message = db.RandomResponse("RestrictMessageDistribution");
-            //        Send(@params, client);
-            //        return;
-            //    }
-            //}
+            var BlackList = client.Groups.GetBanned(187905748);
+            foreach (var BannedUser in BlackList)
+            {
+                if (BannedUser.Profile.Id == user.Id)
+                {
+                    @params.PeerId = message.PeerId.Value;
+                    @params.RandomId = new Random().Next();
+                    @params.Message = db.RandomResponse("RestrictMessageDistribution");
+                    Send(@params, client);
+                    return;
+                }
+            }
             List<string> PossibleLocations = db.GetListString("PossibleLocations");
             string text = message.Text.ToLower();
             string warningType;

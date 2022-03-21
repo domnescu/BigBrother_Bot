@@ -84,7 +84,15 @@ namespace BigBrother_V2.TelegramBigBro.Commands
                 @params.RandomId = rnd.Next();
                 @params.UserIds = null;
                 @params.PeerId = peerID;
-                Program.BotClient.Messages.Send(@params);
+                try
+                {
+                    Program.BotClient.Messages.Send(@params);
+                }
+                catch
+                {
+                    db.DeleteChat(peerID);
+                }
+                
             }
         }
     }

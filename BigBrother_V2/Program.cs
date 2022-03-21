@@ -67,6 +67,14 @@ namespace BigBrother_V2
             botClient.StartReceiving(HandleUpdateAsync, HandleErrorAsync, receiverOptions, cancellationToken: cts.Token);
             var me = await botClient.GetMeAsync();
 
+            Telegram.Bot.Types.Message sentMessage = await botClient.SendTextMessageAsync(
+                chatId: 312191379,
+#if !DEBUG
+                text: "Успешный запуск на сервере"
+#else
+                text: "Успешный запуск на Компе"
+#endif
+            );
             var BigBroLongPollServer = BotClient.Groups.GetLongPollServer(bigbroID);
             while (true)
             {
@@ -175,6 +183,11 @@ namespace BigBrother_V2
 
         static async Task HandleUpdateAsync(ITelegramBotClient botClientTelegram, Update update, CancellationToken cancellationToken)
         {
+            if(update.Type == UpdateType.MyChatMember && update.MyChatMember.OldChatMember.User.Username == "@BigBrother_Makara_Bot")
+            {
+                Database db = new Database();
+                db.DeleteChat(update.MyChatMember.Chat.Id);
+            }
             // Is update type message?
             if (update.Type != UpdateType.Message)
                 return;
@@ -186,7 +199,7 @@ namespace BigBrother_V2
             {
                 if (command.Contatins(update.Message))
                 {
-                    await Task.Run(() => command.Execute(update.Message, botClientTelegram, cancellationToken));
+                    await Task.Run(() => command.Execute(update.Message, botClientTelegram, cancellationToken), cancellationToken);
                 }
             }
         }

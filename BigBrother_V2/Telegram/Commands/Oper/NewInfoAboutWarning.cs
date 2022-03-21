@@ -77,7 +77,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                                         @params.PeerId = MainMakara;
                                         @params.RandomId = new Random().Next();
                                         @params.Message = LocationForSave + " - эту инфу я получил из Телеграма от @" + message.From.Username;
-                                        Program.BotClient.Messages.Send(@params);
+                                        try
+                                        {
+                                            Program.BotClient.Messages.Send(@params);
+                                        }
+                                        catch
+                                        {
+                                            db.DeleteChat(MainMakara);
+                                        }
                                     }
                                     goto EndForeach;
 

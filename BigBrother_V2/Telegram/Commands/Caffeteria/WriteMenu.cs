@@ -21,17 +21,17 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
             {
                 if (text.StartsWith("на завтрак "))
                 {
-                    db.AddToMenu(text.Replace("на завтрак ", "") + "\nИнформация получена " + DateTime.Now.ToString("DD:MM:yyyy"), "завтрак");
+                    db.AddToMenu(text.Replace("на завтрак ", "") + "\nИнформация получена " + DateTime.Now.ToString("dd.MM.yyyy"), "завтрак");
                     textToResponse = "Я запомнил что у вас на завтрак";
                 }
                 else if (text.StartsWith("на обед "))
                 {
-                    db.AddToMenu(text.Replace("на обед ", "") + "\nИнформация получена " + DateTime.Now.ToString("DD:MM:yyyy"), "обед");
+                    db.AddToMenu(text.Replace("на обед ", "") + "\nИнформация получена " + DateTime.Now.ToString("dd.MM.yyyy"), "обед");
                     textToResponse = "Теперь я знаю что у вас на обед.";
                 }
                 else if (text.StartsWith("на ужин "))
                 {
-                    db.AddToMenu(text.Replace("на ужин ", "") + "\nИнформация получена " + DateTime.Now.ToString("DD:MM:yyyy"), "ужин");
+                    db.AddToMenu(text.Replace("на ужин ", "") + "\nИнформация получена " + DateTime.Now.ToString("dd.MM.yyyy"), "ужин");
                     textToResponse = "Ну всё, теперь можете спрашивать меня что у вас на ужин :)";
                 }
                 else if (text.StartsWith("сейчас в столовой ") || text.StartsWith("в столовой "))
@@ -51,9 +51,9 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
                         time = "ужин";
                     }
                     if (text.StartsWith(""))
-                        db.AddToMenu(text.Replace("сейчас в столовой ", "") + "\nИнформация получена " + DateTime.Now.ToString("DD:MM:yyyy"), time);
+                        db.AddToMenu(text.Replace("сейчас в столовой ", "") + "\nИнформация получена " + DateTime.Now.ToString("dd.MM.yyyy"), time);
                     else
-                        db.AddToMenu(text.Replace("в столовой ", "") + "\nИнформация получена " + DateTime.Now.ToString("DD:MM:yyyy"), time);
+                        db.AddToMenu(text.Replace("в столовой ", "") + "\nИнформация получена " + DateTime.Now.ToString("dd.MM.yyyy"), time);
                     textToResponse = "БлЭт! Надеюсь я ничего не перепутал и все правильно запомнил...у вас же сейчас " + time + "?";
                 }
             }

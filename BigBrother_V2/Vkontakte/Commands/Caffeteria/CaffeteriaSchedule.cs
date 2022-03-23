@@ -11,11 +11,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
 
         public override string Name => "Расписание столовой";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Photo photo_attach = new Photo
+            Photo photo_attach = new()
             {
                 OwnerId = -187905748,
                 AlbumId = 267692087,
@@ -34,7 +34,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             string Text = message.Text.ToLower();
             if (((Text.Contains("во сколько") || Text.Contains("до скольки") || Text.Contains("когда")) && (Text.Contains("завтрак") || Text.Contains("обед") || Text.Contains("ужин"))) ||
                    (Text.Contains("расписание") && (Text.Contains("столов") || Text.Contains("столов") || Text.Contains("рестора"))))
+            {
                 return true;
+            }
+
             return false;
         }
     }

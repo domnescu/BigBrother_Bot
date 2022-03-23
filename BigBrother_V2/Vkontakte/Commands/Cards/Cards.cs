@@ -13,8 +13,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
         public override void Execute(Message message, VkApi client)
         {
             string text = message.Text.ToLower();
-            MessagesSendParams @params = new MessagesSendParams();
-            User user = new User(message.FromId.Value, client);
+            MessagesSendParams @params = new();
+            User user = new(message.FromId.Value, client);
             if (message.PeerId.Value < 2000000000)
             {
                 long PhotoID;
@@ -151,7 +151,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 }
 
 
-                Photo photo_attach = new Photo
+                Photo photo_attach = new()
                 {
                     OwnerId = -187905748,
                     AlbumId = 267692087,
@@ -172,7 +172,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && text.Contains("пятёр") == false && text.Contains("пятер") == false)
+            {
                 return true;
+            }
+
             return false;
         }
     }

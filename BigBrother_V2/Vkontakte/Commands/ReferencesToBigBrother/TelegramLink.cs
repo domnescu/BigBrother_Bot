@@ -9,14 +9,14 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
     {
         public override string Name => "Приветствие";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();
-            VkNet.Model.Attachments.Link link = new VkNet.Model.Attachments.Link();
-            Uri uri = new Uri("https://t.me/BigBrother_Makara_Bot?start");
+            VkNet.Model.Attachments.Link link = new();
+            Uri uri = new("https://t.me/BigBrother_Makara_Bot?start");
             link.Uri = uri;
             link.Title = "Мой телеграм";
             link.IsExternal = true;
@@ -30,9 +30,12 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if ((text.Contains("телег") || text.Contains("telegr")) && text.Contains("дай") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

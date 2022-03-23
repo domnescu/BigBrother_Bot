@@ -12,7 +12,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
+            Database db = new();
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: db.RandomResponse("AnswerOnFoul"),
@@ -23,10 +23,13 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("id") == false && db.CheckText(text, "fouls") && ((text.Contains("ты") && db.CheckText(text, "WarningList") == false)
                 || db.CheckText(text, "BotNames")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

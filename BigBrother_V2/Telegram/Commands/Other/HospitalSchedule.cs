@@ -22,7 +22,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.Contains("расписание") && (text.Contains("больницы") || text.Contains("поликлиники")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

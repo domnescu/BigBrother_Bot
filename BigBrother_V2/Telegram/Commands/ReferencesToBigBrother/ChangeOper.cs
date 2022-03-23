@@ -13,8 +13,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            UserTelegram user = new UserTelegram(message);
-            Database db = new Database();
+            UserTelegram user = new(message);
+            Database db = new();
             string Response = string.Empty;
             if (user.IsAdmin && message.ForwardFrom == null)
             {
@@ -51,9 +51,12 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("запомни") && text.Contains("опер") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -12,7 +12,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database database = new Database();
+            Database database = new();
             bool Succes = database.DeleteChat(message.Chat.Id);
             string text;
             ReplyKeyboardMarkup keyboard = null;
@@ -20,21 +20,29 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
             {
                 if (Succes)
                 {
-                    KeyboardButton keyboardButton = new KeyboardButton("пересылай инфу");
-                    keyboard = new ReplyKeyboardMarkup(keyboardButton);
-                    keyboard.ResizeKeyboard = true;
+                    KeyboardButton keyboardButton = new("пересылай инфу");
+                    keyboard = new ReplyKeyboardMarkup(keyboardButton)
+                    {
+                        ResizeKeyboard = true
+                    };
                     text = "Хорошо, не буду больше беспокоить тебя.";
                 }
                 else
+                {
                     text = "Видимо где-то произошла ошибка, попробуй вызвать Администратора.";
+                }
             }
             else
             {
                 keyboard = null;
                 if (Succes)
+                {
                     text = "Хорошо, не буду больше отправлять вам информацию.";
+                }
                 else
+                {
                     text = "Что-то пошло не по плану. Попробуйте связаться с Админом сообщества.";
+                }
             }
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
@@ -46,10 +54,13 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override bool Contatins(Message message)
         {
-            Database db = new Database();
+            Database db = new();
             string text = message.Text.ToLower();
             if ((text.Contains("прекрати") || text.Contains("перестань")) && text.Contains("инф") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

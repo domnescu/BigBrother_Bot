@@ -10,36 +10,56 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
         public override string Name => "Работа с базой данных";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            User user = new User(message.FromId.Value, client);
+            User user = new(message.FromId.Value, client);
             string answer;
             if (user.IsAdmin && message.Type == VkNet.Enums.MessageType.Received)
             {
-                Database database = new Database();
+                Database database = new();
                 bool Succes = database.AddToDB(message.Text);
                 if (message.Text.ToLower().StartsWith("insert") && Succes)
+                {
                     answer = "Элемент успешно добавлен в базу данных.";
+                }
                 else if (message.Text.ToLower().StartsWith("insert") && !Succes)
+                {
                     answer = "Произошла ошибка при добавлении в базу данных - проверь правильность ввода!";
+                }
                 else if (message.Text.ToLower().StartsWith("delete") && Succes)
+                {
                     answer = "Элемент успешно удалён из базы данных.";
+                }
                 else if (message.Text.ToLower().StartsWith("delete") && !Succes)
+                {
                     answer = "Произошла ошибка при удалении элемента из базы данных - проверь правильность ввода!";
+                }
                 else if (message.Text.ToLower().StartsWith("update") && Succes)
+                {
                     answer = "Элемент из базы данных успешно обновлён.";
+                }
                 else if (message.Text.ToLower().StartsWith("update") && !Succes)
+                {
                     answer = "Видимо ты где-то ошибся. В базе данных всё осталось в прежнем состоянии.";
+                }
                 else if (message.Text.ToLower().StartsWith("create") && Succes)
+                {
                     answer = "Таблица успешно создана.";
+                }
                 else if (message.Text.ToLower().StartsWith("create") && !Succes)
+                {
                     answer = "При создании таблицы возникла ошибка.";
+                }
                 else if (message.Text.ToLower().StartsWith("alter") && Succes)
+                {
                     answer = "Обновление таблицы успешно завершено.";
-                else 
+                }
+                else
+                {
                     answer = "Что-то пошло не так. Посмотри, может где-то есть очепятка.";
+                }
             }
             else if (message.Type == null)
             {
@@ -60,7 +80,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.StartsWith("insert") || text.StartsWith("update") || text.StartsWith("delete") || text.StartsWith("create") || text.StartsWith("alter"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

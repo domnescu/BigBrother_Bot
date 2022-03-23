@@ -11,7 +11,7 @@ namespace BigBrother_V2.Vkontakte.Commands
 
         public string Number = "Начальник военной кафедры Алексеев Алексей Сергеевич 8(812)321-15-93";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -25,7 +25,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("начальник") && text.Contains("воен")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

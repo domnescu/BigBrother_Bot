@@ -14,16 +14,18 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database database = new Database();
+            Database database = new();
             List<long> conversations = database.GetListLong("Chats");
             int users = 0;
             int Chats = 0;
             string Response;
-            List<long> ChatsForNrOfUsers = new List<long>();
-            foreach (var PeerID in conversations)
+            List<long> ChatsForNrOfUsers = new();
+            foreach (long PeerID in conversations)
             {
                 if (PeerID < 2000000000)
+                {
                     users++;
+                }
                 else
                 {
                     Chats++;
@@ -31,11 +33,11 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
                 }
             }
             Response = "Сейчас на мою рассылку подписаны " + users + " людей и " + Chats + " бесед.";
-            var chats = Program.BotClient.Messages.GetConversationsById(ChatsForNrOfUsers);
+            VkNet.Model.ConversationResult chats = Program.BotClient.Messages.GetConversationsById(ChatsForNrOfUsers);
 
-            foreach (var chat in chats.Items)
+            foreach (VkNet.Model.Conversation chat in chats.Items)
             {
-                var UsersInChat = Program.BotClient.Messages.GetConversationMembers(chat.Peer.Id);
+                VkNet.Model.GetConversationMembersResult UsersInChat = Program.BotClient.Messages.GetConversationMembers(chat.Peer.Id);
                 long NrOFUsersInChat = UsersInChat.Count;
                 Response += "\n" + chat.ChatSettings.Title + ":" + NrOFUsersInChat + " участников в ВК";
             }
@@ -49,9 +51,12 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("сколько") && text.Contains("людей") && text.Contains("подписа") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -12,9 +12,9 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
+            Database db = new();
             string Text = message.Text.Remove(0, 19);
-            await MessageDistributionWithTelegram("@"+ message.From.Username +" из Телеграма просил разослать следующее сообщение:\n"+ Text);
+            await MessageDistributionWithTelegram("@" + message.From.Username + " из Телеграма просил разослать следующее сообщение:\n" + Text);
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: "Готово, я разослал твоё сообщение.",
@@ -26,7 +26,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             if (text.StartsWith("бб сделай рассылку"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -12,11 +12,11 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
     {
         public override string Name => "Кнопки";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            var buttons = new List<List<MessageKeyboardButton>> { };
+            List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>> { };
             if (message.Text.ToLower().Contains("опер"))
             {
 
@@ -112,7 +112,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                         };
                 @params.Message = "Я надеюсь не надо объяснять как они работают.";
             }
-            var keyboard1 = new MessageKeyboard
+            MessageKeyboard keyboard1 = new MessageKeyboard
             {
                 Inline = false,
                 OneTime = false,
@@ -128,7 +128,10 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             if (message.PeerId.Value < 2000000000 && text.StartsWith("кнопки"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

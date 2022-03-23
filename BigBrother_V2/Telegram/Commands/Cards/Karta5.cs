@@ -23,7 +23,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && (text.Contains("пятёр") || text.Contains("пятер")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

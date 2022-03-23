@@ -12,13 +12,13 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         public override string Name => "Пустая Команда";
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
+            Database db = new();
             List<string> list = db.GetListString("WhoKnowMath", condition: "WHERE Platform='Telegram'");
             string response = "Математика без хуйни! На ютубе посмотри его ведосики) норм объясняет";
             if (list.Count != 0)
             {
                 response = "Вот тебе список людей которые, возможно, смогут тебе помочь:\n";
-                foreach (var str in list)
+                foreach (string str in list)
                 {
                     response += str + Environment.NewLine;
                 }
@@ -35,7 +35,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
             string text = message.Text.ToLower();
             if (text.Contains("кто") && (text.Contains("знает") || text.Contains("понимает") || text.Contains("может")) &&
                 (text.Contains("матема") || text.Contains("матан") || text.Contains("вышмат")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

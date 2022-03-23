@@ -12,7 +12,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
+            Database db = new();
             string text;
             if (message.Text.ToLower().Contains("тобой") || message.Text.ToLower().Contains("тебя"))
             {
@@ -58,7 +58,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.Contains("идти") && text.Contains("пар") && text.Contains("на"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

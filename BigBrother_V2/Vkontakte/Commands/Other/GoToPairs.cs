@@ -10,13 +10,13 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Идти на пары ?";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
-            Database db = new Database();
+            Database db = new();
             if (message.Text.ToLower().Contains("тобой") || message.Text.ToLower().Contains("тебя"))
             {
                 @params.Message = "Не, ну в приницпе, можно)) Почему бы и нет ?";
@@ -46,7 +46,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             if (text.Contains("идти") && text.Contains("пар") && text.Contains("на"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

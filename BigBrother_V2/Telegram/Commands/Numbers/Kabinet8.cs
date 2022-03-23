@@ -24,7 +24,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Numbers
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && ((text.Contains("8") || text.Contains("восьм")) && text.Contains("кабинет")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -13,7 +13,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            UserTelegram user = new UserTelegram(message);
+            UserTelegram user = new(message);
             string response;
             if (user.IsAdmin && message.ForwardFrom == null)
             {
@@ -22,9 +22,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
             }
             else if (message.ForwardFrom != null)
+            {
                 response = "Лучше свяжитесь с администратором.";
+            }
             else
+            {
                 response = "Ты не сможешь меня остановить 😈";
+            }
+
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: response,
@@ -35,10 +40,13 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             //Добавить упоминания бота
             if (text.Contains("перезагруз") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -12,15 +12,15 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
     {
         public override string Name => "Новая информация по оперу";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override async void Execute(Message message, VkApi client)
         {
             @params = new MessagesSendParams();
-            Database db = new Database();
-            User user = new User(message.FromId.Value, client);
-            var BlackList = client.Groups.GetBanned(187905748);
-            foreach (var BannedUser in BlackList)
+            Database db = new();
+            User user = new(message.FromId.Value, client);
+            VkNet.Utils.VkCollection<GetBannedResult> BlackList = client.Groups.GetBanned(187905748);
+            foreach (GetBannedResult BannedUser in BlackList)
             {
                 if (BannedUser.Profile.Id == user.Id)
                 {
@@ -40,7 +40,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                 warningType = db.GetWorkingVariable("CurrentOper");
             }
             else
+            {
                 warningType = "проверка";
+            }
+
             for (int i = 0; i < PossibleLocations.Count; i++)
             {
                 if (text.Contains(PossibleLocations[i]))
@@ -69,12 +72,14 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                         }
                     }
                     db.InfoUpdate(warningType, operinfoupdate + "\nВремя получения информации " + DateTime.Now.ToShortTimeString());
-                    Random random = new Random();
+                    Random random = new();
                     @params.DisableMentions = true;
                     @params.Message = operinfoupdate + "\nэту информацию я получил из ВК от ";
-                    StringForLink @string = new StringForLink();
-                    @string.VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
-                    @string.Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>";
+                    StringForLink @string = new()
+                    {
+                        VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]",
+                        Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>"
+                    };
                     await MessageDistribution(@params, client, @string);
                     @params.UserIds = null;
                     @params.Message = "Вот что я запомнил:\n" + operinfoupdate;
@@ -82,7 +87,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                     @params.RandomId = random.Next();
                     Send(@params, client);
                     List<long> MainMakaraChats = db.GetListLong("MainMakara");
-                    foreach (var MainMakara in MainMakaraChats)
+                    foreach (long MainMakara in MainMakaraChats)
                     {
                         if (message.PeerId.Value != MainMakara)
                         {
@@ -104,7 +109,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                 || text.StartsWith("ушли") || text.StartsWith("вышли") || text.StartsWith("вышла")) &&
                 text.Length < 15 && text.Contains("?") == false && text.Contains("не ") == false && text.Contains("нет") == false)
                 || text == "вернулся") && Regex.Replace(text, @"[^\d]+", "").Length < 5 && message.Payload == null && text.Length < 15)
+            {
                 return true;
+            }
+
             return false;
         }
     }

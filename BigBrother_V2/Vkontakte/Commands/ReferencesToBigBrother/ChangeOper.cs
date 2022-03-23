@@ -11,12 +11,12 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Принудительное изменение опера";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            User user = new User(message.FromId.Value, client);
-            Database db = new Database();
+            User user = new(message.FromId.Value, client);
+            Database db = new();
             if (user.IsAdmin && message.Type != null)
             {
                 List<string> operList = db.GetListString("WarningList");
@@ -50,9 +50,12 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("запомни") && text.Contains("опер") && (db.CheckText(text, "BotNames") || message.PeerId.Value < 2000000000))
+            {
                 return true;
+            }
+
             return false;
         }
     }

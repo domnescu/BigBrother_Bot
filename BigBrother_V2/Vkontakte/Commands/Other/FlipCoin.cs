@@ -9,7 +9,7 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Подбрось монетку";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -30,7 +30,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             if ((text.Contains("подбрось") || text.Contains("подкинь")) && text.Contains("монет"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

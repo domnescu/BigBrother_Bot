@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using VkNet;
 using VkNet.Model;
-using VkNet.Model.Attachments;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
@@ -11,7 +9,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
     {
         public override string Name => "Ссылка на беседу для продажи.";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -25,7 +23,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.Contains("бизнес") && text.Contains("макар"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -48,12 +48,15 @@ namespace BigBrother_V2
         public string RandomResponse(string group)
         {
             botDataBase.Open();
-            List<string> list = new List<string>();
+            List<string> list = new();
 
             command = new SQLiteCommand("SELECT * FROM RandomAnswers WHERE Type='" + group + "';", botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())
+            {
                 list.Add(reader.GetString(1));
+            }
+
             reader.Close();
             botDataBase.Close();
             return list[new Random().Next(list.Count)];
@@ -66,7 +69,7 @@ namespace BigBrother_V2
         /// <returns></returns>
         public List<long> GetListLong(string table, int column = 0, string condition = "")
         {
-            List<long> list = new List<long>();
+            List<long> list = new();
             botDataBase.Open();
             command = new SQLiteCommand("SELECT * FROM " + table + " " + condition, botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -203,7 +206,7 @@ namespace BigBrother_V2
         /// <returns></returns>
         public List<string> GetListString(string table, int column = 0, string condition = "")
         {
-            List<string> list = new List<string>();
+            List<string> list = new();
             botDataBase.Open();
             command = new SQLiteCommand("SELECT * FROM " + table + " " + condition, botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -224,7 +227,7 @@ namespace BigBrother_V2
         /// <returns></returns>
         public Dictionary<string, string> GetDictionaryString(string table, int column0 = 0, int column1 = 1)
         {
-            Dictionary<string, string> pairs = new Dictionary<string, string>();
+            Dictionary<string, string> pairs = new();
             botDataBase.Open();
             command = new SQLiteCommand("SELECT * FROM " + table, botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -409,7 +412,7 @@ namespace BigBrother_V2
         /// <returns></returns>
         public List<string> GetWarningTypes()
         {
-            List<string> list = new List<string>();
+            List<string> list = new();
             botDataBase.Open();
             command = new SQLiteCommand("SELECT * FROM WarningList GROUP BY Type", botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -428,7 +431,7 @@ namespace BigBrother_V2
         /// <returns>Список угроз</returns>
         public List<string> GetWarnings(string Type)
         {
-            List<string> list = new List<string>();
+            List<string> list = new();
             botDataBase.Open();
             command = new SQLiteCommand("SELECT * FROM WarningList WHERE Type='" + Type + "';", botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
@@ -456,7 +459,11 @@ namespace BigBrother_V2
             {
                 command = new SQLiteCommand("INSERT INTO SPAM (ChatID,UserID) VALUES (" + ChatID + ", " + UserID + ");", botDataBase);
             }
-            else response = true;
+            else
+            {
+                response = true;
+            }
+
             command.ExecuteNonQuery();
             botDataBase.Close();
             return response;

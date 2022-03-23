@@ -9,7 +9,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
     {
         public override string Name => "Инициалы Савука";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -23,7 +23,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
         {
             string text = message.Text.ToLower();
             if (text.Contains("инициалы") && (text.Contains("савук") || text.Contains("павук")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

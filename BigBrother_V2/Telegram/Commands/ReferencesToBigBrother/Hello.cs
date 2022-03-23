@@ -22,9 +22,12 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.StartsWith("привет") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

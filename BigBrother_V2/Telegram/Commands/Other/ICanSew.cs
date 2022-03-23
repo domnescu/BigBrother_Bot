@@ -11,7 +11,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
+            Database db = new();
             db.AddToDB("INSERT INTO WhoSew (domain,Platform) VALUES ('@" + message.From.Username + "','Telegram')");
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
@@ -24,7 +24,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.Contains("не") == false && (text.Contains("умею") || text.Contains("могу")) && text.Contains("шить"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -11,7 +11,7 @@ namespace BigBrother_V2.Vkontakte.Commands
 
         public string Number = "Декан общеинженерного факультета (он же Директор МЦОО) Кольцов Олег Вениаминович 8(812)421-38-97";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -26,7 +26,10 @@ namespace BigBrother_V2.Vkontakte.Commands
             string text = message.Text.ToLower();
             if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("декан ") || text.EndsWith("декан") ||
                 text.Contains("директор") || text.EndsWith("декана") || text.Contains("кольцов")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

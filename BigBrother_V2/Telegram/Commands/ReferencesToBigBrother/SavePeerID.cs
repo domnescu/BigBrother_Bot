@@ -12,29 +12,37 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database database = new Database();
-            bool Succes = database.AddChat(message.Chat.Id,"Telegram");
+            Database database = new();
+            bool Succes = database.AddChat(message.Chat.Id, "Telegram");
             string text;
             ReplyKeyboardMarkup keyboard = null;
             if (message.Chat.Id > 0)
             {
                 if (Succes)
                 {
-                    KeyboardButton keyboardButton = new KeyboardButton("прекрати пересылать инфу");
-                    keyboard = new ReplyKeyboardMarkup(keyboardButton);
-                    keyboard.ResizeKeyboard = true;
+                    KeyboardButton keyboardButton = new("прекрати пересылать инфу");
+                    keyboard = new ReplyKeyboardMarkup(keyboardButton)
+                    {
+                        ResizeKeyboard = true
+                    };
                     text = "Хорошо, я буду присылать тебе всю информацию по оперу";
                 }
                 else
+                {
                     text = "Ты уже есть в моей базе данных. Если тебе не приходит информация, вызови администратора.";
+                }
             }
             else
             {
                 keyboard = null;
                 if (Succes)
+                {
                     text = "Ваш чат успешно добавлен в базу данных";
+                }
                 else
+                {
                     text = "Ваш чат уже есть в моей базе данных, если по каким-то причинам информация сюда не приходит, вызовите администратора.";
+                }
             }
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
@@ -46,10 +54,13 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override bool Contatins(Message message)
         {
-            Database db = new Database();
+            Database db = new();
             string text = message.Text.ToLower();
             if ((text.Contains("пересылай") || text.Contains("присылай")) && text.Contains("инфу") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

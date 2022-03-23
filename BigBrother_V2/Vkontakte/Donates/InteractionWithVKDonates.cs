@@ -23,15 +23,15 @@ namespace BigBrother_V2.Vkontakte.Donates
         public Task Execute(IJobExecutionContext context)
         {
             VkApi client = Program.BotClient;
-            Database db = new Database();
+            Database db = new();
             bool NewDonate = false;
-            MessagesSendParams @params = new MessagesSendParams();
-            var webClient = new WebClient();
-            var response = webClient.DownloadString(db.GetWorkingVariable("DonateString"));
+            MessagesSendParams @params = new();
+            WebClient webClient = new WebClient();
+            string response = webClient.DownloadString(db.GetWorkingVariable("DonateString"));
             DonatesResponse donatesResponse = JsonSerializer.Deserialize<DonatesResponse>(response);
             int NrOfActualDonates = 0;
             int sum = 0;
-            foreach (var donate in donatesResponse.donates)
+            foreach (Donate donate in donatesResponse.donates)
             {
                 DateTime parsedDate = DateTime.Parse(donate.date);
                 if (parsedDate.Month == DateTime.Now.Month && parsedDate.Year == DateTime.Now.Year
@@ -39,7 +39,7 @@ namespace BigBrother_V2.Vkontakte.Donates
                 {
                     NewDonate = true;
                     sum += donate.sum;
-                    User user = new User(donate.uid, client);
+                    User user = new(donate.uid, client);
                     @params.Message += "[id" + user.Id + "|@" + user.Domain + "], ";
                     NrOfActualDonates++;
                 }
@@ -50,33 +50,54 @@ namespace BigBrother_V2.Vkontakte.Donates
             string days;
             string hours;
             if (SecondIsOne(numberOfdays))
+            {
                 days = "дней";
+            }
             else if (numberOfdays % 10 == 0 || numberOfdays % 10 >= 5)
+            {
                 days = "дней";
+            }
             else if (numberOfdays % 10 >= 2 && numberOfdays % 10 <= 4)
+            {
                 days = "дня";
+            }
             else
+            {
                 days = "день";
+            }
 
             if (SecondIsOne(numberOFhours))
+            {
                 hours = "часов";
+            }
             else if (numberOFhours % 10 == 0 || numberOFhours % 10 >= 5)
+            {
                 hours = "часов";
+            }
             else if (numberOFhours % 10 >= 2 && numberOFhours % 10 <= 4)
+            {
                 hours = "часа";
+            }
             else
+            {
                 hours = "час";
+            }
+
             string NrOfUsers;
             if (NrOfActualDonates > 1)
+            {
                 NrOfUsers = "вам";
+            }
             else
+            {
                 NrOfUsers = "тебе";
+            }
 
             @params.Message += "большое спасибо за донат, благодоря " + NrOfUsers + " я могу находится на сервере ещё " + numberOfdays + " " + days + " и " + numberOFhours + " " + hours;
             if (NewDonate)
             {
                 List<long> Chats = db.GetListLong("MainMakara");
-                foreach (var chat in Chats)
+                foreach (long chat in Chats)
                 {
                     @params.RandomId = new Random().Next();
                     @params.PeerId = chat;
@@ -96,7 +117,10 @@ namespace BigBrother_V2.Vkontakte.Donates
             nr %= 100;
             nr /= 10;
             if (nr == 1)
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -9,18 +9,23 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
     {
         public override string Name => "Пустая Команда";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database db = new Database();
-            User user = new User(message.PeerId.Value, client);
+            Database db = new();
+            User user = new(message.PeerId.Value, client);
             bool Succes = db.AddToDB("DELETE FROM WhoPrint WHERE domain='[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]';");
 
             if (Succes)
+            {
                 @params.Message = "Готово, я тебя удалил из списка людей которые могут распечатать.";
+            }
             else
+            {
                 @params.Message = "Так тебя и нет в списке людей которые могут распечатать";
+            }
+
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);
@@ -30,7 +35,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.Contains("печата") && text.Contains("не") && message.PeerId.Value < 2000000000)
+            {
                 return true;
+            }
+
             return false;
         }
     }

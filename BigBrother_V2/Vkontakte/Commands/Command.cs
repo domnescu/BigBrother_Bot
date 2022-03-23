@@ -57,16 +57,16 @@ namespace BigBrother_V2.Vkontakte.Commands
         /// </summary>
         /// <param name="params">Параметры сообщения</param>
         /// <param name="client">Клиент через который следует отправить сообщения</param>
-        public async Task MessageDistribution(MessagesSendParams @params, VkApi client, StringForLink @string=null)
+        public async Task MessageDistribution(MessagesSendParams @params, VkApi client, StringForLink @string = null)
         {
             @params.PeerId = null;
             @params.UserIds = null;
-            Database db = new Database();
-            Random rnd = new Random();
+            Database db = new();
+            Random rnd = new();
 
             List<long> ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
 
-            foreach (var ChatID in ListOfConversations)
+            foreach (long ChatID in ListOfConversations)
             {
                 Telegram.Bot.Types.Message sentMessage = await Program.botClient.SendTextMessageAsync(
                     chatId: ChatID,
@@ -77,10 +77,10 @@ namespace BigBrother_V2.Vkontakte.Commands
             @params.Message += @string.VK;
             ListOfConversations.Clear();
             ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
-            List<long> Users = new List<long>();
-            List<long> Chats = new List<long>();
+            List<long> Users = new();
+            List<long> Chats = new();
             int count = 1;
-            foreach (var peerID in ListOfConversations)
+            foreach (long peerID in ListOfConversations)
             {
                 if (peerID < 2000000000)
                 {
@@ -103,14 +103,16 @@ namespace BigBrother_V2.Vkontakte.Commands
             @params.UserIds = Users;
             @params.RandomId = rnd.Next();
             await SendToUsersIds(@params, client);
-            foreach (var peerID in Chats)
+            foreach (long peerID in Chats)
             {
                 @params.RandomId = rnd.Next();
                 @params.UserIds = null;
                 @params.PeerId = peerID;
-                try{
+                try
+                {
                     Send(@params, client);
-                } catch 
+                }
+                catch
                 {
                     db.DeleteChat(peerID);
                 }

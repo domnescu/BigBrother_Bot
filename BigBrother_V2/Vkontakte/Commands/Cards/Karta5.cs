@@ -13,8 +13,8 @@ namespace BigBrother_V2.Vkontakte.Commands
 
         public override void Execute(Message message, VkApi client)
         {
-            MessagesSendParams @params = new MessagesSendParams();
-            User user = new User(message.FromId.Value, client);
+            MessagesSendParams @params = new();
+            User user = new(message.FromId.Value, client);
             if (user.Sex == VkNet.Enums.Sex.Male)
             {
                 @params.Message = user.FirstName + ", Карта Пятёрочки, специально для тебя";
@@ -27,7 +27,7 @@ namespace BigBrother_V2.Vkontakte.Commands
             {
                 @params.Message = "Существо неопознанного пола, немедленно покинь магазин! Мало кому нравятся существа неопознанного пола";
             }
-            Photo photo_attach = new Photo
+            Photo photo_attach = new()
             {
                 OwnerId = -187905748,
                 AlbumId = 267692087,
@@ -43,7 +43,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && (text.Contains("пятёр") || text.Contains("пятер")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

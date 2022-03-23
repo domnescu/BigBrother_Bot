@@ -9,11 +9,11 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
     {
         public override string Name => "Кто Я ?";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database database = new Database();
+            Database database = new();
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();
             @params.Message = database.RandomResponse("WhoIAm");
@@ -23,9 +23,12 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("кто такой") && db.CheckText(text, "BotNames"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

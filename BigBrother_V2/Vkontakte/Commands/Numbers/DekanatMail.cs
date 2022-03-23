@@ -10,16 +10,21 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
     {
         public override string Name => "Почта Деканата";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             if (message.FromId.Value == 143676891)
+            {
                 @params.Message = "Да ты уже заебал! Я уже заебался отправлять тебе почту деканата";
+            }
             else
+            {
                 @params.Message = "Почта деканата - dekanatoif@mail.ru";
+            }
+
             Send(@params, client);
         }
 
@@ -27,7 +32,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("почта") || text.Contains("у кого")) && text.Contains("почта") && text.Contains("деканат"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

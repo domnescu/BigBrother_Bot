@@ -10,11 +10,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
     {
         public override string Name => "Запись меню столовой в БД";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database db = new Database();
+            Database db = new();
             string text = message.Text.ToLower();
             bool ContainsFood = db.CheckText(text, "CaffeteriaFilter");
             if (ContainsFood && db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2") == false && Regex.Match(text, @"[^a-zA-Zа-яА-ЯёЁ., \t\v\r\n\f)(\\\/-]").Success == false)
@@ -51,9 +51,14 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                         time = "ужин";
                     }
                     if (text.StartsWith(""))
+                    {
                         db.AddToMenu(text.Replace("сейчас в столовой ", "") + "\nИнформация получена " + DateTime.Now.ToString("dd.MM.yyyy"), time);
+                    }
                     else
+                    {
                         db.AddToMenu(text.Replace("в столовой ", "") + "\nИнформация получена " + DateTime.Now.ToString("dd.MM.yyyy"), time);
+                    }
+
                     @params.Message = "БлЭт! Надеюсь я ничего не перепутал и все правильно запомнил...у вас же сейчас " + time + "?";
                 }
             }
@@ -66,7 +71,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                 @params.Message = db.RandomResponse("CaffeteriaAltFilter");
             }
             else
+            {
                 @params.Message = db.RandomResponse("NotEat");
+            }
+
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);
@@ -75,10 +83,13 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if ((text.StartsWith("на завтрак") || text.StartsWith("на обед") || text.StartsWith("на ужин") || text.StartsWith("сейчас в столовой"))
                 && text.Contains("форм") == false && text.Contains("кто") == false && text.Contains("есть") == false && text.Contains("?") == false)
+            {
                 return true;
+            }
+
             return false;
         }
     }

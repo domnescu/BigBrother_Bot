@@ -10,7 +10,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
         public override string Name => "Главный бизнесмен Макары";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -27,7 +27,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.Contains("бизнес"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

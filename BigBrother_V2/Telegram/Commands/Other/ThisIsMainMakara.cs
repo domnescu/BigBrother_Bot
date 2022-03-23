@@ -12,8 +12,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         public override string Name => "Указание на главную беседу Макары.";
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database database = new Database();
-            UserTelegram user = new UserTelegram(message);
+            Database database = new();
+            UserTelegram user = new(message);
             string response;
             if (message.From == null && user.IsAdmin)
             {
@@ -46,9 +46,12 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("запомни") && (text.Contains("главная") || text.Contains("общая")) && text.Contains("беседа") && db.CheckText(text, "BotNames"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

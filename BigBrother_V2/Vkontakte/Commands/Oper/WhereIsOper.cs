@@ -10,14 +10,14 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
     {
         public override string Name => "Где опер?";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database db = new Database();
+            Database db = new();
             string Location;
             Dictionary<string, string> WarningList = db.GetDictionaryString("WarningList");
-            foreach (var warning in WarningList)
+            foreach (KeyValuePair<string, string> warning in WarningList)
             {
                 if (message.Text.ToLower().Contains(warning.Key.ToLower()) || message.Text.ToLower().StartsWith("ень"))
                 {
@@ -34,9 +34,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("где") && (db.CheckText(text, "WarningList") || text.StartsWith("ень")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -10,7 +10,7 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Какая неделя ?";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -21,7 +21,7 @@ namespace BigBrother_V2.Vkontakte.Commands
             //к текущей дате добавляется одна неделя.
             if (message.FromId.Value == 135310203 || message.FromId.Value == 241324442)
             {
-                User user = new User(message.FromId.Value, client);
+                User user = new(message.FromId.Value, client);
                 answer = user.FirstName + ", ты говорил что состоишь в секте Нечётной недели поэтому для тебя — Нечётная неделя.";
             }
             else
@@ -65,7 +65,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             if (text.StartsWith("какая") && text.Contains("неделя"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

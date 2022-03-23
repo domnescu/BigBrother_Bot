@@ -12,9 +12,9 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         public override string Name => "Включение Тайм-аута";
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
-            UserTelegram user = new UserTelegram(message);
-            Message sentMessage = new Message();
+            Database db = new();
+            UserTelegram user = new(message);
+            Message sentMessage = new();
             string answer;
             if (user.IsAdmin && message.ForwardFrom == null)
             {
@@ -35,7 +35,9 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
                     return;
                 }
                 else
+                {
                     answer = "А ты не хочешь указать на сколько мне нужно отключиться ?";
+                }
             }
             else if (message.ForwardFrom != null)
             {
@@ -54,10 +56,13 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
 
         public override bool Contatins(Message message)
         {
-            Database db = new Database();
+            Database db = new();
             string text = message.Text.ToLower();
             if ((text.Contains("пауз") || text.Contains("тайм")) && db.CheckText(text, "BotNames"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

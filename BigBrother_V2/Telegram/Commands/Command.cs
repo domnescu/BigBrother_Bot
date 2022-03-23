@@ -34,16 +34,18 @@ namespace BigBrother_V2.TelegramBigBro.Commands
 
         public async Task MessageDistributionWithTelegram(string text)
         {
-            MessagesSendParams @params = new MessagesSendParams();
-            @params.Message = text;
-            @params.PeerId = null;
-            @params.UserIds = null;
-            @params.DisableMentions = true;
-            Database db = new Database();
-            Random rnd = new Random();
+            MessagesSendParams @params = new()
+            {
+                Message = text,
+                PeerId = null,
+                UserIds = null,
+                DisableMentions = true
+            };
+            Database db = new();
+            Random rnd = new();
             List<long> ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
 
-            foreach (var ChatID in ListOfConversations)
+            foreach (long ChatID in ListOfConversations)
             {
                 Message sentMessage = await Program.botClient.SendTextMessageAsync(
                     chatId: ChatID,
@@ -53,10 +55,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands
 
             ListOfConversations.Clear();
             ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
-            List<long> Users = new List<long>();
-            List<long> Chats = new List<long>();
+            List<long> Users = new();
+            List<long> Chats = new();
             int count = 1;
-            foreach (var peerID in ListOfConversations)
+            foreach (long peerID in ListOfConversations)
             {
                 if (peerID < 2000000000)
                 {
@@ -79,7 +81,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands
             @params.UserIds = Users;
             @params.RandomId = rnd.Next();
             await Program.BotClient.Messages.SendToUserIdsAsync(@params);
-            foreach (var peerID in Chats)
+            foreach (long peerID in Chats)
             {
                 @params.RandomId = rnd.Next();
                 @params.UserIds = null;
@@ -92,7 +94,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands
                 {
                     db.DeleteChat(peerID);
                 }
-                
+
             }
         }
     }

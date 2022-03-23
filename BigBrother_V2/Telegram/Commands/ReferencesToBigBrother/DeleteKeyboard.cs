@@ -12,7 +12,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            var keyboard = new ReplyKeyboardRemove();
+            ReplyKeyboardRemove keyboard = new ReplyKeyboardRemove();
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: "Это сообщение должно убрать кнопки",
@@ -25,7 +25,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             if (text.Contains("наряд закончился") || text.Contains("убери кнопки") || text.Contains("убрать кнопки"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

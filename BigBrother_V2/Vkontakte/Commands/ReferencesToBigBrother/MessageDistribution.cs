@@ -17,12 +17,12 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 
         public override async void Execute(Message message, VkApi client)
         {
-            MessagesSendParams @params = new MessagesSendParams();
-            Database db = new Database();
-            User user = new User(message.FromId.Value, client);
-            Random rnd = new Random();
-            var BlackList = client.Groups.GetBanned(187905748);
-            foreach (var BannedUser in BlackList)
+            MessagesSendParams @params = new();
+            Database db = new();
+            User user = new(message.FromId.Value, client);
+            Random rnd = new();
+            VkNet.Utils.VkCollection<GetBannedResult> BlackList = client.Groups.GetBanned(187905748);
+            foreach (GetBannedResult BannedUser in BlackList)
             {
                 if (BannedUser.Profile.Id == user.Id)
                 {
@@ -35,20 +35,22 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             }
             List<long> ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
 
-            StringForLink @string = new StringForLink();
-            @string.VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
-            @string.Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>";
+            StringForLink @string = new()
+            {
+                VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]",
+                Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>"
+            };
 
             @params.Message += @string.VK;
             ListOfConversations.Clear();
-            List<long> Users = new List<long>();
-            List<long> Chats = new List<long>();
-            List<MediaAttachment> mediaAttachments = new List<MediaAttachment>();
+            List<long> Users = new();
+            List<long> Chats = new();
+            List<MediaAttachment> mediaAttachments = new();
             string Text = message.Text.Remove(0, 19);
             switch (user.Sex)
             {
                 case VkNet.Enums.Sex.Male:
-                    @string.VK ="[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просил передать:\n";
+                    @string.VK = "[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просил передать:\n";
                     @string.Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstName + " " + user.LastName + "</a> просил передать:\n";
                     break;
                 case VkNet.Enums.Sex.Female:
@@ -65,7 +67,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     break;
             };
             ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
-            foreach (var ChatID in ListOfConversations)
+            foreach (long ChatID in ListOfConversations)
             {
                 Telegram.Bot.Types.Message sentMessage = await Program.botClient.SendTextMessageAsync(
                     chatId: ChatID,
@@ -76,14 +78,14 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 
             ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
             @params.DisableMentions = true;
-            foreach (var a in message.Attachments)
+            foreach (Attachment a in message.Attachments)
             {
                 mediaAttachments.Add(a.Instance);
             }
             @params.Message = Text;
             @params.Attachments = mediaAttachments;
             int count = 1;
-            foreach (var peerID in ListOfConversations)
+            foreach (long peerID in ListOfConversations)
             {
                 if (peerID < 2000000000)
                 {
@@ -106,7 +108,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             @params.UserIds = Users;
             @params.RandomId = rnd.Next();
             await client.Messages.SendToUserIdsAsync(@params);
-            foreach (var peerID in Chats)
+            foreach (long peerID in Chats)
             {
                 @params.RandomId = rnd.Next();
                 @params.UserIds = null;
@@ -125,7 +127,10 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             if (text.StartsWith("бб сделай рассылку"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

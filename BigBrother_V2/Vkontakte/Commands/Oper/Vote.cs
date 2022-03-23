@@ -11,12 +11,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
     {
         public override string Name => "Голосование за нового опера";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            User user = new User(message.FromId.Value, client);
-            Database db = new Database();
+            User user = new(message.FromId.Value, client);
+            Database db = new();
             @params.Attachments = null;
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
@@ -31,20 +31,27 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                     string temp;
                     //проверка пола голосовавшего пользователя
                     if (user.Sex == VkNet.Enums.Sex.Male)
+                    {
                         temp = "голосовал";
+                    }
                     else
+                    {
                         temp = "голосовала";
+                    }
+
                     @params.Message = user.FirstName + ", ты уже " + temp;
                     Send(@params, client);
                     return;
                 }
                 string oper = null;
-                foreach (var _oper in OperList)
+                foreach (KeyValuePair<string, string> _oper in OperList)
                 {
                     if (text.Contains(_oper.Key.ToLower()))
                     {
                         if (_oper.Value == "опер" && _oper.Key != "опер")
+                        {
                             oper = _oper.Key;
+                        }
                         else
                         {
                             @params.Message = "А я считаю что " + _oper.Key + " это " + _oper.Value + ", а не опер.";
@@ -62,7 +69,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                     {
                         case 1:
                             {
-                                Audio audio = new Audio
+                                Audio audio = new()
                                 {
                                     OwnerId = -187905748,
                                     Id = 456239030
@@ -108,10 +115,13 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if ((text.StartsWith("сказать") || (text.Contains("опер") && text.Contains("где") == false && text.Contains("кто") == false && text.Length < 16
                 && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false)) && text.Contains("?") == false)
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -9,7 +9,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
     {
         public override string Name => "Знакомство с бб";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -22,9 +22,12 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if ((text.Contains("знакомст") || text.Contains("знакомь")) && db.CheckText(text, "BotNames"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

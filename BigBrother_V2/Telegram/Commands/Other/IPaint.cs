@@ -10,7 +10,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         public override string Name => "Я делаю начерт";
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
+            Database db = new();
             db.AddToDB("INSERT INTO WhoPaint (domain,Platform) VALUES ('@" + message.From.Username + "','Telegram')");
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
@@ -24,7 +24,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
             string text = message.Text.ToLower();
             if (text.Contains("не") == false && text.Contains("делаю") && ((text.Contains("инженерк") || text.Contains("инжеграф") || (text.Contains("инженер") && text.Contains("граф"))) ||
                 text.Contains("начерт")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

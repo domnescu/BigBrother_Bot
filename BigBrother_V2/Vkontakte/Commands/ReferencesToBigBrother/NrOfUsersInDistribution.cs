@@ -11,21 +11,23 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 
         public override string Name => "Тестовая команда";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database database = new Database();
+            Database database = new();
             List<long> conversations = database.GetListLong("Chats");
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             int users = 0;
             int Chats = 0;
-            List<long> ChatsForNrOfUsers = new List<long>();
-            foreach (var PeerID in conversations)
+            List<long> ChatsForNrOfUsers = new();
+            foreach (long PeerID in conversations)
             {
                 if (PeerID < 2000000000)
+                {
                     users++;
+                }
                 else
                 {
                     Chats++;
@@ -33,12 +35,12 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                 }
             }
             @params.Message = "Сейчас на мою рассылку подписаны " + users + " людей и " + Chats + " бесед.";
-            var chats = client.Messages.GetConversationsById(ChatsForNrOfUsers);
+            ConversationResult chats = client.Messages.GetConversationsById(ChatsForNrOfUsers);
 
-            foreach (var chat in chats.Items)
+            foreach (Conversation chat in chats.Items)
             {
 
-                var UsersInChat = client.Messages.GetConversationMembers(chat.Peer.Id);
+                GetConversationMembersResult UsersInChat = client.Messages.GetConversationMembers(chat.Peer.Id);
                 long NrOFUsersInChat = UsersInChat.Count;
                 @params.Message += "\n" + chat.ChatSettings.Title + ":" + NrOFUsersInChat + " участников";
             }
@@ -48,9 +50,12 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("сколько") && text.Contains("людей") && text.Contains("подписа") && db.CheckText(text, "BotNames"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

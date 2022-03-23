@@ -12,11 +12,11 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Тестовая команда";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            User user = new User(message.FromId.Value, client);
+            User user = new(message.FromId.Value, client);
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             if (user.IsAdmin && message.Type != null)
@@ -25,23 +25,25 @@ namespace BigBrother_V2.Vkontakte.Commands
                 Send(@params, client);
                 @params.RandomId = new Random().Next();
                 @params.Message = "Из базы данных удалены следующие люди: \n";
-                Database db = new Database();
+                Database db = new();
                 List<long> Chats = db.GetListLong("Chats");
-                var conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 200 });
-                foreach (var conversationAndLastMessage in conversations.Items)
+                GetConversationsResult conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 200 });
+                foreach (ConversationAndLastMessage conversationAndLastMessage in conversations.Items)
                 {
                     ulong LastMessageId = (ulong)conversationAndLastMessage.Conversation.OutRead;
-                    var messages = client.Messages.GetById(new[] { LastMessageId }, new[] { "" });
-                    foreach (var LastUnreadMessage in messages)
+                    VkNet.Utils.VkCollection<Message> messages = client.Messages.GetById(new[] { LastMessageId }, new[] { "" });
+                    foreach (Message LastUnreadMessage in messages)
                     {
 
                         if ((DateTime.Now - LastUnreadMessage.Date).Value.TotalDays > 14 && LastUnreadMessage.PeerId.Value < 2000000000 && Chats.Contains(LastUnreadMessage.PeerId.Value))
                         {
-                            User UserInMessageDistribution = new User(LastUnreadMessage.PeerId.Value, client);
+                            User UserInMessageDistribution = new(LastUnreadMessage.PeerId.Value, client);
                             @params.Message += "[id" + UserInMessageDistribution.Id + "|" + UserInMessageDistribution.FullName + "]\n";
-                            MessagesSendParams sendParams = new MessagesSendParams();
-                            sendParams.PeerId = UserInMessageDistribution.Id;
-                            sendParams.RandomId = new Random().Next();
+                            MessagesSendParams sendParams = new()
+                            {
+                                PeerId = UserInMessageDistribution.Id,
+                                RandomId = new Random().Next()
+                            };
                             if (user.Sex == VkNet.Enums.Sex.Male)
                             {
                                 sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читал мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
@@ -55,7 +57,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                                 sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читалО мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
                             }
 
-                            var buttons = new List<List<MessageKeyboardButton>>
+                            List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>>
                             {
                                 new List<MessageKeyboardButton>()
                                 {
@@ -97,10 +99,13 @@ namespace BigBrother_V2.Vkontakte.Commands
 
         public override bool Contatins(Message message)
         {
-            Database db = new Database();
+            Database db = new();
             string text = message.Text.ToLower();
             if (text.Contains("почисти") && (text.Contains("бд") || text.Contains("базу")) && db.CheckText(text, "BotNames"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

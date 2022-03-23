@@ -10,11 +10,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
     {
         public override string Name => "Расписание 64 Поликлиники";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Photo photo_attach = new Photo
+            Photo photo_attach = new()
             {
                 OwnerId = -187905748,
                 AlbumId = 267692087,
@@ -31,7 +31,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.Contains("расписание") && (text.Contains("больницы") || text.Contains("поликлиники")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

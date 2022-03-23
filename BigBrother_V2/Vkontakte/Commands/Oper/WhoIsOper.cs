@@ -9,12 +9,12 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Кто опер ?";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database db = new Database();
-            User user = new User(message.FromId.Value, client);
+            Database db = new();
+            User user = new(message.FromId.Value, client);
             string oper = db.GetWorkingVariable("CurrentOper");
             @params.Message = user.FirstName + ", сейчас " + oper + " опер.";
             @params.PeerId = message.PeerId.Value;
@@ -26,7 +26,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             if (text.Contains("кто") && text.Contains("опер") && text.Contains("заступ") == false && text.Contains("будет") == false && text.Contains("завтра") == false)
+            {
                 return true;
+            }
+
             return false;
         }
     }

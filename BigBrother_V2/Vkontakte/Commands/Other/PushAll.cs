@@ -12,13 +12,13 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Тестовая команда";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
-            User user = new User(message.FromId.Value, client);
+            User user = new(message.FromId.Value, client);
             @params.Message = user.FirstName + ", объясни мне пожалуйста, нахуя ты это сделал?";
             Send(@params, client);
         }
@@ -26,9 +26,12 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("@all") && db.CheckInt64(message.PeerId.Value, "IgnoreAll") == false)
+            {
                 return true;
+            }
+
             return false;
         }
     }

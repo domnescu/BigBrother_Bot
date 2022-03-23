@@ -11,13 +11,13 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Пустая Команда";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            var buttons = new List<List<MessageKeyboardButton>> { }; // пустой массив кнопок. Без массива не отправляется клавиатура!!
+            List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>> { }; // пустой массив кнопок. Без массива не отправляется клавиатура!!
 
-            var keyboard = new MessageKeyboard
+            MessageKeyboard keyboard = new MessageKeyboard
             {
                 Inline = false,
                 OneTime = false,
@@ -34,7 +34,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             if (text.Contains("наряд закончился") || text.Contains("убери кнопки") || text.Contains("убрать кнопки"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

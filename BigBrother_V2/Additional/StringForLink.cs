@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BigBrother_V2.Additional
+﻿namespace BigBrother_V2.Additional
 {
     public class StringForLink
     {

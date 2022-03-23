@@ -40,7 +40,10 @@ namespace BigBrother_V2.TelegramBigBro
             Domain = message.From.Username;
             Id = message.From.Id;
             if (Id == 312191379)
+            {
                 IsAdmin = true;
+            }
+
             FullName = FirstName + " " + LastName;
             IsBot = message.From.IsBot;
 

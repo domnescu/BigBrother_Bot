@@ -13,9 +13,9 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
+            Database db = new();
             string text = message.Text.ToLower();
-            string textToResponse = String.Empty;
+            string textToResponse = string.Empty;
             bool ContainsFood = db.CheckText(text, "CaffeteriaFilter");
             if (ContainsFood && db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2") == false && Regex.Match(text, @"[^a-zA-Zа-яА-ЯёЁ., \t\v\r\n\f)(\\\/-]").Success == false)
             {
@@ -51,9 +51,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
                         time = "ужин";
                     }
                     if (text.StartsWith(""))
+                    {
                         db.AddToMenu(text.Replace("сейчас в столовой ", "") + "\nИнформация получена " + DateTime.Now.ToString("dd.MM.yyyy"), time);
+                    }
                     else
+                    {
                         db.AddToMenu(text.Replace("в столовой ", "") + "\nИнформация получена " + DateTime.Now.ToString("dd.MM.yyyy"), time);
+                    }
+
                     textToResponse = "БлЭт! Надеюсь я ничего не перепутал и все правильно запомнил...у вас же сейчас " + time + "?";
                 }
             }
@@ -66,7 +71,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
                 textToResponse = db.RandomResponse("CaffeteriaAltFilter");
             }
             else
+            {
                 textToResponse = db.RandomResponse("NotEat");
+            }
+
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: textToResponse,
@@ -79,7 +87,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
             string text = message.Text.ToLower();
             if ((text.StartsWith("на завтрак") || text.StartsWith("на обед") || text.StartsWith("на ужин") || text.StartsWith("сейчас в столовой"))
                 && text.Contains("форм") == false && text.Contains("кто") == false && text.Contains("есть") == false && text.Contains("?") == false)
+            {
                 return true;
+            }
+
             return false;
         }
     }

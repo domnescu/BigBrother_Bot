@@ -9,7 +9,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
     {
         public override string Name => "Список комманд";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -22,9 +22,12 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if ((text.Contains("команды") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"))) || message.Payload == "{\"command\":\"start\"}" || text == "начать")
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -57,7 +57,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.StartsWith("какая") && text.Contains("неделя"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -18,13 +18,13 @@ namespace BigBrother_V2
         /// <returns></returns>
         public Task Execute(IJobExecutionContext context)
         {
-            Database database = new Database();
+            Database database = new();
             if (DateTime.Now.Hour == 00)
             {
                 database.CleanTable("Votes");
                 database.SetWorkingVariable("VoteAcces", "open");
                 Dictionary<string, string> warnings = database.GetDictionaryString("WarningList");
-                foreach (var warning in warnings)
+                foreach (KeyValuePair<string, string> warning in warnings)
                 {
                     if (warning.Value != "опер")
                     {
@@ -37,10 +37,12 @@ namespace BigBrother_V2
             if ((DateTime.Now.Day == 31 && DateTime.Now.Month == 12) || (DateTime.Now.Day == 01 && DateTime.Now.Month == 01))
             {
                 VkApi client = Program.BotClient;
-                Database db = new Database();
-                MessagesSendParams @params = new MessagesSendParams();
-                Audio Track = new Audio();
-                Track.OwnerId = -187905748;
+                Database db = new();
+                MessagesSendParams @params = new();
+                Audio Track = new()
+                {
+                    OwnerId = -187905748
+                };
                 if (DateTime.Now.Day == 31 && DateTime.Now.Hour == 14)
                 {
                     @params.Message = "Так)) ещё немного и у кого-то начнётся веселье))\nНастоятельно рекомендую слушать песни которые я буду отправлять))" +
@@ -118,10 +120,13 @@ namespace BigBrother_V2
                 }
 
                 List<long> Chats = db.GetListLong("MainMakara");
-                foreach (var chat in Chats)
+                foreach (long chat in Chats)
                 {
                     if (Track.Id != null)
+                    {
                         @params.Attachments = new[] { Track };
+                    }
+
                     @params.RandomId = new Random().Next();
                     @params.PeerId = chat;
                     client.Messages.Send(@params);

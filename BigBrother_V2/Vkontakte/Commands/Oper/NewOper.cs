@@ -9,21 +9,23 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Кто опер ?";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database db = new Database();
-            User user = new User(message.FromId.Value, client);
-            if (user.IsAdmin && message.Type!=null)
+            Database db = new();
+            User user = new(message.FromId.Value, client);
+            if (user.IsAdmin && message.Type != null)
             {
                 string temporarText = message.Text.Remove(0, 11);
                 db.AddToDB("INSET INTO WarningList ('warning','type') VALUES ('" + temporarText + "','опер');");
                 @params.Message = "Готово, " + temporarText + " добавлен в базу данных как новый опер.";
-            } else if (message.Type != null)
+            }
+            else if (message.Type != null)
             {
                 @params.Message = "Администраторские команды не выполняются из пересланных сообщений.";
-            } else
+            }
+            else
             {
                 @params.Message = "У тебя нет прав на выполнение данной команды. Свяжись с одним из администраторов для выполнения этой команды.";
             }
@@ -36,7 +38,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             if (text.StartsWith("новый опер"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

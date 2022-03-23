@@ -13,7 +13,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
+            Database db = new();
             string text = message.Text.ToLower();
             DateTime dateTime = DateTime.Now;
             string day;
@@ -71,7 +71,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
                 Response = db.RandomResponse("RandomCaffeteria");
             }
             else
+            {
                 Response = answer;
+            }
+
             Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: Response,
@@ -84,7 +87,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
             string text = message.Text.ToLower();
             if ((text.Contains("что ") || text.Contains("чем ") || text.Contains("чё ") || text.Contains("че ")) && ((text.Contains("столов")
                 || text.Contains("рестора") || text.Contains("кормят")) || text.Contains("завтрак") || text.Contains("обед") || text.Contains("ужин")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

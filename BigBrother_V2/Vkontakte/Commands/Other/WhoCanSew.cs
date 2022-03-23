@@ -10,17 +10,17 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
     {
         public override string Name => "Пустая Команда";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database db = new Database();
+            Database db = new();
             List<string> list = db.GetListString("WhoSew", condition: "WHERE Platform='VK'");
             @params.Message = "Вот хз! мне ещё не говорили";
             if (list.Count != 0)
             {
                 @params.Message = "Кто-то из этих людей точно может шить\n";
-                foreach (var str in list)
+                foreach (string str in list)
                 {
                     @params.Message += str + Environment.NewLine;
                 }
@@ -34,7 +34,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             string text = message.Text.ToLower();
             if (text.Contains("кто") && text.Contains(" шить"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

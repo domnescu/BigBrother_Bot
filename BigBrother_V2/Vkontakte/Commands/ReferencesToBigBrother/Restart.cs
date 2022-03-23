@@ -11,14 +11,14 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
     {
         public override string Name => "Перезагрузка";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            User user = new User(message.FromId.Value, client);
+            User user = new(message.FromId.Value, client);
             if (user.IsAdmin && message.Type != null)
             {
-                Photo photo_attach = new Photo
+                Photo photo_attach = new()
                 {
                     OwnerId = -187905748,
                     AlbumId = 267692087,
@@ -30,9 +30,14 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 
             }
             else if (message.Type == null)
+            {
                 @params.Message = "Лучше свяжитесь с администратором.";
+            }
             else
+            {
                 @params.Message = "Ты не сможешь меня остановить 😈";
+            }
+
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();
             Send(@params, client);
@@ -41,10 +46,13 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             //Добавить упоминания бота
             if (text.Contains("перезагруз") && db.CheckText(text, "BotNames"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

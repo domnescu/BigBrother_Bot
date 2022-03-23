@@ -43,29 +43,29 @@ namespace BigBrother_V2
         /// <summary>
         /// Клиент бота
         /// </summary>
-        public static VkApi BotClient = new VkApi();
+        public static VkApi BotClient = new();
         /// <summary>
         /// Список всех доступных команд
         /// </summary>
-        static List<Command> ListOfCommands = new List<Command>();
+        static List<Command> ListOfCommands = new();
 
 
         public static TelegramBotClient botClient;
-        static List<CommandTelegram> CommandsTelegram = new List<CommandTelegram>();
+        static List<CommandTelegram> CommandsTelegram = new();
 
         static async Task Main()
         {
             Initialize();
-            Database db = new Database();
+            Database db = new();
 
             botClient = new TelegramBotClient(db.GetWorkingVariable("BigBroKeyTelegram"));
-            using var cts = new CancellationTokenSource();
-            var receiverOptions = new ReceiverOptions
+            using CancellationTokenSource cts = new CancellationTokenSource();
+            ReceiverOptions receiverOptions = new ReceiverOptions
             {
                 AllowedUpdates = { } // all update types(message, join etc.)
             };
             botClient.StartReceiving(HandleUpdateAsync, HandleErrorAsync, receiverOptions, cancellationToken: cts.Token);
-            var me = await botClient.GetMeAsync();
+            Telegram.Bot.Types.User me = await botClient.GetMeAsync();
 
             Telegram.Bot.Types.Message sentMessage = await botClient.SendTextMessageAsync(
                 chatId: 312191379,
@@ -75,21 +75,25 @@ namespace BigBrother_V2
                 text: "Успешный запуск на Компе"
 #endif
             );
-            var BigBroLongPollServer = BotClient.Groups.GetLongPollServer(bigbroID);
+            LongPollServerResponse BigBroLongPollServer = BotClient.Groups.GetLongPollServer(bigbroID);
             while (true)
             {
                 try
                 {
-                    var poll = BotClient.Groups.GetBotsLongPollHistory(
+                    BotsLongPollHistoryResponse poll = BotClient.Groups.GetBotsLongPollHistory(
                        new BotsLongPollHistoryParams()
                        {
                            Server = BigBroLongPollServer.Server,
                            Ts = BigBroLongPollServer.Ts,
                            Key = BigBroLongPollServer.Key,
                        });
-                    if (poll.Updates == null) continue;
+                    if (poll.Updates == null)
+                    {
+                        continue;
+                    }
+
                     BigBroLongPollServer.Ts = poll.Ts;
-                    foreach (var update in poll.Updates)
+                    foreach (VkNet.Model.GroupUpdate.GroupUpdate update in poll.Updates)
                     {
                         if (update.Type == GroupUpdateType.MessageNew)
                         {
@@ -99,7 +103,9 @@ namespace BigBrother_V2
 
                             int timer = int.Parse(db.GetWorkingVariable("TimeOut"));
                             if (DateTime.Now.Minute >= timer)
+                            {
                                 ProcessingMessageAsync(update.MessageNew.Message);
+                            }
                         }
                         else if (update.Type == GroupUpdateType.MessageDeny)
                         {
@@ -144,7 +150,7 @@ namespace BigBrother_V2
         /// <param name="message">Сообщение</param>
         static async void ProcessingMessage(VkNet.Model.Message message)
         {
-            foreach (var command in ListOfCommands)
+            foreach (Command command in ListOfCommands)
             {
                 await CheckCommandsAsync(command, message);
             }
@@ -159,7 +165,7 @@ namespace BigBrother_V2
         {
             if (command.Contatins(message))
             {
-                Database db = new Database();
+                Database db = new();
 #if !DEBUG
                 db.UserUsedCommandIncrease(message.FromId.Value);
 #endif
@@ -168,19 +174,21 @@ namespace BigBrother_V2
                     try
                     {
                         command.Execute(message, BotClient);
-                    } catch (Exception e)
+                    }
+                    catch (Exception e)
                     {
-                        BotClient.Messages.Send(new MessagesSendParams {
+                        BotClient.Messages.Send(new MessagesSendParams
+                        {
                             PeerId = 235052667,
                             RandomId = new Random().Next(),
-                            Message= "Произошла ошибка при обработке команд из ВК!!\nОписание ошибки:"+e.Message + "\n\n StackTrace:\n" +e.StackTrace + "Сообщение которое вызвало ошибку:\n"+
-                                message.Text + "\nСообщение пришло от [id"+message.FromId.Value + "|Этого человека]"
-                        });;
+                            Message = "Произошла ошибка при обработке команд из ВК!!\nОписание ошибки:" + e.Message + "\n\n StackTrace:\n" + e.StackTrace + "Сообщение которое вызвало ошибку:\n" +
+                                message.Text + "\nСообщение пришло от [id" + message.FromId.Value + "|Этого человека]"
+                        }); ;
                     }
                 }
                 else if (db.NrOfCommandsFromUser(message.FromId.Value) == 10)
                 {
-                    Vkontakte.User user = new Vkontakte.User(message.FromId.Value, BotClient);
+                    Vkontakte.User user = new(message.FromId.Value, BotClient);
                     BotClient.Messages.Send(new MessagesSendParams
                     {
                         RandomId = new Random().Next(),
@@ -195,19 +203,23 @@ namespace BigBrother_V2
 
         static async Task HandleUpdateAsync(ITelegramBotClient botClientTelegram, Update update, CancellationToken cancellationToken)
         {
-            if(update.Type == UpdateType.MyChatMember && update.MyChatMember.OldChatMember.User.Username == "@BigBrother_Makara_Bot")
+            if (update.Type == UpdateType.MyChatMember && update.MyChatMember.OldChatMember.User.Username == "@BigBrother_Makara_Bot")
             {
-                Database db = new Database();
+                Database db = new();
                 db.DeleteChat(update.MyChatMember.Chat.Id);
             }
             // Is update type message?
             if (update.Type != UpdateType.Message)
+            {
                 return;
+            }
             // Is message type text?
             if (update.Message!.Type != MessageType.Text)
+            {
                 return;
+            }
 
-            foreach (var command in CommandsTelegram)
+            foreach (CommandTelegram command in CommandsTelegram)
             {
                 if (command.Contatins(update.Message))
                 {
@@ -218,7 +230,7 @@ namespace BigBrother_V2
 
         static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
-            var ErrorMessage = exception switch
+            string ErrorMessage = exception switch
             {
                 ApiRequestException apiRequestException
                     => $"Telegram API Error:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
@@ -235,7 +247,7 @@ namespace BigBrother_V2
         /// </summary>
         static void Initialize()
         {
-            Database db = new Database();
+            Database db = new();
             BotClient.Authorize(new ApiAuthParams() { AccessToken = db.GetWorkingVariable("BigBroKey") });
             DonateScheduler.Start();
             EventsOn00Scheduler.Start();

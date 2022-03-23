@@ -25,7 +25,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
         {
             string text = message.Text.ToLower();
             if (text.Contains("инициалы") && (text.Contains("бывалькевич") || text.Contains("бублик")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

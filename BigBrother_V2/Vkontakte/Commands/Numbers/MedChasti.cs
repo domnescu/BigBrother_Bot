@@ -11,7 +11,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
 
         public string Number = "Медсанчасть - 8(921)903-04-95";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -25,7 +25,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("медсанчаст") || text.Contains("медчаст") || text.Contains("медпункт")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

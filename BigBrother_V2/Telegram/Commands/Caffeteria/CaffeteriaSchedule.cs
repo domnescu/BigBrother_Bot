@@ -26,7 +26,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
             string Text = message.Text.ToLower();
             if (((Text.Contains("во сколько") || Text.Contains("до скольки") || Text.Contains("когда")) && (Text.Contains("завтрак") || Text.Contains("обед") || Text.Contains("ужин"))) ||
                    (Text.Contains("расписание") && (Text.Contains("столов") || Text.Contains("столов") || Text.Contains("рестора"))))
+            {
                 return true;
+            }
+
             return false;
         }
     }

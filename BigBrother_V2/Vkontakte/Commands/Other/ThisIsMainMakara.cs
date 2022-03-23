@@ -10,12 +10,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
         public override string Name => "Указание на главную беседу Макары.";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database database = new Database();
-            User user = new User(message.FromId.Value, client);
+            Database database = new();
+            User user = new(message.FromId.Value, client);
             if (message.Type == VkNet.Enums.MessageType.Received && user.IsAdmin)
             {
                 if (message.PeerId.Value > 2000000000)
@@ -45,9 +45,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("запомни") && (text.Contains("главная") || text.Contains("общая")) && text.Contains("беседа") && db.CheckText(text, "BotNames"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -61,7 +61,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Cards
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && text.Contains("пятёр") == false && text.Contains("пятер") == false)
+            {
                 return true;
+            }
+
             return false;
         }
     }

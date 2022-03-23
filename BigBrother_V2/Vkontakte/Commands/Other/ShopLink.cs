@@ -11,12 +11,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
     {
         public override string Name => "Ссылка на беседу для продажи.";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            User user = new User(message.FromId.Value, client);
-            Database db = new Database();
+            User user = new(message.FromId.Value, client);
+            Database db = new();
             if (message.PeerId.Value > 2000000000 && message.FromId.Value > 0)
             {
                 if (db.KickUser(message.FromId.Value, message.PeerId.Value - 2000000000))
@@ -37,11 +37,18 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 }
             }
             else if (message.PeerId.Value < 2000000000)
+            {
                 @params.Message = "Нахрен ты мне в личку эту хрень отправил ? Ты что совсем тупой ?";
+            }
             else if (message.FromId.Value < 0 && message.Type == null)
+            {
                 @params.Message = "Вы блять серьёзно ? Вы написали бота чтобы он отправлял сообщения о продаже ?";
+            }
             else if (message.FromId.Value < 0 && message.Type != null)
+            {
                 @params.Message = "Бляяя...да вы заебали уже! Вам чё сука одной беседы не хватает для продажи своей хуйни ? Вы паблики создаёте, пересылаете посты с их стены...Лучше бы вы так упорно учились!";
+            }
+
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);
@@ -49,13 +56,16 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
         public override bool Contatins(Message message)
         {
-            Regex regex = new Regex(@"([0-9]+.?[ \t\v\r\n\f]?((ру?б?)|(₽+)))+");
+            Regex regex = new(@"([0-9]+.?[ \t\v\r\n\f]?((ру?б?)|(₽+)))+");
             if (message.Attachments.Count == 0)
             {
                 string text = message.Text.ToLower();
                 MatchCollection matches = regex.Matches(text);
                 if (matches.Count > 1 && text.Contains("раз") == false && text.Contains("рота") == false)
+                {
                     return true;
+                }
+
                 return false;
             }
             else
@@ -63,8 +73,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 string text = message.Text.ToLower();
                 MatchCollection matches = regex.Matches(text);
                 if (matches.Count > 1 && text.Contains("раз") == false && text.Contains("рота") == false)
+                {
                     return true;
-                foreach (var attach in message.Attachments)
+                }
+
+                foreach (Attachment attach in message.Attachments)
                 {
                     if (attach.Type == typeof(Wall))
                     {
@@ -72,7 +85,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                         text = wallPost.Text;
                         matches = regex.Matches(text);
                         if (matches.Count > 1 && text.Contains("раз") == false && text.Contains("рота") == false)
+                        {
                             return true;
+                        }
                     }
                 }
                 return false;

@@ -9,7 +9,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
     {
         public override string Name => "Номера начальства";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -39,7 +39,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && text.Contains("начальств"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

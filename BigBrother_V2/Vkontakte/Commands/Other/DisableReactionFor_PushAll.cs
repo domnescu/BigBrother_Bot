@@ -12,21 +12,21 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Игнорирование All";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
-            var members = client.Messages.GetConversationMembers(message.PeerId.Value);
-            foreach (var member in members.Items)
+            GetConversationMembersResult members = client.Messages.GetConversationMembers(message.PeerId.Value);
+            foreach (ConversationMember member in members.Items)
             {
                 if (member.MemberId == message.FromId.Value)
                 {
                     if (member.IsAdmin)
                     {
                         @params.Message = "Окей, в данной беседе, я буду игнорировать @all.";
-                        Database db = new Database();
+                        Database db = new();
                         db.AddToDB("INSERT INTO IgnoreAll (PeerID) VALUES (" + message.PeerId.Value + ")");
                     }
                     else
@@ -41,9 +41,12 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if (text.Contains("all") && text.Contains("игнорируй") && db.CheckText(text, "BotNames") && message.PeerId.Value > 2000000000)
+            {
                 return true;
+            }
+
             return false;
         }
     }

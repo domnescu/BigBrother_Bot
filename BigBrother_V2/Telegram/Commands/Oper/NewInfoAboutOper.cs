@@ -15,8 +15,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
-            UserTelegram user = new UserTelegram(message);
+            Database db = new();
+            UserTelegram user = new(message);
             List<string> PossibleLocations = db.GetListString("PossibleLocations");
             string text = message.Text.ToLower();
             string warningType;
@@ -26,7 +26,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                 warningType = db.GetWorkingVariable("CurrentOper");
             }
             else
+            {
                 warningType = "проверка";
+            }
+
             for (int i = 0; i < PossibleLocations.Count; i++)
             {
                 if (text.Contains(PossibleLocations[i]))
@@ -62,12 +65,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                         cancellationToken: cancellationToken
                     );
                     List<long> MainMakaraChats = db.GetListLong("MainMakara");
-                    foreach (var MainMakara in MainMakaraChats)
+                    foreach (long MainMakara in MainMakaraChats)
                     {
-                        MessagesSendParams @params = new MessagesSendParams();
-                        @params.PeerId = MainMakara;
-                        @params.RandomId = new Random().Next();
-                        @params.Message = operinfoupdate + "\nэту инфу я получил из Телеграма от @" + message.From.Username;
+                        MessagesSendParams @params = new()
+                        {
+                            PeerId = MainMakara,
+                            RandomId = new Random().Next(),
+                            Message = operinfoupdate + "\nэту инфу я получил из Телеграма от @" + message.From.Username
+                        };
                         Program.BotClient.Messages.Send(@params);
                     }
                     return;
@@ -82,7 +87,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                 || text.StartsWith("ушли") || text.StartsWith("вышли") || text.StartsWith("вышла")) &&
                 text.Length < 15 && text.Contains("?") == false && text.Contains("не ") == false && text.Contains("нет") == false)
                 || text == "вернулся") && Regex.Replace(text, @"[^\d]+", "").Length < 5 && text.Length < 15)
+            {
                 return true;
+            }
+
             return false;
         }
     }

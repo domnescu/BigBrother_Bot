@@ -11,12 +11,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
     {
         public override string Name => "Включение Тайм-аута";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database db = new Database();
-            User user = new User(message.PeerId.Value, client);
+            Database db = new();
+            User user = new(message.PeerId.Value, client);
             if (user.IsAdmin && message.Type != null)
             {
                 if (Regex.Replace(message.Text, @"[^\d]+", "").Length != 0)
@@ -34,7 +34,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                     return;
                 }
                 else
+                {
                     @params.Message = "А ты не хочешь указать на сколько мне нужно отключиться ?";
+                }
             }
             else if (message.Type == null)
             {
@@ -52,10 +54,13 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
         public override bool Contatins(Message message)
         {
-            Database db = new Database();
+            Database db = new();
             string text = message.Text.ToLower();
             if ((text.Contains("пауз") || text.Contains("тайм")) && db.CheckText(text, "BotNames"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

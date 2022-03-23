@@ -12,16 +12,16 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Новая информация по оперу";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override async void Execute(Message message, VkApi client)
         {
-            Database db = new Database();
+            Database db = new();
             if (message.Type == VkNet.Enums.MessageType.Received)
             {
                 List<string> Types = db.GetWarningTypes();
                 List<string> Locations = db.GetListString("PossibleLocations");
-                User user = new User(message.FromId.Value, client);
+                User user = new(message.FromId.Value, client);
 #if !DEBUG
                 var BlackList = client.Groups.GetBanned(187905748);
                 foreach (var BannedUser in BlackList)
@@ -37,10 +37,10 @@ namespace BigBrother_V2.Vkontakte.Commands
                 }
 #endif
                 string text = " " + message.Text.ToLower();
-                foreach (var type in Types)
+                foreach (string type in Types)
                 {
                     List<string> Warnings = db.GetWarnings(type);
-                    foreach (var warning in Warnings)
+                    foreach (string warning in Warnings)
                     {
                         if (text.Contains(warning.ToLower()) || (message.Payload != null && message.Payload.Contains(warning.ToLower())))
                         {
@@ -52,7 +52,10 @@ namespace BigBrother_V2.Vkontakte.Commands
                                     string WarningType = type; //костыль для "красивого" сохранения информации
                                     string TextForSaveInfo;
                                     if (WarningType == "опер")
+                                    {
                                         WarningType = CurrentOper;
+                                    }
+
                                     string LocationForSave = WarningType + " " + Locations[i];
                                     if (Locations[i] == "к себе")
                                     {
@@ -85,12 +88,14 @@ namespace BigBrother_V2.Vkontakte.Commands
                                     Send(@params, client);
                                     @params.DisableMentions = true;
                                     @params.Message = LocationForSave + "\nэту информацию я получил из ВК от ";
-                                    StringForLink @string = new StringForLink();
-                                    @string.VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
-                                    @string.Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>";
+                                    StringForLink @string = new()
+                                    {
+                                        VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]",
+                                        Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>"
+                                    };
                                     await MessageDistribution(@params, client, @string);
                                     List<long> MainMakaraChats = db.GetListLong("MainMakara");
-                                    foreach (var MainMakara in MainMakaraChats)
+                                    foreach (long MainMakara in MainMakaraChats)
                                     {
                                         if (message.PeerId.Value != MainMakara)
                                         {
@@ -121,12 +126,15 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = " " + message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if ((text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false &&
                 text.Contains("через") == false && text.Contains("пойдёт") == false && text.Contains("что") == false && text.Contains("не ") == false &&
                 text.Contains("возможно") == false && text.Contains("сказал") == false && text.Contains("надо") == false && text.Contains("кто-нибудь") == false &&
                 text.Contains("кто-то") == false && text.Length < 100 && (db.CheckText(text, "WarningList")) && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5) || (message.Payload != null && message.Payload.Contains("location")))
+            {
                 return true;
+            }
+
             return false;
         }
     }

@@ -1,6 +1,4 @@
-﻿using BigBrother_V2.TelegramBigBro.Commands;
-using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -26,7 +24,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Numbers
         {
             string text = message.Text.ToLower();
             if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && text.Contains("бухгал"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

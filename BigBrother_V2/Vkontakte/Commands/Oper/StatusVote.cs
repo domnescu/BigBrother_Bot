@@ -9,15 +9,20 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Статус Голосования";
 
-        MessagesSendParams @params = new MessagesSendParams();
+        MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            Database db = new Database();
+            Database db = new();
             if (db.GetWorkingVariable("VoteAcces") == "open")
+            {
                 @params.Message = "Статус: открыто \nСписок голосов:\n" + db.GetVoteStatus();
+            }
             else
+            {
                 @params.Message = "Статус: закрыто";
+            }
+
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);
@@ -27,7 +32,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             if (text.Contains("статус") && text.Contains("голосования"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

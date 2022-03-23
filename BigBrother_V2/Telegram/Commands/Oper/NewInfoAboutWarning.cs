@@ -15,17 +15,17 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new Database();
+            Database db = new();
             if (message.ForwardFrom == null)
             {
                 List<string> Types = db.GetWarningTypes();
                 List<string> Locations = db.GetListString("PossibleLocations");
-                UserTelegram user = new UserTelegram(message);
+                UserTelegram user = new(message);
                 string text = " " + message.Text.ToLower();
-                foreach (var type in Types)
+                foreach (string type in Types)
                 {
                     List<string> Warnings = db.GetWarnings(type);
-                    foreach (var warning in Warnings)
+                    foreach (string warning in Warnings)
                     {
                         if (text.Contains(warning.ToLower()))
                         {
@@ -37,7 +37,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                                     string WarningType = type; //костыль для "красивого" сохранения информации
                                     string TextForSaveInfo;
                                     if (WarningType == "опер")
+                                    {
                                         WarningType = CurrentOper;
+                                    }
+
                                     string LocationForSave = WarningType + " " + Locations[i];
                                     if (Locations[i] == "к себе")
                                     {
@@ -71,12 +74,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                                     string TextForDistribution = LocationForSave + "\n эту информацию я получил из Телеграма, от @" + message.From.Username;
                                     await MessageDistributionWithTelegram(TextForDistribution);
                                     List<long> MainMakaraChats = db.GetListLong("MainMakara");
-                                    foreach (var MainMakara in MainMakaraChats)
+                                    foreach (long MainMakara in MainMakaraChats)
                                     {
-                                        MessagesSendParams @params = new MessagesSendParams();
-                                        @params.PeerId = MainMakara;
-                                        @params.RandomId = new Random().Next();
-                                        @params.Message = LocationForSave + " - эту инфу я получил из Телеграма от @" + message.From.Username;
+                                        MessagesSendParams @params = new()
+                                        {
+                                            PeerId = MainMakara,
+                                            RandomId = new Random().Next(),
+                                            Message = LocationForSave + " - эту инфу я получил из Телеграма от @" + message.From.Username
+                                        };
                                         try
                                         {
                                             Program.BotClient.Messages.Send(@params);
@@ -108,12 +113,15 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = " " + message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if ((text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false &&
                 text.Contains("через") == false && text.Contains("пойдёт") == false && text.Contains("что") == false && text.Contains("не ") == false &&
                 text.Contains("возможно") == false && text.Contains("сказал") == false && text.Contains("надо") == false && text.Contains("кто-нибудь") == false &&
                 text.Contains("кто-то") == false && text.Length < 100 && (db.CheckText(text, "WarningList")) && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5))
+            {
                 return true;
+            }
+
             return false;
         }
     }

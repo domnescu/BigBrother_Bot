@@ -28,7 +28,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands
         {
             string text = message.Text.ToLower();
             if (text.Contains("test"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

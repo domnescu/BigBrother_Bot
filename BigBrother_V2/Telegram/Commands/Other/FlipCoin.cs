@@ -32,7 +32,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         {
             string text = message.Text.ToLower();
             if ((text.Contains("подбрось") || text.Contains("подкинь")) && text.Contains("монет"))
+            {
                 return true;
+            }
+
             return false;
         }
     }

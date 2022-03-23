@@ -14,8 +14,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            UserTelegram user = new UserTelegram(message);
-            Database db = new Database();
+            UserTelegram user = new(message);
+            Database db = new();
             string text = " " + message.Text.ToLower().Replace("опер", "");
             int NrOfVotes = db.GetNrOfElements("Votes");
             if (NrOfVotes <= 5 && db.GetWorkingVariable("VoteAcces") == "open" && message.ForwardFrom == null && db.CheckText(text, "WarningList"))
@@ -32,12 +32,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                     return;
                 }
                 string oper = null;
-                foreach (var _oper in OperList)
+                foreach (KeyValuePair<string, string> _oper in OperList)
                 {
                     if (text.Contains(_oper.Key.ToLower()))
                     {
                         if (_oper.Value == "опер" && _oper.Key != "опер")
+                        {
                             oper = _oper.Key;
+                        }
                         else
                         {
                             Message sentMessage = await botClient.SendTextMessageAsync(
@@ -112,10 +114,13 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
+            Database db = new();
             if ((text.StartsWith("сказать") || (text.Contains("опер") && text.Contains("где") == false && text.Contains("кто") == false && text.Length < 16
                 && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false)) && text.Contains("?") == false)
+            {
                 return true;
+            }
+
             return false;
         }
     }

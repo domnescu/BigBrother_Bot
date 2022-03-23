@@ -181,7 +181,7 @@ namespace BigBrother_V2
                         {
                             PeerId = 235052667,
                             RandomId = new Random().Next(),
-                            Message = "Произошла ошибка при обработке команд из ВК!!\nОписание ошибки:" + e.Message + "\n\n StackTrace:\n" + e.StackTrace + "Сообщение которое вызвало ошибку:\n" +
+                            Message = "Произошла ошибка при обработке команд из ВК!!\nОписание ошибки:" + e.Message + "\n\n StackTrace:\n" + e.StackTrace + "\nСообщение которое вызвало ошибку:\n" +
                                 message.Text + "\nСообщение пришло от [id" + message.FromId.Value + "|Этого человека]"
                         }); ;
                     }
@@ -343,6 +343,8 @@ namespace BigBrother_V2
             ListOfCommands.Add(new NewOper());
             ListOfCommands.Add(new AccountingNumber());
             ListOfCommands.Add(new ShopLink2());
+            ListOfCommands.Add(new InitialsIvanov());
+            ListOfCommands.Add(new InitialsStepanov());
             #endregion
             #region Telegram Commands
 #if DEBUG
@@ -423,6 +425,8 @@ namespace BigBrother_V2
             CommandsTelegram.Add(new DeleteKeyboardTelegram());
             CommandsTelegram.Add(new AccountingTelegram());
             CommandsTelegram.Add(new ShopLinkTelegram());
+            CommandsTelegram.Add(new InitialsStepanovTelegram());
+            CommandsTelegram.Add(new InitialsIvanovTelegram());
             #endregion
             #endregion
         }

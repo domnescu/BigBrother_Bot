@@ -1,5 +1,8 @@
-﻿using System;
+﻿using BigBrother_V2.Additional;
+using System;
 using System.Collections.Generic;
+using Telegram.Bot;
+using Telegram.Bot.Types.Enums;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.Attachments;
@@ -30,20 +33,49 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     return;
                 }
             }
-            List<long> ListOfConversations = db.GetListLong("Chats");
+            List<long> ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
+
+            StringForLink @string = new StringForLink();
+            @string.VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]";
+            @string.Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>";
+
+            @params.Message += @string.VK;
+            ListOfConversations.Clear();
             List<long> Users = new List<long>();
             List<long> Chats = new List<long>();
             List<MediaAttachment> mediaAttachments = new List<MediaAttachment>();
             string Text = message.Text.Remove(0, 19);
-            string StartOfText = user.Sex switch
+            switch (user.Sex)
             {
-                VkNet.Enums.Sex.Male => "[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просил передать:\n",
-                VkNet.Enums.Sex.Female => "[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просила передать:\n",
-                VkNet.Enums.Sex.Unknown => "Существо неопознонного пола, именующее себя как [id" + user.Id + " | " + user.FirstName + " " + user.LastName + "], просило передать:\n",
-                _ => "Какая-то неведомая хуйня, просила передать:\n",
+                case VkNet.Enums.Sex.Male:
+                    @string.VK ="[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просил передать:\n";
+                    @string.Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstName + " " + user.LastName + "</a> просил передать:\n";
+                    break;
+                case VkNet.Enums.Sex.Female:
+                    @string.VK = "[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "] просила передать:\n";
+                    @string.Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstName + " " + user.LastName + "</a> просила передать:\n";
+                    break;
+                case VkNet.Enums.Sex.Unknown:
+                    @string.VK = "Существо неопознонного пола, именующее себя как [id" + user.Id + " | " + user.FirstName + " " + user.LastName + "], просило передать:\n";
+                    @string.Telegram = "Существо неопознонного пола, именующее себя как<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstName + " " + user.LastName + "</a> просило передать:\n";
+                    break;
+                default:
+                    @string.VK = "\n";
+                    @string.Telegram = "Какая-то неведомая хуйня, просила передать называющее себя <a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstName + " " + user.LastName + "</a> просила передать:\n";
+                    break;
             };
+            ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
+            foreach (var ChatID in ListOfConversations)
+            {
+                Telegram.Bot.Types.Message sentMessage = await Program.botClient.SendTextMessageAsync(
+                    chatId: ChatID,
+                    text: @string.Telegram + Text,
+                    parseMode: ParseMode.Html
+                );
+            }
+
+            ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
             @params.DisableMentions = true;
-            Text = StartOfText + Text;
             foreach (var a in message.Attachments)
             {
                 mediaAttachments.Add(a.Instance);

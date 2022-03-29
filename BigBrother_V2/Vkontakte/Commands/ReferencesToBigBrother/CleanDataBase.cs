@@ -26,7 +26,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                 @params.RandomId = new Random().Next();
                 @params.Message = "Из базы данных удалены следующие люди: \n";
                 Database db = new();
-                List<long> Chats = db.GetListLong("Chats");
+                List<long> Chats = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
                 GetConversationsResult conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 200 });
                 foreach (ConversationAndLastMessage conversationAndLastMessage in conversations.Items)
                 {
@@ -84,8 +84,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                     }
                 }
                 Send(@params, client);
-            }
-            if (message.Type == null)
+            } else if (message.Type == null)
             {
                 @params.Message = user.FirstName + " ты за кого меня принимаешь? Только непосредственно администраторы могут использовать эту команду.";
                 Send(@params, client);

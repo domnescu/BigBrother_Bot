@@ -23,6 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 {
                     try
                     {
+                        client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
                         client.Messages.RemoveChatUser((ulong)message.PeerId.Value - 2000000000, message.FromId.Value);
                         @params.Message = "Несите нового! Этот не понял с первого раза!";
                     }
@@ -33,6 +34,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 }
                 else
                 {
+                    client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
                     @params.Message = user.FirstName + ", для таких сообщений, есть отдельаня беседа. Если попробуешь ещё раз отправить что-то подобное, я тебя кикну.\n https://vk.me/join/AJQ1d5A_1grjDZ0ArYPhk0rr";
                 }
             }

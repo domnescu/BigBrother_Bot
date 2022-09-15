@@ -16,7 +16,7 @@ namespace BigBrother_V2.Vkontakte.Commands
             Database db = new();
             User user = new(message.FromId.Value, client);
             string oper = db.GetWorkingVariable("CurrentOper");
-            @params.Message = user.FirstName + ", сейчас " + oper + " опер.";
+            @params.Message = user.FirstName + ", тебе не похуй кто опер ? сиди блять учи пары и не еби мозги! А то придёт " + oper + " и даст по ебалу.";
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);

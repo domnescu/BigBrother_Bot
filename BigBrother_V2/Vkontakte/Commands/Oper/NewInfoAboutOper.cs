@@ -72,6 +72,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                         }
                     }
                     db.InfoUpdate(warningType, operinfoupdate + "\nВремя получения информации " + DateTime.Now.ToShortTimeString());
+                    db.SetWorkingVariable("PeerForAnihilation", message.PeerId.Value.ToString());
                     Random random = new();
                     @params.DisableMentions = true;
                     @params.Message = operinfoupdate + "\nэту информацию я получил из ВК от ";

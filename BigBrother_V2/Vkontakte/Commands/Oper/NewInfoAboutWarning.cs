@@ -81,6 +81,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                                     }
                                     TextForSaveInfo = LocationForSave + "\nВремя получения информации " + DateTime.Now.ToString("HH:mm");
                                     db.InfoUpdate(type, TextForSaveInfo);
+                                    db.SetWorkingVariable("PeerForAnihilation", message.PeerId.Value.ToString());
                                     @params.UserIds = null;
                                     @params.PeerId = message.PeerId.Value;
                                     @params.RandomId = new Random().Next();

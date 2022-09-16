@@ -514,5 +514,20 @@ namespace BigBrother_V2
             botDataBase.Close();
             return UsedCommands;
         }
+
+        public void SaveFuckingChat(long UserID,bool IsAdmin)
+        {
+            botDataBase.Open();
+            try
+            {
+                command = new SQLiteCommand("INSERT INTO Fucking_chat (userID,IsAdmin) VALUES (" + UserID + ",'" + IsAdmin.ToString() + "');", botDataBase);
+                command.ExecuteNonQuery();
+            }
+            catch
+            {
+                botDataBase.Close();
+            }
+            botDataBase.Close();
+        }
     }
 }

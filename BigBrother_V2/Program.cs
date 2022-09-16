@@ -345,7 +345,6 @@ namespace BigBrother_V2
             ListOfCommands.Add(new ShopLink2());
             ListOfCommands.Add(new InitialsIvanov());
             ListOfCommands.Add(new InitialsStepanov());
-            ListOfCommands.Add(new ChatList());
             ListOfCommands.Add(new Anihilation_Protocol());
             #endregion
             #region Telegram Commands

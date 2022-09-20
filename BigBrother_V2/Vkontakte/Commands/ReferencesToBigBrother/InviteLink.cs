@@ -15,7 +15,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             Database db = new Database();
             ulong.TryParse(db.GetWorkingVariable("PeerForAnihilation"), out ulong AnihilationPeerID);
-            string Link = client.Messages.GetInviteLink(AnihilationPeerID, true);
+            string Link = client.Messages.GetInviteLink(AnihilationPeerID, false);
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();
             @params.Message = "Пожалуйста, пригласительная ссылка в беседу из которой я в последний раз получал инфу по оперу \n"+Link;

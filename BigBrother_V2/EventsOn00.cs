@@ -22,6 +22,7 @@ namespace BigBrother_V2
             if (DateTime.Now.Hour == 00)
             {
                 database.CleanTable("Votes");
+                database.SetWorkingVariable("WhoIsInCheck", "");
                 database.SetWorkingVariable("VoteAcces", "open");
                 Dictionary<string, string> warnings = database.GetDictionaryString("WarningList");
                 foreach (KeyValuePair<string, string> warning in warnings)
@@ -33,6 +34,10 @@ namespace BigBrother_V2
                         database.InfoUpdate(warning.Value, tempString);
                     }
                 }
+            }
+            if (DateTime.Now.Hour == 16)
+            {
+                database.SetWorkingVariable("CurrentOper", "Да хуёзнает кто ");
             }
             if ((DateTime.Now.Day == 31 && DateTime.Now.Month == 12) || (DateTime.Now.Day == 01 && DateTime.Now.Month == 01))
             {

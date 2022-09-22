@@ -16,7 +16,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override void Execute(Message message, VkApi client)
         {
             Database db = new();
-            User user = new(message.PeerId.Value, client);
+            User user = new(message.FromId.Value, client);
             if (user.IsAdmin && message.Type != null)
             {
                 if (Regex.Replace(message.Text, @"[^\d]+", "").Length != 0)

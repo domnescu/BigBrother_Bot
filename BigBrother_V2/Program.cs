@@ -349,6 +349,7 @@ namespace BigBrother_V2
             ListOfCommands.Add(new InviteLink());
             ListOfCommands.Add(new Check());
             ListOfCommands.Add(new WhoIsInCheck());
+            ListOfCommands.Add(new Dont_fuck());
             #endregion
             #region Telegram Commands
 #if DEBUG

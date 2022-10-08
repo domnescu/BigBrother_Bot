@@ -21,15 +21,21 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             {
                 if (db.KickUser(message.FromId.Value, message.PeerId.Value - 2000000000))
                 {
-                    try
+                    GetConversationMembersResult UsersInChat = client.Messages.GetConversationMembers(message.PeerId.Value);
+                    for (int i = 0; i < UsersInChat.Count; i++)
                     {
-                        client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
-                        client.Messages.RemoveChatUser((ulong)message.PeerId.Value - 2000000000, message.FromId.Value);
-                        @params.Message = "Несите нового! Этот не понял с первого раза!";
-                    }
-                    catch
-                    {
-                        @params.Message = "Дайте мне права Администатора в беседе! Я хочу кикнуть эту мразь!";
+                        if (user.Id == UsersInChat.Profiles[i].Id)
+                        {
+                            if (UsersInChat.Items[i].CanKick)
+                            {
+                                client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
+                                client.Messages.RemoveChatUser((ulong)message.PeerId.Value - 2000000000, message.FromId.Value);
+                                @params.Message = "Несите нового! Этот не понял с первого раза!";
+                            } else 
+                            {
+                                @params.Message = "Дайте мне права Администатора в беседе! Я хочу кикнуть эту мразь!";
+                            }
+                        }
                     }
                 }
                 else

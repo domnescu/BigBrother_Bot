@@ -12,7 +12,6 @@ using BigBrother_V2.Vkontakte.Commands.Numbers;
 using BigBrother_V2.Vkontakte.Commands.Oper;
 using BigBrother_V2.Vkontakte.Commands.Other;
 using BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother;
-using BigBrother_V2.Vkontakte.Donates;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -249,7 +248,6 @@ namespace BigBrother_V2
         {
             Database db = new();
             BotClient.Authorize(new ApiAuthParams() { AccessToken = db.GetWorkingVariable("BigBroKey") });
-            DonateScheduler.Start();
             EventsOn00Scheduler.Start();
             #region Инициализация команд
             #region VK Commands

@@ -35,7 +35,7 @@ namespace BigBrother_V2
                     }
                 }
             }
-            if (DateTime.Now.Hour == 16)
+            if (DateTime.Now.Hour == 16 && database.GetWorkingVariable("VoteAcces")=="open")
             {
                 database.SetWorkingVariable("CurrentOper", "Да хуёзнает кто ");
             }

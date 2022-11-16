@@ -25,6 +25,7 @@ using VkNet;
 using VkNet.Enums.SafetyEnums;
 using VkNet.Exception;
 using VkNet.Model;
+using VkNet.Model.GroupUpdate;
 using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2
@@ -92,23 +93,23 @@ namespace BigBrother_V2
                     }
 
                     BigBroLongPollServer.Ts = poll.Ts;
-                    foreach (VkNet.Model.GroupUpdate.GroupUpdate update in poll.Updates)
+                    foreach (GroupUpdate update in poll.Updates)
                     {
-                        if (update.Type == GroupUpdateType.MessageNew)
+                        if (update.Instance is MessageNew message)
                         {
                             //убираем упоминания бота из текста.
-                            update.MessageNew.Message.Text = update.MessageNew.Message.Text.Replace("[club187905748|*bigbrother_bot] ", "");
-                            update.MessageNew.Message.Text = update.MessageNew.Message.Text.Replace("[club187905748|@bigbrother_bot] ", "");
+                            message.Message.Text = message.Message.Text.Replace("[club187905748|*bigbrother_bot] ", "");
+                            message.Message.Text = message.Message.Text.Replace("[club187905748|@bigbrother_bot] ", "");
 
                             int timer = int.Parse(db.GetWorkingVariable("TimeOut"));
                             if (DateTime.Now.Minute >= timer)
                             {
-                                ProcessingMessageAsync(update.MessageNew.Message);
+                                ProcessingMessageAsync(message.Message);
                             }
                         }
-                        else if (update.Type == GroupUpdateType.MessageDeny)
+                        else if (update.Instance is MessageDeny messageDeny)
                         {
-                            db.DeleteChat(update.MessageDeny.UserId.Value);
+                            db.DeleteChat(messageDeny.UserId.Value);
                         }
                     }
 

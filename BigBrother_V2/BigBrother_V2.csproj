@@ -13,10 +13,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Flurl" Version="3.0.6" />
+    <PackageReference Include="Flurl" Version="3.0.7" />
     <PackageReference Include="Flurl.Http" Version="3.2.4" />
-    <PackageReference Include="Quartz" Version="3.5.0" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.116" />
+    <PackageReference Include="Quartz" Version="3.6.2" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
     <PackageReference Include="Telegram.Bot" Version="18.0.0" />
     <PackageReference Include="Telegram.Bot.Extensions.Polling" Version="1.0.2" />
     <PackageReference Include="VkNet" Version="1.72.0" />

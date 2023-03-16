@@ -24,11 +24,13 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                     GetConversationMembersResult UsersInChat = client.Messages.GetConversationMembers(message.PeerId.Value);
                     for (int i = 0; i < UsersInChat.Count; i++)
                     {
-                        if (user.Id == UsersInChat.Profiles[i].Id)
+                        if (user.Id == UsersInChat.Items[i].MemberId)
                         {
-                            if (UsersInChat.Items[i].CanKick)
+                            //В будущем может быть сделаю чтобы работало
+                            //client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
+
+                            if (UsersInChat.Items[i].CanKick==true)
                             {
-                                client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
                                 client.Messages.RemoveChatUser((ulong)message.PeerId.Value - 2000000000, message.FromId.Value);
                                 @params.Message = "Несите нового! Этот не понял с первого раза!";
                             } else 

@@ -15,6 +15,18 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
         public override void Execute(Message message, VkApi client)
         {
             Database db = new();
+            VkNet.Utils.VkCollection<GetBannedResult> BlackList = client.Groups.GetBanned(187905748);
+            foreach (GetBannedResult BannedUser in BlackList)
+            {
+                if (BannedUser.Profile.Id == message.FromId.Value)
+                {
+                    @params.PeerId = message.PeerId.Value;
+                    @params.RandomId = new Random().Next();
+                    @params.Message = db.RandomResponse("RestrictWriteCaffeteria");
+                    Send(@params, client);
+                    return;
+                }
+            }
             string text = message.Text.ToLower();
             bool ContainsFood = db.CheckText(text, "CaffeteriaFilter");
             if (ContainsFood && db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2") == false && Regex.Match(text, @"[^a-zA-Zа-яА-ЯёЁ., \t\v\r\n\f)(\\\/-]").Success == false)

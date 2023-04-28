@@ -29,7 +29,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                         db.CleanTable("Votes");
                         db.InfoUpdate("опер", "После того как заступил " + operList[i] + ", я инфы не получал.");
 
-                        @params.Message = "Информация о текущем опере успено обновлена";
+                        @params.Message = "Информация о текущем опере успешно обновлена";
                         break;
                     }
                 }

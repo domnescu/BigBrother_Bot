@@ -84,7 +84,8 @@ namespace BigBrother_V2.Vkontakte.Commands
                     }
                 }
                 Send(@params, client);
-            } else if (message.Type == null)
+            }
+            else if (message.Type == null)
             {
                 @params.Message = user.FirstName + " ты за кого меня принимаешь? Только непосредственно администраторы могут использовать эту команду.";
                 Send(@params, client);

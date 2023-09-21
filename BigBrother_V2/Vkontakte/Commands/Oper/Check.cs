@@ -35,7 +35,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             {
                 @params.Message = "Хорошо, я запомнил что в проверке " + answer + " но это не точно";
                 db.SetWorkingVariable("WhoIsInCheck", answer);
-            } else
+            }
+            else
             {
                 @params.Message = "Чё за приколы ? Я не смог понять кто в проверке :| либо ты где-то ошибся либо человека торого ты назвал нет в моей базе данных.";
             }

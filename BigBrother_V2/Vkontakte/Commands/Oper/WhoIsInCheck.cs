@@ -16,14 +16,15 @@ namespace BigBrother_V2.Vkontakte.Commands
             Database db = new();
             User user = new(message.FromId.Value, client);
             string Check = db.GetWorkingVariable("WhoIsInCheck");
-            if(Check.Contains(" "))
+            if (Check.Contains(" "))
             {
                 @params.Message = user.FirstName + ", по общаге ходит проверка в которую входят " + Check + " но это не точно";
-            } else
+            }
+            else
             {
                 @params.Message = user.FirstName + ", в общаге щас бушует " + Check + " но это не точно!!!";
             }
-            
+
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);

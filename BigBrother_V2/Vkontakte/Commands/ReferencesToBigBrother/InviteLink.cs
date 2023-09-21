@@ -5,7 +5,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class InviteLink:Command
+    class InviteLink : Command
     {
         public override string Name => "Получение пригласительной ссылки в последний чат откуда поступала инфа по угрозам";
 
@@ -18,7 +18,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             string Link = client.Messages.GetInviteLink(AnihilationPeerID, false);
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();
-            @params.Message = "Пожалуйста, пригласительная ссылка в беседу из которой я в последний раз получал инфу по оперу \n"+Link;
+            @params.Message = "Пожалуйста, пригласительная ссылка в беседу из которой я в последний раз получал инфу по оперу \n" + Link;
             Send(@params, client);
         }
 
@@ -26,7 +26,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new Database();
-            if (text.Contains("пригласительная")&& text.Contains("ссылка")&& db.CheckText(text, "BotNames"))
+            if (text.Contains("пригласительная") && text.Contains("ссылка") && db.CheckText(text, "BotNames"))
             {
                 return true;
             }

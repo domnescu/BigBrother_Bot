@@ -27,9 +27,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 long AnihilationPeerID;
                 _ = long.TryParse(db.GetWorkingVariable("PeerForAnihilation"), out AnihilationPeerID);
                 GetConversationMembersResult UsersInChat = client.Messages.GetConversationMembers(AnihilationPeerID);
-                for(int i=0;i<UsersInChat.Count;i++)
+                for (int i = 0; i < UsersInChat.Count; i++)
                 {
-                    db.SaveFuckingChat(UsersInChat.Profiles[i].Id,UsersInChat.Items[i].IsAdmin);
+                    db.SaveFuckingChat(UsersInChat.Profiles[i].Id, UsersInChat.Items[i].IsAdmin);
                 }
                 @params.Message = "✅Первый этап заверщён. Список всех участников беседы успешно выгружен в мою базу данных.";
                 @params.RandomId = new Random().Next();
@@ -54,7 +54,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
      "Т.к. администраторы заебались кидать в ЧС всяких пиздюков из этой беседы, было решено уничтожить вашу беседу. Это не займёт много времени, не волнуйтесь 😈";
                 @params.RandomId = new Random().Next();
                 Send(@params, client);
-                @params.PeerId = message.PeerId.Value; 
+                @params.PeerId = message.PeerId.Value;
                 @params.Message = "☑ Начинаю третий этап протокола анигиляции. Третий этап будет выполняться пока меня не кикнут из беседы или я не кикну всех остальных.";
                 @params.RandomId = new Random().Next();
                 Send(@params, client);

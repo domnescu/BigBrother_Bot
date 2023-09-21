@@ -29,11 +29,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                             //В будущем может быть сделаю чтобы работало
                             //client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
 
-                            if (UsersInChat.Items[i].CanKick==true)
+                            if (UsersInChat.Items[i].CanKick == true)
                             {
                                 client.Messages.RemoveChatUser((ulong)message.PeerId.Value - 2000000000, message.FromId.Value);
                                 @params.Message = "Несите нового! Этот не понял с первого раза!";
-                            } else 
+                            }
+                            else
                             {
                                 @params.Message = "Дайте мне права Администатора в беседе! Я хочу кикнуть эту мразь!";
                             }

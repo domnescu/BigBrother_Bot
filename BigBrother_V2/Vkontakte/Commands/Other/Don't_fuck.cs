@@ -15,10 +15,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override void Execute(Message message, VkApi client)
         {
             User user = new User(message.FromId.Value, client);
-            if (user.Sex== VkNet.Enums.Sex.Male)
+            if (user.Sex == VkNet.Enums.Sex.Male)
             {
                 @params.Message = "А схуяли тебя что-то или кто-то должен ебать ?";
-            } else if (user.Sex == VkNet.Enums.Sex.Female)
+            }
+            else if (user.Sex == VkNet.Enums.Sex.Female)
             {
                 @params.Message = "Эт легко исправить! @all Парни!! тут " + user.FirstName + " хочет чтоб её ебали!";
             }

@@ -1,7 +1,5 @@
-﻿using Quartz.Util;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SQLite;
 
 namespace BigBrother_V2
@@ -517,7 +515,7 @@ namespace BigBrother_V2
             return UsedCommands;
         }
 
-        public void SaveFuckingChat(long UserID,bool IsAdmin)
+        public void SaveFuckingChat(long UserID, bool IsAdmin)
         {
             botDataBase.Open();
             try
@@ -543,7 +541,7 @@ namespace BigBrother_V2
         public long GetLong(string table, string column, string cell, int NrOfColumn)
         {
             botDataBase.Open();
-            long number=0;
+            long number = 0;
             command = new SQLiteCommand("SELECT * FROM " + table + " WHERE " + column + "='" + cell + "';", botDataBase);
             SQLiteDataReader reader = command.ExecuteReader();
             while (reader.Read())

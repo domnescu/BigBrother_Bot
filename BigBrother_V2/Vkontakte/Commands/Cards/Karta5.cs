@@ -33,7 +33,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                 OwnerId = -187905748,
                 AlbumId = 267692087,
                 Id = db.GetLong("Cards", "Name", "Пятёрочка", 1)
-        };
+            };
             @params.Attachments = new[] { photo_attach };
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();

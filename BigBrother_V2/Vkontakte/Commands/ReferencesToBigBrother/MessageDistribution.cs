@@ -82,7 +82,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             {
                 mediaAttachments.Add(a.Instance);
             }
-            @params.Message =@string.VK + Text;
+            @params.Message = @string.VK + Text;
             @params.Attachments = mediaAttachments;
             int count = 1;
             foreach (long peerID in ListOfConversations)

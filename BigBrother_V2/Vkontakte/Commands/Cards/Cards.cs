@@ -15,12 +15,13 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
             string text = message.Text.ToLower();
             MessagesSendParams @params = new();
             User user = new(message.FromId.Value, client);
+            Database db = new Database();
             if (message.PeerId.Value < 2000000000)
             {
                 long PhotoID;
                 if (text.Contains("ике") || text.Contains("ike"))
                 {
-                    PhotoID = 457239021;
+                    PhotoID = db.GetLong("Cards", "Name", "IKEA", 1);
                     if (user.Sex == VkNet.Enums.Sex.Male)
                     {
                         @params.Message = user.FirstName + ", надеюсь ты купил что-то небольшое, ну или взял себе помошников)";
@@ -36,7 +37,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 }
                 else if (text.Contains("карусел"))
                 {
-                    PhotoID = 457239020;
+                    PhotoID = db.GetLong("Cards", "Name", "Карусель", 1);
                     if (user.Sex == VkNet.Enums.Sex.Male)
                     {
                         @params.Message = user.FirstName + ",можешь купить мне пивка ? ";
@@ -52,7 +53,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 }
                 else if (text.Contains("лент"))
                 {
-                    PhotoID = 457239113;
+                    PhotoID = db.GetLong("Cards", "Name", "Лента", 1);
                     if (user.Sex == VkNet.Enums.Sex.Male)
                     {
                         @params.Message = user.FirstName + ", Хз если ещё работает))";
@@ -68,7 +69,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 }
                 else if (text.Contains("магнит"))
                 {
-                    PhotoID = 457239060;
+                    PhotoID = db.GetLong("Cards", "Name", "Магнит", 1);
                     if (user.Sex == VkNet.Enums.Sex.Male)
                     {
                         @params.Message = user.FirstName + ", ты просил карту Магнита ? Получай";
@@ -84,7 +85,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 }
                 else if (text.Contains("оке") || text.Contains("okey"))
                 {
-                    PhotoID = 457239022;
+                    PhotoID = db.GetLong("Cards", "Name", "ОКЕЙ", 1);
                     if (user.Sex == VkNet.Enums.Sex.Male)
                     {
                         @params.Message = user.FirstName + ", Окей, держи карту ОКЕЙ";
@@ -100,7 +101,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 }
                 else if (text.Contains("перекрест") || text.Contains("перекрёст"))
                 {
-                    PhotoID = 457239023;
+                    PhotoID = db.GetLong("Cards", "Name", "Перекрёсток", 1);
                     if (user.Sex == VkNet.Enums.Sex.Male)
                     {
                         @params.Message = user.FirstName + ", Ну на тебе карту Перекрёстка";
@@ -116,7 +117,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 }
                 else if (text.Contains("пловдив"))
                 {
-                    PhotoID = 457239104; if (user.Sex == VkNet.Enums.Sex.Male)
+                    PhotoID = db.GetLong("Cards", "Name", "Пловдив", 1);
+                    if (user.Sex == VkNet.Enums.Sex.Male)
                     {
                         @params.Message = user.FirstName + ", держи карту Пловдив";
                     }
@@ -131,7 +133,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
                 }
                 else if (text.Contains("прис") || text.Contains("pris") || text.Contains("приз"))
                 {
-                    PhotoID = 457239024;
+                    PhotoID = db.GetLong("Cards", "Name", "Prisma", 1);
                     if (user.Sex == VkNet.Enums.Sex.Male)
                     {
                         @params.Message = user.FirstName + ", ты просил карту Призмы? Получай)";

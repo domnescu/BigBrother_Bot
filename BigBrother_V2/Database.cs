@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Quartz.Util;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
 
 namespace BigBrother_V2
@@ -528,6 +530,29 @@ namespace BigBrother_V2
                 botDataBase.Close();
             }
             botDataBase.Close();
+        }
+
+        /// <summary>
+        /// Получучение числа из таблицы БД
+        /// </summary>
+        /// <param name="table">Название таблицы</param>
+        /// <param name="column">Название столбца</param>
+        /// <param name="cell">Данные в одной из ячеек из таблицы</param>
+        /// <param name="NrOfColumn">Номер номер столбца из которого стоит извлечь данные</param>
+        /// <returns></returns>
+        public long GetLong(string table, string column, string cell, int NrOfColumn)
+        {
+            botDataBase.Open();
+            long number=0;
+            command = new SQLiteCommand("SELECT * FROM " + table + " WHERE " + column + "='" + cell + "';", botDataBase);
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                number = reader.GetInt64(NrOfColumn);
+            }
+            reader.Close();
+            botDataBase.Close();
+            return number;
         }
     }
 }

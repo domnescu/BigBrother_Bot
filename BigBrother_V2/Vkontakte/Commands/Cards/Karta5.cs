@@ -27,12 +27,13 @@ namespace BigBrother_V2.Vkontakte.Commands
             {
                 @params.Message = "Существо неопознанного пола, немедленно покинь магазин! Мало кому нравятся существа неопознанного пола";
             }
+            Database db = new Database();
             Photo photo_attach = new()
             {
                 OwnerId = -187905748,
                 AlbumId = 267692087,
-                Id = 457239062
-            };
+                Id = db.GetLong("Cards", "Name", "Пятёрочка", 1)
+        };
             @params.Attachments = new[] { photo_attach };
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();

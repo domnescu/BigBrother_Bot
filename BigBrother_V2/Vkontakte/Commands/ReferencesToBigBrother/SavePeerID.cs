@@ -8,11 +8,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class SavePeerID : Command
+    internal class SavePeerID : Command
     {
         public override string Name => "Сохранение идентификатора диалога/беседы";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -20,8 +20,8 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             bool Succes = database.AddChat(message.PeerId.Value, "VK");
             if (message.PeerId.Value < 2000000000)
             {
-                List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>>
-                    {
+                List<List<MessageKeyboardButton>> buttons = new()
+                {
                         new List<MessageKeyboardButton>()
                         {
                             new MessageKeyboardButton
@@ -41,26 +41,16 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     OneTime = false,
                     Buttons = buttons
                 };
-                if (Succes)
-                {
-                    @params.Message = "Хорошо, я буду присылать тебе всю информацию по оперу";
-                }
-                else
-                {
-                    @params.Message = "Ты уже есть в моей базе данных. Если тебе не приходит информация, вызови администратора.";
-                }
+                @params.Message = Succes
+                    ? "Хорошо, я буду присылать тебе всю информацию по оперу"
+                    : "Ты уже есть в моей базе данных. Если тебе не приходит информация, вызови администратора.";
             }
             else
             {
                 @params.Keyboard = null;
-                if (Succes)
-                {
-                    @params.Message = "Ваша беседа успешно добавлена в базу данных";
-                }
-                else
-                {
-                    @params.Message = "Ваша беседа уже есть в моей базе данных, если по каким-то причинам информация сюда не приходит, вызовите администратора.";
-                }
+                @params.Message = Succes
+                    ? "Ваша беседа успешно добавлена в базу данных"
+                    : "Ваша беседа уже есть в моей базе данных, если по каким-то причинам информация сюда не приходит, вызовите администратора.";
             }
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
@@ -71,12 +61,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             Database db = new();
             string text = message.Text.ToLower();
-            if ((text.Contains("пересылай") || text.Contains("присылай")) && text.Contains("инфу") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("пересылай") || text.Contains("присылай")) && text.Contains("инфу") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"));
         }
     }
 }

@@ -5,12 +5,12 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class BuisnessMakara : Command
+    internal class BuisnessMakara : Command
     {
 
         public override string Name => "Ссылка на беседу Бизнес Макара";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -24,12 +24,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("бизнес") && text.Contains("макар") && text.Length < 15)
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("бизнес") && text.Contains("макар") && text.Length < 15;
         }
     }
 }

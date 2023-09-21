@@ -6,11 +6,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Oper
 {
-    class Check : Command
+    internal class Check : Command
     {
         public override string Name => "Кто в проверке ?";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -48,13 +48,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new Database();
-            if (text.Contains("в проверк") && db.CheckText(text, "WarningList"))
-            {
-                return true;
-            }
-
-            return false;
+            Database db = new();
+            return text.Contains("в проверк") && db.CheckText(text, "WarningList");
         }
     }
 }

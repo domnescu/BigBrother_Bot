@@ -6,13 +6,13 @@ using VkNet.Model;
 using VkNet.Model.Keyboard;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class CleanDataBase : Command
+    internal class CleanDataBase : Command
     {
         public override string Name => "Тестовая команда";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -44,20 +44,13 @@ namespace BigBrother_V2.Vkontakte.Commands
                                 PeerId = UserInMessageDistribution.Id,
                                 RandomId = new Random().Next()
                             };
-                            if (user.Sex == VkNet.Enums.Sex.Male)
-                            {
-                                sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читал мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
-                            }
-                            else if (user.Sex == VkNet.Enums.Sex.Female)
-                            {
-                                sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читала мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
-                            }
-                            else
-                            {
-                                sendParams.Message = UserInMessageDistribution.FirstName + ", ты больше 14 дней не читалО мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
-                            }
+                            sendParams.Message = user.Sex == VkNet.Enums.Sex.Male
+                                ? UserInMessageDistribution.FirstName + ", ты больше 14 дней не читал мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных."
+                                : user.Sex == VkNet.Enums.Sex.Female
+                                    ? UserInMessageDistribution.FirstName + ", ты больше 14 дней не читала мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных."
+                                    : UserInMessageDistribution.FirstName + ", ты больше 14 дней не читалО мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
 
-                            List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>>
+                            List<List<MessageKeyboardButton>> buttons = new()
                             {
                                 new List<MessageKeyboardButton>()
                                 {
@@ -79,7 +72,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                                 Buttons = buttons
                             };
                             Send(sendParams, client);
-                            db.DeleteChat(LastUnreadMessage.PeerId.Value);
+                            _ = db.DeleteChat(LastUnreadMessage.PeerId.Value);
                         }
                     }
                 }
@@ -101,12 +94,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             Database db = new();
             string text = message.Text.ToLower();
-            if (text.Contains("почисти") && (text.Contains("бд") || text.Contains("базу")) && db.CheckText(text, "BotNames"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("почисти") && (text.Contains("бд") || text.Contains("базу")) && db.CheckText(text, "BotNames");
         }
     }
 }

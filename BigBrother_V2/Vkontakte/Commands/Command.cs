@@ -40,7 +40,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         /// <param name="client">Авторизованный клиент от имени которого отправляются сообщения.</param>
         public void Send(MessagesSendParams @params, VkApi client)
         {
-            client.Messages.Send(@params);
+            _ = client.Messages.Send(@params);
         }
         /// <summary>
         /// Асинхронная отправка сообщений 100 пользователям одновременно.
@@ -50,7 +50,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         /// <param name="client">Клиент через который следует отправить сообщения</param>
         public async Task SendToUsersIds(MessagesSendParams @params, VkApi client)
         {
-            await client.Messages.SendToUserIdsAsync(@params);
+            _ = await client.Messages.SendToUserIdsAsync(@params);
         }
         /// <summary>
         /// Метод отвечающий за массовые рассылки сообщений
@@ -114,7 +114,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                 }
                 catch
                 {
-                    db.DeleteChat(peerID);
+                    _ = db.DeleteChat(peerID);
                 }
             }
         }

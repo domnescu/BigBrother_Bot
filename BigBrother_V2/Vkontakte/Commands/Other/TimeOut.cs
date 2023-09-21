@@ -7,11 +7,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class TimeOut : Command
+    internal class TimeOut : Command
     {
         public override string Name => "Включение Тайм-аута";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -38,13 +38,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                     @params.Message = "А ты не хочешь указать на сколько мне нужно отключиться ?";
                 }
             }
-            else if (message.Type == null)
-            {
-                @params.Message = "Пересланные сообщения администраторов не обрабатываются.";
-            }
             else
             {
-                @params.Message = "Данная команда доступна только для администраторов.";
+                @params.Message = message.Type == null
+                    ? "Пересланные сообщения администраторов не обрабатываются."
+                    : "Данная команда доступна только для администраторов.";
             }
 
             @params.PeerId = message.PeerId.Value;
@@ -56,12 +54,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             Database db = new();
             string text = message.Text.ToLower();
-            if ((text.Contains("пауз") || text.Contains("тайм")) && db.CheckText(text, "BotNames"))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("пауз") || text.Contains("тайм")) && db.CheckText(text, "BotNames");
         }
     }
 }

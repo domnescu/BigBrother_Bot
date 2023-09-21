@@ -5,9 +5,9 @@ using Telegram.Bot.Types;
 
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Oper
+namespace BigBrother_V2.Telegram.Commands.Oper
 {
-    class WhoIsOperTelegram : CommandTelegram
+    internal class WhoIsOperTelegram : CommandTelegram
     {
         public override string Name => "Кто опер ?";
 
@@ -16,7 +16,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
             Database db = new();
             UserTelegram user = new(message);
             string oper = db.GetWorkingVariable("CurrentOper");
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            _ = await botClient.SendTextMessageAsync(
             chatId: message.Chat.Id,
             text: user.FirstName + ", сейчас " + oper + " опер.",
             cancellationToken: cancellationToken
@@ -26,12 +26,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("кто") && text.Contains("опер") && text.Contains("заступ") == false && text.Contains("будет") == false && text.Contains("завтра") == false)
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("кто") && text.Contains("опер") && text.Contains("заступ") == false && text.Contains("будет") == false && text.Contains("завтра") == false;
         }
     }
 }

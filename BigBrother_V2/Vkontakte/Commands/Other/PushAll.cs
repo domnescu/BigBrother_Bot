@@ -3,16 +3,16 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Other
 {
     /// <summary>
     /// Данная функция не входит в релизную версию, она используется исключительно для тестирования функций
     /// </summary>
-    class PushAll : Command
+    internal class PushAll : Command
     {
         public override string Name => "Тестовая команда";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -27,12 +27,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("@all") && db.CheckInt64(message.PeerId.Value, "IgnoreAll") == false)
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("@all") && db.CheckInt64(message.PeerId.Value, "IgnoreAll") == false;
         }
     }
 }

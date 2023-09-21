@@ -5,12 +5,12 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class Chrome : Command
+    internal class Chrome : Command
     {
 
         public override string Name => "Главный бизнесмен Макары";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -26,12 +26,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("бизнес"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("бизнес");
         }
     }
 }

@@ -8,11 +8,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class DeletePeerID : Command
+    internal class DeletePeerID : Command
     {
         public override string Name => "Удаление диалога из БД";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -22,7 +22,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             {
                 if (Succes)
                 {
-                    List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>>
+                    List<List<MessageKeyboardButton>> buttons = new()
                     {
                         new List<MessageKeyboardButton>()
                         {
@@ -53,14 +53,9 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             else
             {
                 @params.Keyboard = null;
-                if (Succes)
-                {
-                    @params.Message = "Хорошо, не буду больше отправлять вам информацию.";
-                }
-                else
-                {
-                    @params.Message = "Что-то пошло не по плану. Попробуйте связаться с Админом сообщества.";
-                }
+                @params.Message = Succes
+                    ? "Хорошо, не буду больше отправлять вам информацию."
+                    : "Что-то пошло не по плану. Попробуйте связаться с Админом сообщества.";
             }
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
@@ -71,12 +66,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             Database db = new();
             string text = message.Text.ToLower();
-            if ((text.Contains("прекрати") || text.Contains("перестань")) && text.Contains("инф") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("прекрати") || text.Contains("перестань")) && text.Contains("инф") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"));
         }
     }
 }

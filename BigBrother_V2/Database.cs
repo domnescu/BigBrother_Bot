@@ -4,7 +4,7 @@ using System.Data.SQLite;
 
 namespace BigBrother_V2
 {
-    class Database
+    internal class Database
     {
         /// <summary>
         /// подключение локальной базы данных
@@ -30,7 +30,7 @@ namespace BigBrother_V2
             try
             {
                 command = new SQLiteCommand(Text, botDataBase);
-                command.ExecuteNonQuery();
+                _ = command.ExecuteNonQuery();
             }
             catch
             {
@@ -92,7 +92,7 @@ namespace BigBrother_V2
             try
             {
                 command = new SQLiteCommand("INSERT INTO Chats (PeerID,Platform) VALUES (" + peerID + ",'" + platform + "');", botDataBase);
-                command.ExecuteNonQuery();
+                _ = command.ExecuteNonQuery();
             }
             catch
             {
@@ -112,7 +112,7 @@ namespace BigBrother_V2
             try
             {
                 command = new SQLiteCommand("DELETE FROM Chats WHERE PeerID=" + peerID + ";", botDataBase);
-                command.ExecuteNonQuery();
+                _ = command.ExecuteNonQuery();
             }
             catch
             {
@@ -159,7 +159,7 @@ namespace BigBrother_V2
             try
             {
                 command = new SQLiteCommand("UPDATE WorkingVariables SET value='" + value + "' WHERE variable='" + variable + "';", botDataBase);
-                command.ExecuteNonQuery();
+                _ = command.ExecuteNonQuery();
             }
             catch
             {
@@ -195,7 +195,7 @@ namespace BigBrother_V2
         {
             botDataBase.Open();
             command = new SQLiteCommand("DELETE FROM " + table, botDataBase);
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
             botDataBase.Close();
         }
         /// <summary>
@@ -306,7 +306,7 @@ namespace BigBrother_V2
         {
             botDataBase.Open();
             command = new SQLiteCommand("INSERT INTO votes (UserID,OperName) VALUES (" + UserID + ",'" + operName + "');", botDataBase);
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
             botDataBase.Close();
         }
         /// <summary>
@@ -318,7 +318,7 @@ namespace BigBrother_V2
         {
             botDataBase.Open();
             command = new SQLiteCommand("UPDATE WarningList SET Location='" + location + "' WHERE Type='" + Type + "';", botDataBase);
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
             botDataBase.Close();
         }
         /// <summary>
@@ -395,15 +395,10 @@ namespace BigBrother_V2
 
             command = new SQLiteCommand("SELECT count(*) FROM CaffeteriaMemory WHERE Day='" + day + "' AND Time='" + time + "';", botDataBase);
             int countRows = Convert.ToInt32(command.ExecuteScalar());
-            if (countRows == 0)
-            {
-                command = new SQLiteCommand("INSERT INTO CaffeteriaMemory (Eat,Time,Day) VALUES ('" + Text + "', '" + time + "', '" + day + "');", botDataBase);
-            }
-            else
-            {
-                command = new SQLiteCommand("UPDATE CaffeteriaMemory SET Eat='" + Text + "' WHERE Day='" + day + "' AND Time='" + time + "';", botDataBase);
-            }
-            command.ExecuteNonQuery();
+            command = countRows == 0
+                ? new SQLiteCommand("INSERT INTO CaffeteriaMemory (Eat,Time,Day) VALUES ('" + Text + "', '" + time + "', '" + day + "');", botDataBase)
+                : new SQLiteCommand("UPDATE CaffeteriaMemory SET Eat='" + Text + "' WHERE Day='" + day + "' AND Time='" + time + "';", botDataBase);
+            _ = command.ExecuteNonQuery();
             botDataBase.Close();
         }
         /// <summary>
@@ -464,7 +459,7 @@ namespace BigBrother_V2
                 response = true;
             }
 
-            command.ExecuteNonQuery();
+            _ = command.ExecuteNonQuery();
             botDataBase.Close();
             return response;
         }
@@ -477,15 +472,10 @@ namespace BigBrother_V2
             botDataBase.Open();
             command = new SQLiteCommand("SELECT count(*) FROM ComandsFromUser WHERE UserID=" + userID + ";", botDataBase);
             int countRows = Convert.ToInt32(command.ExecuteScalar());
-            if (countRows == 0)
-            {
-                command = new SQLiteCommand("INSERT INTO ComandsFromUser (UserID,Commands) VALUES (" + userID + ",1);", botDataBase);
-            }
-            else
-            {
-                command = new SQLiteCommand("UPDATE ComandsFromUser SET Commands=Commands+1 WHERE UserID=" + userID + ";", botDataBase);
-            }
-            command.ExecuteNonQuery();
+            command = countRows == 0
+                ? new SQLiteCommand("INSERT INTO ComandsFromUser (UserID,Commands) VALUES (" + userID + ",1);", botDataBase)
+                : new SQLiteCommand("UPDATE ComandsFromUser SET Commands=Commands+1 WHERE UserID=" + userID + ";", botDataBase);
+            _ = command.ExecuteNonQuery();
             botDataBase.Close();
         }
         /// <summary>
@@ -521,7 +511,7 @@ namespace BigBrother_V2
             try
             {
                 command = new SQLiteCommand("INSERT INTO Fucking_chat (userID,IsAdmin) VALUES (" + UserID + ",'" + IsAdmin.ToString() + "');", botDataBase);
-                command.ExecuteNonQuery();
+                _ = command.ExecuteNonQuery();
             }
             catch
             {

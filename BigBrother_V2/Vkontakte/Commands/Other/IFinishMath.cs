@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class IFinishMath : Command
+    internal class IFinishMath : Command
     {
         public override string Name => "Пустая Команда";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -17,14 +17,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             User user = new(message.PeerId.Value, client);
             bool Succes = db.AddToDB("DELETE FROM WhoKnowMath WHERE domain='[id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]';");
 
-            if (Succes)
-            {
-                @params.Message = "Готово, я тебя удалил из списка людей которые могут помочь с вышматом";
-            }
-            else
-            {
-                @params.Message = "Так тебя и нет в списке людей которые могут помочь с вышматом";
-            }
+            @params.Message = Succes
+                ? "Готово, я тебя удалил из списка людей которые могут помочь с вышматом"
+                : "Так тебя и нет в списке людей которые могут помочь с вышматом";
 
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
@@ -34,13 +29,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (((text.Contains("делаю") || text.Contains("знаю") || (text.Contains("могу") && text.Contains("помочь"))) && (text.Contains("матан") || text.Contains("матем") || text.Contains("вышмат"))
-                && text.Contains("не")) && message.PeerId.Value < 2000000000)
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("делаю") || text.Contains("знаю") || (text.Contains("могу") && text.Contains("помочь"))) && (text.Contains("матан") || text.Contains("матем") || text.Contains("вышмат"))
+                && text.Contains("не") && message.PeerId.Value < 2000000000;
         }
     }
 }

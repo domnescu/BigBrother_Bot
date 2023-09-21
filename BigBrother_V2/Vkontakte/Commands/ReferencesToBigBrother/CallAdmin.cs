@@ -6,11 +6,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class CallAdmin : Command
+    internal class CallAdmin : Command
     {
         public override string Name => "Вызов администратора";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -26,15 +26,9 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                 VkNet.Utils.VkCollection<VkNet.Model.User> admins = client.Groups.GetMembers(new GroupsGetMembersParams { Filter = GroupsMemberFilters.Managers, GroupId = "187905748", });
                 foreach (VkNet.Model.User admin in admins)
                 {
-                    if (message.PeerId.Value < 2000000000)
-                    {
-                        @params.Message = user.FirstName + " " + user.LastName + " нуждается в помощи. Посмотри пожалуйста сообщения сообщества и попробуй разобраться.";
-                    }
-                    else
-                    {
-
-                        @params.Message = "Выйди пожалуйста на связь с [id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]. Этот человек, в какой-то беседе, просил вызвать администратора.";
-                    }
+                    @params.Message = message.PeerId.Value < 2000000000
+                        ? user.FirstName + " " + user.LastName + " нуждается в помощи. Посмотри пожалуйста сообщения сообщества и попробуй разобраться."
+                        : "Выйди пожалуйста на связь с [id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]. Этот человек, в какой-то беседе, просил вызвать администратора.";
                     @params.PeerId = admin.Id;
                     @params.RandomId = new Random().Next();
                     Send(@params, client);
@@ -56,12 +50,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             string text = message.Text.ToLower();
             Database db = new();
             //Добавить упоминания бота
-            if ((text.Contains("зов") || text.Contains("вызывай")) && (text.Contains("админ") || text.Contains("шефа") || text.Contains("начальника") || text.Contains("шефа")) && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("зов") || text.Contains("вызывай")) && (text.Contains("админ") || text.Contains("шефа") || text.Contains("начальника") || text.Contains("шефа")) && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"));
         }
     }
 }

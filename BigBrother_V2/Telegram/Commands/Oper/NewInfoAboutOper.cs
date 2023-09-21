@@ -7,28 +7,23 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Oper
+namespace BigBrother_V2.Telegram.Commands.Oper
 {
-    class NewInfoAboutOperTelegram : CommandTelegram
+    internal class NewInfoAboutOperTelegram : CommandTelegram
     {
         public override string Name => "Новая информация по оперу";
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
             Database db = new();
-            UserTelegram user = new(message);
+            _ = new UserTelegram(message);
             List<string> PossibleLocations = db.GetListString("PossibleLocations");
             string text = message.Text.ToLower();
             string warningType;
             string operinfoupdate;
-            if (text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("вернулся"))
-            {
-                warningType = db.GetWorkingVariable("CurrentOper");
-            }
-            else
-            {
-                warningType = "проверка";
-            }
+            warningType = text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("вернулся")
+                ? db.GetWorkingVariable("CurrentOper")
+                : "проверка";
 
             for (int i = 0; i < PossibleLocations.Count; i++)
             {
@@ -39,8 +34,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                     {
                         operinfoupdate = "По последней информации, " + warningType + " пошёл к себе";
                     }
-                    else if (PossibleLocations[i] == "ушёл" || PossibleLocations[i] == "ушел" || PossibleLocations[i] == "ушли" ||
-                        PossibleLocations[i] == "ушла" || PossibleLocations[i] == "вышел" || PossibleLocations[i] == "вышли" || PossibleLocations[i] == "вышла")
+                    else if (PossibleLocations[i] is "ушёл" or "ушел" or "ушли" or
+                        "ушла" or "вышел" or "вышли" or "вышла")
                     {
                         operinfoupdate = warningType + " " + PossibleLocations[i] + " из ";
                         for (int k = i + 1; k < PossibleLocations.Count; k++)
@@ -59,7 +54,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                     }
                     db.InfoUpdate(warningType, operinfoupdate + "\nВремя получения информации " + DateTime.Now.ToShortTimeString());
                     await MessageDistributionWithTelegram(operinfoupdate + "\nэту инфу я получил из Телеграма от @" + message.From.Username);
-                    Message sentMessage = await botClient.SendTextMessageAsync(
+                    _ = await botClient.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: "Вот что я запомнил:\n" + operinfoupdate,
                         cancellationToken: cancellationToken
@@ -73,7 +68,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                             RandomId = new Random().Next(),
                             Message = operinfoupdate + "\nэту инфу я получил из Телеграма от @" + message.From.Username
                         };
-                        Program.BotClient.Messages.Send(@params);
+                        _ = Program.BotClient.Messages.Send(@params);
                     }
                     return;
                 }
@@ -83,15 +78,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((((text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("ушла")
+            return (((text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("ушла")
                 || text.StartsWith("ушли") || text.StartsWith("вышли") || text.StartsWith("вышла")) &&
                 text.Length < 15 && text.Contains("?") == false && text.Contains("не ") == false && text.Contains("нет") == false)
-                || text == "вернулся") && Regex.Replace(text, @"[^\d]+", "").Length < 5 && text.Length < 15)
-            {
-                return true;
-            }
-
-            return false;
+                || text == "вернулся") && Regex.Replace(text, @"[^\d]+", "").Length < 5 && text.Length < 15;
         }
     }
 }

@@ -3,15 +3,14 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Numbers
 {
-    class ZamDekNumber : Command
+    internal class ZamDekNumber : Command
     {
         public override string Name => "номер заместителя декана (директора)";
 
         public string Number = "Заместитель декана Капустин Сергей Викторович - 8(911)930-49-11";
-
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -24,12 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("замдек") || text.Contains("капустин")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("замдек") || text.Contains("капустин"));
         }
     }
 }

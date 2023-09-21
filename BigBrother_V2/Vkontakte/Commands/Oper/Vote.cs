@@ -7,11 +7,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Oper
 {
-    class Vote : Command
+    internal class Vote : Command
     {
         public override string Name => "Голосование за нового опера";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -28,16 +28,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                 if (db.CheckInt64(user.Id, "Votes"))
                 {
                     //временная переменная для формирования "красивого" ответа
-                    string temp;
+                    string temp = user.Sex == VkNet.Enums.Sex.Male ? "голосовал" : "голосовала";
                     //проверка пола голосовавшего пользователя
-                    if (user.Sex == VkNet.Enums.Sex.Male)
-                    {
-                        temp = "голосовал";
-                    }
-                    else
-                    {
-                        temp = "голосовала";
-                    }
 
                     @params.Message = user.FirstName + ", ты уже " + temp;
                     Send(@params, client);
@@ -116,13 +108,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if ((text.StartsWith("сказать") || (text.Contains("опер") && text.Contains("где") == false && text.Contains("кто") == false && text.Length < 16
-                && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false)) && text.Contains("?") == false)
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("сказать") || (text.Contains("опер") && text.Contains("где") == false && text.Contains("кто") == false && text.Length < 16
+                && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false)) && text.Contains("?") == false;
         }
     }
 }

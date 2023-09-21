@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class ChangeVoteStatus : Command
+    internal class ChangeVoteStatus : Command
     {
         public override string Name => "Принудительное изменение опера";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -31,13 +31,11 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                 }
 
             }
-            else if (user.IsAdmin && message.Type == null)
-            {
-                @params.Message = "Пересланное сообщение Админа сообщества ? Серьёзно ? Это так не работает)";
-            }
             else
             {
-                @params.Message = "Только Администраторы сообщества имеют право менять статус голосования";
+                @params.Message = user.IsAdmin && message.Type == null
+                    ? "Пересланное сообщение Админа сообщества ? Серьёзно ? Это так не работает)"
+                    : "Только Администраторы сообщества имеют право менять статус голосования";
             }
 
             @params.PeerId = message.PeerId.Value;
@@ -49,12 +47,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("голосование") && db.CheckText(text, "BotNames"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("голосование") && db.CheckText(text, "BotNames");
         }
     }
 }

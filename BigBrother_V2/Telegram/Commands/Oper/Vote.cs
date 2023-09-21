@@ -6,9 +6,9 @@ using Telegram.Bot.Types;
 
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Oper
+namespace BigBrother_V2.Telegram.Commands.Oper
 {
-    class VoteTelegram : CommandTelegram
+    internal class VoteTelegram : CommandTelegram
     {
         public override string Name => "Голосование за нового опера";
 
@@ -23,8 +23,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                 Dictionary<string, string> OperList = db.GetDictionaryString("WarningList");
                 if (db.CheckInt64(user.Id, "Votes"))
                 {
-
-                    Message sentMessage = await botClient.SendTextMessageAsync(
+                    _ = await botClient.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: user.FirstName + ", ты уже голосовал/голосовала",
                         cancellationToken: cancellationToken
@@ -42,7 +41,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                         }
                         else
                         {
-                            Message sentMessage = await botClient.SendTextMessageAsync(
+                            _ = await botClient.SendTextMessageAsync(
                                 chatId: message.Chat.Id,
                                 text: "А я считаю что " + _oper.Key + " это " + _oper.Value + ", а не опер.",
                                 cancellationToken: cancellationToken
@@ -60,7 +59,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                     {
                         case 1:
                             {
-                                Message sentMessage = await botClient.SendTextMessageAsync(
+                                _ = await botClient.SendTextMessageAsync(
                                     chatId: message.Chat.Id,
                                     text: user.FirstName + " считает что должен заступить " + oper,
                                     cancellationToken: cancellationToken
@@ -70,7 +69,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                         case 5:
                             {
                                 string NewOper = db.WhoIsNewOper();
-                                Message sentMessage = await botClient.SendTextMessageAsync(
+                                _ = await botClient.SendTextMessageAsync(
                                     chatId: message.Chat.Id,
                                     text: NewOper + " заступил опером.",
                                     cancellationToken: cancellationToken
@@ -83,7 +82,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                             }
                         default:
                             {
-                                Message sentMessage = await botClient.SendTextMessageAsync(
+                                _ = await botClient.SendTextMessageAsync(
                                     chatId: message.Chat.Id,
                                     text: user.FirstName + " считает что должен заступить " + oper,
                                     cancellationToken: cancellationToken
@@ -95,7 +94,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
             }
             else if (message.ForwardFrom == null && db.CheckText(text, "WarningList"))
             {
-                Message sentMessage = await botClient.SendTextMessageAsync(
+                _ = await botClient.SendTextMessageAsync(
                     chatId: message.Chat.Id,
                     text: "Голосование закрыто",
                     cancellationToken: cancellationToken
@@ -103,7 +102,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
             }
             else if (message.ForwardFrom != null)
             {
-                Message sentMessage = await botClient.SendTextMessageAsync(
+                _ = await botClient.SendTextMessageAsync(
                     chatId: message.Chat.Id,
                     text: user.FirstName + ", мне показалось или кто-то попытался меня обмануть?",
                     cancellationToken: cancellationToken
@@ -115,13 +114,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if ((text.StartsWith("сказать") || (text.Contains("опер") && text.Contains("где") == false && text.Contains("кто") == false && text.Length < 16
-                && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false)) && text.Contains("?") == false)
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("сказать") || (text.Contains("опер") && text.Contains("где") == false && text.Contains("кто") == false && text.Length < 16
+                && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false)) && text.Contains("?") == false;
         }
     }
 }

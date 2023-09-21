@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class Promotion : Command
+    internal class Promotion : Command
     {
         public override string Name => "Ответ на комплимент";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -25,12 +25,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (db.CheckText(text, "promotions") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return db.CheckText(text, "promotions") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"));
         }
     }
 }

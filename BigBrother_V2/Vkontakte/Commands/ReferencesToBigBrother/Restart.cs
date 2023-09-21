@@ -7,11 +7,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class Restart : Command
+    internal class Restart : Command
     {
         public override string Name => "Перезагрузка";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -29,13 +29,9 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                 new Thread(() => { Thread.Sleep(2000); Environment.Exit(0); }).Start();
 
             }
-            else if (message.Type == null)
-            {
-                @params.Message = "Лучше свяжитесь с администратором.";
-            }
             else
             {
-                @params.Message = "Ты не сможешь меня остановить 😈";
+                @params.Message = message.Type == null ? "Лучше свяжитесь с администратором." : "Ты не сможешь меня остановить 😈";
             }
 
             @params.PeerId = message.PeerId;
@@ -48,12 +44,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             string text = message.Text.ToLower();
             Database db = new();
             //Добавить упоминания бота
-            if (text.Contains("перезагруз") && db.CheckText(text, "BotNames"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("перезагруз") && db.CheckText(text, "BotNames");
         }
     }
 }

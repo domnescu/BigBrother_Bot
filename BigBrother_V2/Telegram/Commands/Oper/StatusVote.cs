@@ -5,26 +5,17 @@ using Telegram.Bot.Types;
 
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Oper
+namespace BigBrother_V2.Telegram.Commands.Oper
 {
-    class StatusVoteTelegram : CommandTelegram
+    internal class StatusVoteTelegram : CommandTelegram
     {
         public override string Name => "Статус Голосования";
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
             Database db = new();
-            string Text;
-            if (db.GetWorkingVariable("VoteAcces") == "open")
-            {
-                Text = "Статус: открыто \nСписок голосов:\n" + db.GetVoteStatus();
-            }
-            else
-            {
-                Text = "Статус: закрыто";
-            }
-
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            string Text = db.GetWorkingVariable("VoteAcces") == "open" ? "Статус: открыто \nСписок голосов:\n" + db.GetVoteStatus() : "Статус: закрыто";
+            _ = await botClient.SendTextMessageAsync(
             chatId: message.Chat.Id,
             text: Text,
             cancellationToken: cancellationToken
@@ -34,12 +25,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("статус") && text.Contains("голосования"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("статус") && text.Contains("голосования");
         }
     }
 }

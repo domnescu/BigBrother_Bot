@@ -7,9 +7,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Oper
+namespace BigBrother_V2.Telegram.Commands.Oper
 {
-    class NewInfoAboutWarningTelegram : CommandTelegram
+    internal class NewInfoAboutWarningTelegram : CommandTelegram
     {
         public override string Name => "Новая информация по оперу";
 
@@ -20,7 +20,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
             {
                 List<string> Types = db.GetWarningTypes();
                 List<string> Locations = db.GetListString("PossibleLocations");
-                UserTelegram user = new(message);
+                _ = new UserTelegram(message);
                 string text = " " + message.Text.ToLower();
                 foreach (string type in Types)
                 {
@@ -46,13 +46,13 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                                     {
                                         LocationForSave = "По последней информации, " + WarningType + " пошёл к себе";
                                     }
-                                    else if (Locations[i] == "ушёл" || Locations[i] == "ушел" || Locations[i] == "ушли"
-                                        || Locations[i] == "ушла" || Locations[i] == "вышел" || Locations[i] == "вышли" || Locations[i] == "вышла")
+                                    else if (Locations[i] is "ушёл" or "ушел" or "ушли"
+                                        or "ушла" or "вышел" or "вышли" or "вышла")
                                     {
                                         LocationForSave = WarningType + " " + Locations[i] + " из ";
                                         for (int j = i + 1; j < Locations.Count; j++)
                                         {
-                                            if ((text.Contains(Locations[j]))
+                                            if (text.Contains(Locations[j])
                                                 && Locations[i] != Locations[j])
                                             {
                                                 LocationForSave += Locations[j];
@@ -84,11 +84,11 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                                         };
                                         try
                                         {
-                                            Program.BotClient.Messages.Send(@params);
+                                            _ = Program.BotClient.Messages.Send(@params);
                                         }
                                         catch
                                         {
-                                            db.DeleteChat(MainMakara);
+                                            _ = db.DeleteChat(MainMakara);
                                         }
                                     }
                                     goto EndForeach;
@@ -102,7 +102,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
             }
             else
             {
-                Message sentMessage = await botClient.SendTextMessageAsync(
+                _ = await botClient.SendTextMessageAsync(
                     chatId: message.Chat.Id,
                     text: "К сожалению, мне запретили обрабатывать такую информацию из пересланных сообщений.",
                     cancellationToken: cancellationToken
@@ -114,15 +114,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
         {
             string text = " " + message.Text.ToLower();
             Database db = new();
-            if ((text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false &&
+            return text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false &&
                 text.Contains("через") == false && text.Contains("пойдёт") == false && text.Contains("что") == false && text.Contains("не ") == false &&
                 text.Contains("возможно") == false && text.Contains("сказал") == false && text.Contains("надо") == false && text.Contains("кто-нибудь") == false &&
-                text.Contains("кто-то") == false && text.Length < 100 && (db.CheckText(text, "WarningList")) && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5))
-            {
-                return true;
-            }
-
-            return false;
+                text.Contains("кто-то") == false && text.Length < 100 && db.CheckText(text, "WarningList") && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5;
         }
     }
 }

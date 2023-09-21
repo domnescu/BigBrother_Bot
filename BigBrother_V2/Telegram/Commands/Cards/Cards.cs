@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Cards
+namespace BigBrother_V2.Telegram.Commands.Cards
 {
-    class CardsTelegram : CommandTelegram
+    internal class CardsTelegram : CommandTelegram
     {
         public override string Name => "Карты Магазинов";
 
@@ -37,20 +37,16 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Cards
             {
                 PhotoID = "https://sun9-28.userapi.com/impg/c858220/v858220535/f27e9/ViMa9K96twU.jpg?size=750x1334&quality=96&sign=d2bea8c82cd60d4b8948174439cf4b99&type=album";
             }
-            else if (text.Contains("пловдив"))
-            {
-                PhotoID = "https://sun9-76.userapi.com/impg/pf1Yd66aoOLN4txpZugXi7GG8BrnS2RVCDsBpw/wJL-w3xMNe0.jpg?size=750x1334&quality=96&sign=a8723d4a91e4a4abd694216ce9d9e1ba&type=album";
-            }
-            else if (text.Contains("прис") || text.Contains("pris") || text.Contains("приз"))
-            {
-                PhotoID = "https://sun9-84.userapi.com/impg/c858220/v858220535/f27f3/kluAta971VE.jpg?size=720x1280&quality=96&sign=7de2bb38286faff08d4b189e4a09e867&type=album";
-            }
             else
             {
-                PhotoID = "https://sun9-34.userapi.com/impg/kcCwf1565EDBYDfdf8lpEQNoP-e6hOmABN904Q/L8Kc5-k9kwY.jpg?size=356x400&quality=96&sign=a65fd194dfaafc4b8d2e5d9c9b83505b&type=album";
+                PhotoID = text.Contains("пловдив")
+                    ? "https://sun9-76.userapi.com/impg/pf1Yd66aoOLN4txpZugXi7GG8BrnS2RVCDsBpw/wJL-w3xMNe0.jpg?size=750x1334&quality=96&sign=a8723d4a91e4a4abd694216ce9d9e1ba&type=album"
+                    : text.Contains("прис") || text.Contains("pris") || text.Contains("приз")
+                                    ? "https://sun9-84.userapi.com/impg/c858220/v858220535/f27f3/kluAta971VE.jpg?size=720x1280&quality=96&sign=7de2bb38286faff08d4b189e4a09e867&type=album"
+                                    : "https://sun9-34.userapi.com/impg/kcCwf1565EDBYDfdf8lpEQNoP-e6hOmABN904Q/L8Kc5-k9kwY.jpg?size=356x400&quality=96&sign=a65fd194dfaafc4b8d2e5d9c9b83505b&type=album";
             }
 
-            Message sentMessage = await botClient.SendPhotoAsync(
+            _ = await botClient.SendPhotoAsync(
                 chatId: message.Chat.Id,
                 photo: PhotoID,
                 cancellationToken: cancellationToken
@@ -60,12 +56,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Cards
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && text.Contains("пятёр") == false && text.Contains("пятер") == false)
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && text.Contains("пятёр") == false && text.Contains("пятер") == false;
         }
     }
 }

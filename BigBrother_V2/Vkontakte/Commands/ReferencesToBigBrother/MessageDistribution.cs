@@ -10,7 +10,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class MessageDistribution : Command
+    internal class MessageDistribution : Command
     {
         public override string Name => "Рассылка сообщений";
 
@@ -95,7 +95,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     {
                         @params.UserIds = Users;
                         @params.RandomId = rnd.Next();
-                        await client.Messages.SendToUserIdsAsync(@params);
+                        _ = await client.Messages.SendToUserIdsAsync(@params);
                         count = 1;
                         Users.Clear();
                     }
@@ -107,7 +107,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             }
             @params.UserIds = Users;
             @params.RandomId = rnd.Next();
-            await client.Messages.SendToUserIdsAsync(@params);
+            _ = await client.Messages.SendToUserIdsAsync(@params);
             foreach (long peerID in Chats)
             {
                 @params.RandomId = rnd.Next();
@@ -126,12 +126,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.StartsWith("бб сделай рассылку"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.StartsWith("бб сделай рассылку");
         }
     }
 }

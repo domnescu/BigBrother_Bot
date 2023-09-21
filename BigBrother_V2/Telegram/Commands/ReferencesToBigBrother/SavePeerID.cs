@@ -4,9 +4,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class SavePeerIDTelegram : CommandTelegram
+    internal class SavePeerIDTelegram : CommandTelegram
     {
         public override string Name => "Сохранение идентификатора диалога/беседы";
 
@@ -35,16 +35,12 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
             else
             {
                 keyboard = null;
-                if (Succes)
-                {
-                    text = "Ваш чат успешно добавлен в базу данных";
-                }
-                else
-                {
-                    text = "Ваш чат уже есть в моей базе данных, если по каким-то причинам информация сюда не приходит, вызовите администратора.";
-                }
+                text = Succes
+                    ? "Ваш чат успешно добавлен в базу данных"
+                    : "Ваш чат уже есть в моей базе данных, если по каким-то причинам информация сюда не приходит, вызовите администратора.";
             }
-            Message sentMessage = await botClient.SendTextMessageAsync(
+
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: text,
                 cancellationToken: cancellationToken,
@@ -56,12 +52,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             Database db = new();
             string text = message.Text.ToLower();
-            if ((text.Contains("пересылай") || text.Contains("присылай")) && text.Contains("инфу") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("пересылай") || text.Contains("присылай")) && text.Contains("инфу") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames"));
         }
     }
 }

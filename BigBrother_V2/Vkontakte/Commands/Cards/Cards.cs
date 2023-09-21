@@ -6,7 +6,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Cards
 {
-    class Cards : Command
+    internal class Cards : Command
     {
         public override string Name => "Карты Магазинов";
 
@@ -15,137 +15,79 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
             string text = message.Text.ToLower();
             MessagesSendParams @params = new();
             User user = new(message.FromId.Value, client);
-            Database db = new Database();
+            Database db = new();
             if (message.PeerId.Value < 2000000000)
             {
                 long PhotoID;
                 if (text.Contains("ике") || text.Contains("ike"))
                 {
                     PhotoID = db.GetLong("Cards", "Name", "IKEA", 1);
-                    if (user.Sex == VkNet.Enums.Sex.Male)
-                    {
-                        @params.Message = user.FirstName + ", надеюсь ты купил что-то небольшое, ну или взял себе помошников)";
-                    }
-                    else if (user.Sex == VkNet.Enums.Sex.Female)
-                    {
-                        @params.Message = user.FirstName + ", Может тебе нужна ещё и помощь чтобы донести покупки ?";
-                    }
-                    else
-                    {
-                        @params.Message = "Зачем тебе мебель ?";
-                    }
+                    @params.Message = user.Sex == VkNet.Enums.Sex.Male
+                        ? user.FirstName + ", надеюсь ты купил что-то небольшое, ну или взял себе помошников)"
+                        : user.Sex == VkNet.Enums.Sex.Female
+                            ? user.FirstName + ", Может тебе нужна ещё и помощь чтобы донести покупки ?"
+                            : "Зачем тебе мебель ?";
                 }
                 else if (text.Contains("карусел"))
                 {
                     PhotoID = db.GetLong("Cards", "Name", "Карусель", 1);
-                    if (user.Sex == VkNet.Enums.Sex.Male)
-                    {
-                        @params.Message = user.FirstName + ",можешь купить мне пивка ? ";
-                    }
-                    else if (user.Sex == VkNet.Enums.Sex.Female)
-                    {
-                        @params.Message = user.FirstName + ",поделись вкусняшками!";
-                    }
-                    else
-                    {
-                        @params.Message = "Существо неопозднанного пола, немедленно покинь здание в котором ты находишься! За тобой уже выехали!";
-                    }
+                    @params.Message = user.Sex == VkNet.Enums.Sex.Male
+                        ? user.FirstName + ",можешь купить мне пивка ? "
+                        : user.Sex == VkNet.Enums.Sex.Female
+                            ? user.FirstName + ",поделись вкусняшками!"
+                            : "Существо неопозднанного пола, немедленно покинь здание в котором ты находишься! За тобой уже выехали!";
                 }
                 else if (text.Contains("лент"))
                 {
                     PhotoID = db.GetLong("Cards", "Name", "Лента", 1);
-                    if (user.Sex == VkNet.Enums.Sex.Male)
-                    {
-                        @params.Message = user.FirstName + ", Хз если ещё работает))";
-                    }
-                    else if (user.Sex == VkNet.Enums.Sex.Female)
-                    {
-                        @params.Message = user.FirstName + ", сразу предупреждаю, грузчиков в аренду я не предоставляю, тащить будешь сама!";
-                    }
-                    else
-                    {
-                        @params.Message = "Существо непонятного пола, уйди из Призмы! Не пугай там людей!";
-                    }
+                    @params.Message = user.Sex == VkNet.Enums.Sex.Male
+                        ? user.FirstName + ", Хз если ещё работает))"
+                        : user.Sex == VkNet.Enums.Sex.Female
+                            ? user.FirstName + ", сразу предупреждаю, грузчиков в аренду я не предоставляю, тащить будешь сама!"
+                            : "Существо непонятного пола, уйди из Призмы! Не пугай там людей!";
                 }
                 else if (text.Contains("магнит"))
                 {
                     PhotoID = db.GetLong("Cards", "Name", "Магнит", 1);
-                    if (user.Sex == VkNet.Enums.Sex.Male)
-                    {
-                        @params.Message = user.FirstName + ", ты просил карту Магнита ? Получай";
-                    }
-                    else if (user.Sex == VkNet.Enums.Sex.Female)
-                    {
-                        @params.Message = user.FirstName + ", с тебя вкусняшки! Адрес доставки вкусняшек в ЛС уточни :)";
-                    }
-                    else
-                    {
-                        @params.Message = "Хрен знает что ты такое! Бери карту и съебись нахуй отсюда!";
-                    }
+                    @params.Message = user.Sex == VkNet.Enums.Sex.Male
+                        ? user.FirstName + ", ты просил карту Магнита ? Получай"
+                        : user.Sex == VkNet.Enums.Sex.Female
+                            ? user.FirstName + ", с тебя вкусняшки! Адрес доставки вкусняшек в ЛС уточни :)"
+                            : "Хрен знает что ты такое! Бери карту и съебись нахуй отсюда!";
                 }
                 else if (text.Contains("оке") || text.Contains("okey"))
                 {
                     PhotoID = db.GetLong("Cards", "Name", "ОКЕЙ", 1);
-                    if (user.Sex == VkNet.Enums.Sex.Male)
-                    {
-                        @params.Message = user.FirstName + ", Окей, держи карту ОКЕЙ";
-                    }
-                    else if (user.Sex == VkNet.Enums.Sex.Female)
-                    {
-                        @params.Message = user.FirstName + ", ты далеко забрела! Может тебе стоит вернуться обратно ?";
-                    }
-                    else
-                    {
-                        @params.Message = "Я по камерам слежу за тобой, немедленно поставь обратно!";
-                    }
+                    @params.Message = user.Sex == VkNet.Enums.Sex.Male
+                        ? user.FirstName + ", Окей, держи карту ОКЕЙ"
+                        : user.Sex == VkNet.Enums.Sex.Female
+                            ? user.FirstName + ", ты далеко забрела! Может тебе стоит вернуться обратно ?"
+                            : "Я по камерам слежу за тобой, немедленно поставь обратно!";
                 }
                 else if (text.Contains("перекрест") || text.Contains("перекрёст"))
                 {
                     PhotoID = db.GetLong("Cards", "Name", "Перекрёсток", 1);
-                    if (user.Sex == VkNet.Enums.Sex.Male)
-                    {
-                        @params.Message = user.FirstName + ", Ну на тебе карту Перекрёстка";
-                    }
-                    else if (user.Sex == VkNet.Enums.Sex.Female)
-                    {
-                        @params.Message = user.FirstName + ", Карта перекрёстка, специально для вас.";
-                    }
-                    else
-                    {
-                        @params.Message = "Существо непонятного пола, уйди из Призмы! Не пугай там людей!";
-                    }
+                    @params.Message = user.Sex == VkNet.Enums.Sex.Male
+                        ? user.FirstName + ", Ну на тебе карту Перекрёстка"
+                        : user.Sex == VkNet.Enums.Sex.Female
+                            ? user.FirstName + ", Карта перекрёстка, специально для вас."
+                            : "Существо непонятного пола, уйди из Призмы! Не пугай там людей!";
                 }
                 else if (text.Contains("пловдив"))
                 {
                     PhotoID = db.GetLong("Cards", "Name", "Пловдив", 1);
-                    if (user.Sex == VkNet.Enums.Sex.Male)
-                    {
-                        @params.Message = user.FirstName + ", держи карту Пловдив";
-                    }
-                    else if (user.Sex == VkNet.Enums.Sex.Female)
-                    {
-                        @params.Message = user.FirstName + ", Карта Пловдив, специально для тебя)";
-                    }
-                    else
-                    {
-                        @params.Message = "Ты что там забыло ?";
-                    }
+                    @params.Message = user.Sex == VkNet.Enums.Sex.Male
+                        ? user.FirstName + ", держи карту Пловдив"
+                        : user.Sex == VkNet.Enums.Sex.Female ? user.FirstName + ", Карта Пловдив, специально для тебя)" : "Ты что там забыло ?";
                 }
                 else if (text.Contains("прис") || text.Contains("pris") || text.Contains("приз"))
                 {
                     PhotoID = db.GetLong("Cards", "Name", "Prisma", 1);
-                    if (user.Sex == VkNet.Enums.Sex.Male)
-                    {
-                        @params.Message = user.FirstName + ", ты просил карту Призмы? Получай)";
-                    }
-                    else if (user.Sex == VkNet.Enums.Sex.Female)
-                    {
-                        @params.Message = user.FirstName + ", тебе ещё нужна карта Призмы ? ";
-                    }
-                    else
-                    {
-                        @params.Message = "Существо непонятного пола, уйди из Призмы! Не пугай там людей!";
-                    }
+                    @params.Message = user.Sex == VkNet.Enums.Sex.Male
+                        ? user.FirstName + ", ты просил карту Призмы? Получай)"
+                        : user.Sex == VkNet.Enums.Sex.Female
+                            ? user.FirstName + ", тебе ещё нужна карта Призмы ? "
+                            : "Существо непонятного пола, уйди из Призмы! Не пугай там людей!";
                 }
                 else
                 {
@@ -173,12 +115,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Cards
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && text.Contains("пятёр") == false && text.Contains("пятер") == false)
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("карт") || (text.Contains("у кого") && text.Contains("есть") && text.Contains("карт"))) && text.Contains("пятёр") == false && text.Contains("пятер") == false;
         }
     }
 }

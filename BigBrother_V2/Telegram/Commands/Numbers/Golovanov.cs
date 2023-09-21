@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Numbers
+namespace BigBrother_V2.Telegram.Commands.Numbers
 {
-    class GolovanovNomberTelegram : CommandTelegram
+    internal class GolovanovNomberTelegram : CommandTelegram
     {
         public override string Name => "Номер Голованова";
 
@@ -13,7 +13,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Numbers
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: Number,
                 cancellationToken: cancellationToken
@@ -23,12 +23,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Numbers
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && text.Contains("голованов"))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && text.Contains("голованов");
         }
     }
 }

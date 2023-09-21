@@ -4,13 +4,13 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class Week : Command
+    internal class Week : Command
     {
         public override string Name => "Какая неделя ?";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -19,7 +19,7 @@ namespace BigBrother_V2.Vkontakte.Commands
             string answer;
             //Если сообщение пользователя начинается и содержит "будет" или "следу"
             //к текущей дате добавляется одна неделя.
-            if (message.FromId.Value == 135310203 || message.FromId.Value == 241324442)
+            if (message.FromId.Value is 135310203 or 241324442)
             {
                 User user = new(message.FromId.Value, client);
                 answer = user.FirstName + ", ты говорил что состоишь в секте Нечётной недели поэтому для тебя — Нечётная неделя.";
@@ -50,7 +50,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                     IsEven = "нечётная";
                 }
                 answer += IsEven + " неделя";
-                if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+                if (DateTime.Now.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
                 {
                     answer = "Сейчас " + IsEven + " неделя. С понедельника начнётся " + IsNotEven + " неделя.";
                 }
@@ -64,12 +64,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.StartsWith("какая") && text.Contains("неделя"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.StartsWith("какая") && text.Contains("неделя");
         }
     }
 }

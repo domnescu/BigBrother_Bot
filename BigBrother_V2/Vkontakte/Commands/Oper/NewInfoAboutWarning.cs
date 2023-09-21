@@ -6,13 +6,13 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Oper
 {
-    class NewInfoAboutWarning : Command
+    internal class NewInfoAboutWarning : Command
     {
         public override string Name => "Новая информация по оперу";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override async void Execute(Message message, VkApi client)
         {
@@ -61,8 +61,8 @@ namespace BigBrother_V2.Vkontakte.Commands
                                     {
                                         LocationForSave = "По последней информации, " + WarningType + " пошёл к себе";
                                     }
-                                    else if (Locations[i] == "ушёл" || Locations[i] == "ушел" || Locations[i] == "ушли"
-                                        || Locations[i] == "ушла" || Locations[i] == "вышел" || Locations[i] == "вышли" || Locations[i] == "вышла")
+                                    else if (Locations[i] is "ушёл" or "ушел" or "ушли"
+                                        or "ушла" or "вышел" or "вышли" or "вышла")
                                     {
                                         LocationForSave = WarningType + " " + Locations[i] + " из ";
                                         for (int j = i + 1; j < Locations.Count; j++)
@@ -128,15 +128,10 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = " " + message.Text.ToLower();
             Database db = new();
-            if ((text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false &&
+            return (text.Contains("где") == false && text.Contains("?") == false && text.Contains("после") == false && text.Contains("будет") == false &&
                 text.Contains("через") == false && text.Contains("пойдёт") == false && text.Contains("что") == false && text.Contains("не ") == false &&
                 text.Contains("возможно") == false && text.Contains("сказал") == false && text.Contains("надо") == false && text.Contains("кто-нибудь") == false &&
-                text.Contains("кто-то") == false && text.Length < 100 && (db.CheckText(text, "WarningList")) && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5) || (message.Payload != null && message.Payload.Contains("location")))
-            {
-                return true;
-            }
-
-            return false;
+                text.Contains("кто-то") == false && text.Length < 100 && db.CheckText(text, "WarningList") && db.CheckText(text, "PossibleLocations") && Regex.Replace(text, @"[^\d]+", "").Length < 5) || (message.Payload != null && message.Payload.Contains("location"));
         }
     }
 }

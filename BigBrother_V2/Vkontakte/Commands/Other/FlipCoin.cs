@@ -3,24 +3,17 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class FlipCoin : Command
+    internal class FlipCoin : Command
     {
         public override string Name => "Подбрось монетку";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            if (new Random().Next() % 2 == 0)
-            {
-                @params.Message = "На моей цифровой монете, выпала решка.";
-            }
-            else
-            {
-                @params.Message = "Судя по циферкам которые я получил, выпал орёл.";
-            }
+            @params.Message = new Random().Next() % 2 == 0 ? "На моей цифровой монете, выпала решка." : "Судя по циферкам которые я получил, выпал орёл.";
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);
@@ -29,12 +22,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.Contains("подбрось") || text.Contains("подкинь")) && text.Contains("монет"))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("подбрось") || text.Contains("подкинь")) && text.Contains("монет");
         }
     }
 }

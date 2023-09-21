@@ -4,18 +4,18 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class MessageDistributionTelegram : CommandTelegram
+    internal class MessageDistributionTelegram : CommandTelegram
     {
         public override string Name => "Рассылка сообщений";
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Database db = new();
+            _ = new Database();
             string Text = message.Text.Remove(0, 19);
             await MessageDistributionWithTelegram("@" + message.From.Username + " из Телеграма просил разослать следующее сообщение:\n" + Text);
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: "Готово, я разослал твоё сообщение.",
                 cancellationToken: cancellationToken
@@ -25,12 +25,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.StartsWith("бб сделай рассылку"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.StartsWith("бб сделай рассылку");
         }
     }
 }

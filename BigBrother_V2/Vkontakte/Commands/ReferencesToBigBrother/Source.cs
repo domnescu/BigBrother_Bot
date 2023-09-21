@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class Source : Command
+    internal class Source : Command
     {
         public override string Name => "Отправка ссылки на исходники бота";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -23,12 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if ((text.Contains("исходник") || (text.Contains("код") && text.Contains("исходный"))) && db.CheckText(text, "BotNames"))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("исходник") || (text.Contains("код") && text.Contains("исходный"))) && db.CheckText(text, "BotNames");
         }
     }
 }

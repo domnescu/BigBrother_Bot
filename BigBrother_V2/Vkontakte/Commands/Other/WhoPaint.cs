@@ -6,11 +6,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class WhoPaint : Command
+    internal class WhoPaint : Command
     {
         public override string Name => "Пустая Команда";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -33,13 +33,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("кто") && ((text.Contains("инженерк") || text.Contains("инжеграф") || (text.Contains("инженер") && text.Contains("граф"))) ||
-                text.Contains("начерт")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("кто") && (text.Contains("инженерк") || text.Contains("инжеграф") || (text.Contains("инженер") && text.Contains("граф")) ||
+                text.Contains("начерт"));
         }
     }
 }

@@ -8,11 +8,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
     /// <summary>
     /// Данная функция не входит в релизную версию, она используется исключительно для тестирования функций
     /// </summary>
-    class Anihilation_Protocol : Command
+    internal class Anihilation_Protocol : Command
     {
         public override string Name => "Протокол уничтожения беседы";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -24,8 +24,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 @params.Message = "‼ ☑ Протокол анигиляции успешно запущен. ‼ ВНИМАНИЕ во время работы протокола анигиляции могут наблюдаться перебои в работе или увеличение времени ответа на запросы.‼";
                 @params.RandomId = new Random().Next();
                 Send(@params, client);
-                long AnihilationPeerID;
-                _ = long.TryParse(db.GetWorkingVariable("PeerForAnihilation"), out AnihilationPeerID);
+                _ = long.TryParse(db.GetWorkingVariable("PeerForAnihilation"), out long AnihilationPeerID);
                 GetConversationMembersResult UsersInChat = client.Messages.GetConversationMembers(AnihilationPeerID);
                 for (int i = 0; i < UsersInChat.Count; i++)
                 {
@@ -63,7 +62,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 {
                     if (member.CanKick)
                     {
-                        client.Messages.RemoveChatUser((ulong)AnihilationPeerID - 2000000000, memberId: member.MemberId);
+                        _ = client.Messages.RemoveChatUser((ulong)AnihilationPeerID - 2000000000, memberId: member.MemberId);
                         cKick++;
                     }
                 }
@@ -75,13 +74,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 @params.RandomId = new Random().Next();
                 Send(@params, client);
             }
-            else if (message.Type == null)
-            {
-                @params.Message = "Протокол анигиляции активируется только личным сообщением от администратора. Пересланные сообщения не действительны.";
-            }
             else
             {
-                @params.Message = "Протокол анигиляции недоступен для тебя.";
+                @params.Message = message.Type == null
+                    ? "Протокол анигиляции активируется только личным сообщением от администратора. Пересланные сообщения не действительны."
+                    : "Протокол анигиляции недоступен для тебя.";
             }
             @params.DisableMentions = true;
             @params.PeerId = message.PeerId.Value;
@@ -92,11 +89,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("протокол") && text.Contains("анигиляция"))
-            {
-                return true;
-            }
-            return false;
+            return text.Contains("протокол") && text.Contains("анигиляция");
         }
     }
 }

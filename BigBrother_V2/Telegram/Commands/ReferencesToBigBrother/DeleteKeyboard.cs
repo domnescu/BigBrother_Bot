@@ -4,16 +4,16 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class DeleteKeyboardTelegram : CommandTelegram
+    internal class DeleteKeyboardTelegram : CommandTelegram
     {
         public override string Name => "Пустая Команда";
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            ReplyKeyboardRemove keyboard = new ReplyKeyboardRemove();
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            ReplyKeyboardRemove keyboard = new();
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: "Это сообщение должно убрать кнопки",
                 cancellationToken: cancellationToken,
@@ -24,12 +24,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("наряд закончился") || text.Contains("убери кнопки") || text.Contains("убрать кнопки"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("наряд закончился") || text.Contains("убери кнопки") || text.Contains("убрать кнопки");
         }
     }
 }

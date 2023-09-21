@@ -5,12 +5,12 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class ThisIsMainMakara : Command
+    internal class ThisIsMainMakara : Command
     {
 
         public override string Name => "Указание на главную беседу Макары.";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -20,7 +20,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             {
                 if (message.PeerId.Value > 2000000000)
                 {
-                    database.AddToDB("INSERT INTO MainMakara (PeerID) VALUES (" + message.PeerId + ");");
+                    _ = database.AddToDB("INSERT INTO MainMakara (PeerID) VALUES (" + message.PeerId + ");");
                     database.SetWorkingVariable("MainMakara", message.PeerId.Value.ToString());
                     @params.Message = "Сделано! Теперь я буду знать что это общая беседа Макары";
                 }
@@ -29,13 +29,11 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                     @params.Message = "Балбес! Ты мне в личку это пишешь ? серьёзно ? Афигеть ты дурень!";
                 }
             }
-            else if (message.Type == null)
-            {
-                @params.Message = "Пересланное сообщение не сработает. А то найдутся всякие дебилы которые будут вводить в меня в заблуждение.";
-            }
             else
             {
-                @params.Message = "Только администратор сообщества имеет доступ к данной команде.";
+                @params.Message = message.Type == null
+                    ? "Пересланное сообщение не сработает. А то найдутся всякие дебилы которые будут вводить в меня в заблуждение."
+                    : "Только администратор сообщества имеет доступ к данной команде.";
             }
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();
@@ -46,12 +44,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("запомни") && (text.Contains("главная") || text.Contains("общая")) && text.Contains("беседа") && db.CheckText(text, "BotNames"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("запомни") && (text.Contains("главная") || text.Contains("общая")) && text.Contains("беседа") && db.CheckText(text, "BotNames");
         }
     }
 }

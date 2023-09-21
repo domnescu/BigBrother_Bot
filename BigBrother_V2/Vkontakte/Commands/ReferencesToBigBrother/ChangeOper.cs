@@ -1,17 +1,16 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class ChangeOper : Command
+    internal class ChangeOper : Command
     {
         public override string Name => "Принудительное изменение опера";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -34,13 +33,11 @@ namespace BigBrother_V2.Vkontakte.Commands
                     }
                 }
             }
-            else if (message.Type == null)
-            {
-                @params.Message = "Для таких \"умников\" как ты, придумали \"защиту ввода\"";
-            }
             else
             {
-                @params.Message = "Ты слишком подозрительная личность! Информации от подозрительных личностей, я чёт не особо верю.";
+                @params.Message = message.Type == null
+                    ? "Для таких \"умников\" как ты, придумали \"защиту ввода\""
+                    : "Ты слишком подозрительная личность! Информации от подозрительных личностей, я чёт не особо верю.";
             }
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
@@ -51,12 +48,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("запомни") && text.Contains("опер") && (db.CheckText(text, "BotNames") || message.PeerId.Value < 2000000000))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("запомни") && text.Contains("опер") && (db.CheckText(text, "BotNames") || message.PeerId.Value < 2000000000);
         }
     }
 }

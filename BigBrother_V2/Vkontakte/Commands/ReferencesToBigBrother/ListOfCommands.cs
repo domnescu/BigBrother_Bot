@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class ListOfCommands : Command
+    internal class ListOfCommands : Command
     {
         public override string Name => "Список комманд";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -23,12 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if ((text.Contains("команды") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"))) || message.Payload == "{\"command\":\"start\"}" || text == "начать")
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("команды") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"))) || message.Payload == "{\"command\":\"start\"}" || text == "начать";
         }
     }
 }

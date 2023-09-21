@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Other
+namespace BigBrother_V2.Telegram.Commands.Other
 {
-    class TimeOutTelegram : CommandTelegram
+    internal class TimeOutTelegram : CommandTelegram
     {
         public override string Name => "Включение Тайм-аута";
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
             Database db = new();
             UserTelegram user = new(message);
-            Message sentMessage = new();
+            _ = new Message();
             string answer;
             if (user.IsAdmin && message.ForwardFrom == null)
             {
@@ -24,7 +24,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
                     db.SetWorkingVariable("TimeOut", (DateTime.Now.Minute + time).ToString());
                     answer = "Спасибо за то что даёте возможность отдохнуть.";
 
-                    sentMessage = await botClient.SendTextMessageAsync(
+                    _ = await botClient.SendTextMessageAsync(
                         chatId: message.Chat.Id,
                         text: answer,
                         cancellationToken: cancellationToken
@@ -39,15 +39,13 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
                     answer = "А ты не хочешь указать на сколько мне нужно отключиться ?";
                 }
             }
-            else if (message.ForwardFrom != null)
-            {
-                answer = "Пересланные сообщения администраторов не обрабатываются.";
-            }
             else
             {
-                answer = "Данная команда доступна только для администраторов.";
+                answer = message.ForwardFrom != null
+                    ? "Пересланные сообщения администраторов не обрабатываются."
+                    : "Данная команда доступна только для администраторов.";
             }
-            sentMessage = await botClient.SendTextMessageAsync(
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: answer,
                 cancellationToken: cancellationToken
@@ -58,12 +56,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         {
             Database db = new();
             string text = message.Text.ToLower();
-            if ((text.Contains("пауз") || text.Contains("тайм")) && db.CheckText(text, "BotNames"))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("пауз") || text.Contains("тайм")) && db.CheckText(text, "BotNames");
         }
     }
 }

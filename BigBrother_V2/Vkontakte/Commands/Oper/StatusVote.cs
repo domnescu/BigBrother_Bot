@@ -3,25 +3,18 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Oper
 {
-    class StatusVote : Command
+    internal class StatusVote : Command
     {
         public override string Name => "Статус Голосования";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
             Database db = new();
-            if (db.GetWorkingVariable("VoteAcces") == "open")
-            {
-                @params.Message = "Статус: открыто \nСписок голосов:\n" + db.GetVoteStatus();
-            }
-            else
-            {
-                @params.Message = "Статус: закрыто";
-            }
+            @params.Message = db.GetWorkingVariable("VoteAcces") == "open" ? "Статус: открыто \nСписок голосов:\n" + db.GetVoteStatus() : "Статус: закрыто";
 
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
@@ -31,12 +24,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("статус") && text.Contains("голосования"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("статус") && text.Contains("голосования");
         }
     }
 }

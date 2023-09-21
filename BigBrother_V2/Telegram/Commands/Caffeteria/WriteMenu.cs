@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
+namespace BigBrother_V2.Telegram.Commands.Caffeteria
 {
-    class WriteMenuTelegram : CommandTelegram
+    internal class WriteMenuTelegram : CommandTelegram
     {
         public override string Name => "Запись меню столовой в БД";
 
@@ -62,20 +62,16 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
                     textToResponse = "БлЭт! Надеюсь я ничего не перепутал и все правильно запомнил...у вас же сейчас " + time + "?";
                 }
             }
-            else if (Regex.Match(text, @"^.*[^A-zА-яЁё].*$").Success)
-            {
-                textToResponse = db.RandomResponse("AltSymbols");
-            }
-            else if (db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2"))
-            {
-                textToResponse = db.RandomResponse("CaffeteriaAltFilter");
-            }
             else
             {
-                textToResponse = db.RandomResponse("NotEat");
+                textToResponse = Regex.Match(text, @"^.*[^A-zА-яЁё].*$").Success
+                    ? db.RandomResponse("AltSymbols")
+                    : db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2")
+                                    ? db.RandomResponse("CaffeteriaAltFilter")
+                                    : db.RandomResponse("NotEat");
             }
 
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: textToResponse,
                 cancellationToken: cancellationToken
@@ -85,13 +81,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("на завтрак") || text.StartsWith("на обед") || text.StartsWith("на ужин") || text.StartsWith("сейчас в столовой"))
-                && text.Contains("форм") == false && text.Contains("кто") == false && text.Contains("есть") == false && text.Contains("?") == false)
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("на завтрак") || text.StartsWith("на обед") || text.StartsWith("на ужин") || text.StartsWith("сейчас в столовой"))
+                && text.Contains("форм") == false && text.Contains("кто") == false && text.Contains("есть") == false && text.Contains("?") == false;
         }
     }
 }

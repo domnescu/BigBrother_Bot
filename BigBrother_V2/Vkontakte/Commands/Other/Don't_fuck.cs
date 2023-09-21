@@ -5,16 +5,16 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class Dont_fuck : Command
+    internal class Dont_fuck : Command
     {
 
         public override string Name => "Шуточный ответ на \"не ебёт\"";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            User user = new User(message.FromId.Value, client);
+            User user = new(message.FromId.Value, client);
             if (user.Sex == VkNet.Enums.Sex.Male)
             {
                 @params.Message = "А схуяли тебя что-то или кто-то должен ебать ?";
@@ -31,11 +31,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("не ебёт") || text.Contains("не ебет"))
-            {
-                return true;
-            }
-            return false;
+            return text.Contains("не ебёт") || text.Contains("не ебет");
         }
     }
 }

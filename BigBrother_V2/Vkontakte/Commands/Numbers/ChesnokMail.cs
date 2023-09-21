@@ -6,11 +6,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Numbers
 {
-    class ChesnokMail : Command
+    internal class ChesnokMail : Command
     {
         public override string Name => "Почта Деканата";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -23,12 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("почта") || text.Contains("у кого")) && text.Contains("почта") && text.Contains("чеснок"))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("почта") || text.Contains("у кого")) && text.Contains("почта") && text.Contains("чеснок");
         }
     }
 }

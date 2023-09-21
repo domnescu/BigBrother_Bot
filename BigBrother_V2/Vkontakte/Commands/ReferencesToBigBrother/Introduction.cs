@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class Introduction : Command
+    internal class Introduction : Command
     {
         public override string Name => "Знакомство с бб";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -23,12 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if ((text.Contains("знакомст") || text.Contains("знакомь")) && db.CheckText(text, "BotNames"))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("знакомст") || text.Contains("знакомь")) && db.CheckText(text, "BotNames");
         }
     }
 }

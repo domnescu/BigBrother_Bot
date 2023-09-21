@@ -6,9 +6,9 @@ using Telegram.Bot.Types;
 
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Oper
+namespace BigBrother_V2.Telegram.Commands.Oper
 {
-    class WhereIsOperTelegram : CommandTelegram
+    internal class WhereIsOperTelegram : CommandTelegram
     {
         public override string Name => "Где опер?";
 
@@ -36,12 +36,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("где") && (db.CheckText(text, "WarningList") || text.StartsWith("ень")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("где") && (db.CheckText(text, "WarningList") || text.StartsWith("ень"));
         }
     }
 }

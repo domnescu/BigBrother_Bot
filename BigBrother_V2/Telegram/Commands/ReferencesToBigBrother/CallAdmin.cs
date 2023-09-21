@@ -6,9 +6,9 @@ using Telegram.Bot.Types;
 using VkNet.Enums.SafetyEnums;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class CallAdminTelegram : CommandTelegram
+    internal class CallAdminTelegram : CommandTelegram
     {
         public override string Name => "Вызов администратора";
 
@@ -23,9 +23,10 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
                 @params.Message = "Выйди пожалуйста на связь с @" + user.Domain + " в Телеграме. У него возникли какие-то проблемы (возможно он наткнулся на ошибку в моей работе)";
                 @params.PeerId = admin.Id;
                 @params.RandomId = new Random().Next();
-                Program.BotClient.Messages.Send(@params);
+                _ = Program.BotClient.Messages.Send(@params);
             }
-            Message sentMessage = await botClient.SendTextMessageAsync(
+
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: "Администратор уведомлён. В ближайшее время он обработает ваш запрос.",
                 cancellationToken: cancellationToken
@@ -36,12 +37,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if ((text.Contains("зов") || text.Contains("вызывай")) && (text.Contains("админ") || text.Contains("шефа") || text.Contains("начальника") || text.Contains("шефа")) && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("зов") || text.Contains("вызывай")) && (text.Contains("админ") || text.Contains("шефа") || text.Contains("начальника") || text.Contains("шефа")) && (message.Chat.Id > 0 || db.CheckText(text, "BotNames"));
         }
     }
 }

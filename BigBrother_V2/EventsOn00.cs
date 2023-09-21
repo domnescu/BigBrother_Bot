@@ -9,7 +9,7 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2
 {
-    class EventsOn00 : IJob
+    internal class EventsOn00 : IJob
     {
         /// <summary>
         /// Действия в 00 Минут каждого часа
@@ -134,7 +134,7 @@ namespace BigBrother_V2
 
                     @params.RandomId = new Random().Next();
                     @params.PeerId = chat;
-                    client.Messages.Send(@params);
+                    _ = client.Messages.Send(@params);
                 }
             }
             database.CleanTable("ComandsFromUser");
@@ -146,7 +146,7 @@ namespace BigBrother_V2
     /// <summary>
     /// Расписание запуска ф-ции в 00 минут
     /// </summary>
-    class EventsOn00Scheduler
+    internal class EventsOn00Scheduler
     {
         public static async void Start()
         {
@@ -161,7 +161,7 @@ namespace BigBrother_V2
                 .WithCronSchedule("0 0 * * * ?")                  // бесконечное повторение
                 .Build();                              // создаем триггер
 
-            await scheduler.ScheduleJob(job, trigger);        // начинаем выполнение работы
+            _ = await scheduler.ScheduleJob(job, trigger);        // начинаем выполнение работы
         }
     }
 }

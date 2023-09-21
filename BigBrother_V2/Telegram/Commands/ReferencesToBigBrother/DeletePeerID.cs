@@ -4,9 +4,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class DeletePeerIDTelegram : CommandTelegram
+    internal class DeletePeerIDTelegram : CommandTelegram
     {
         public override string Name => "Удаление диалога из БД";
 
@@ -35,16 +35,12 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
             else
             {
                 keyboard = null;
-                if (Succes)
-                {
-                    text = "Хорошо, не буду больше отправлять вам информацию.";
-                }
-                else
-                {
-                    text = "Что-то пошло не по плану. Попробуйте связаться с Админом сообщества.";
-                }
+                text = Succes
+                    ? "Хорошо, не буду больше отправлять вам информацию."
+                    : "Что-то пошло не по плану. Попробуйте связаться с Админом сообщества.";
             }
-            Message sentMessage = await botClient.SendTextMessageAsync(
+
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: text,
                 cancellationToken: cancellationToken,
@@ -56,12 +52,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             Database db = new();
             string text = message.Text.ToLower();
-            if ((text.Contains("прекрати") || text.Contains("перестань")) && text.Contains("инф") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("прекрати") || text.Contains("перестань")) && text.Contains("инф") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames"));
         }
     }
 }

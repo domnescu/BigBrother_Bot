@@ -6,7 +6,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.TelegramBigBro.Commands
+namespace BigBrother_V2.Telegram.Commands
 {
     /// <summary>
     /// Абстрактный класс описывающий что должны содержать комманды.
@@ -47,7 +47,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands
 
             foreach (long ChatID in ListOfConversations)
             {
-                Message sentMessage = await Program.botClient.SendTextMessageAsync(
+                _ = await Program.botClient.SendTextMessageAsync(
                     chatId: ChatID,
                     text: @params.Message
                 );
@@ -68,7 +68,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands
                     {
                         @params.UserIds = Users;
                         @params.RandomId = rnd.Next();
-                        await Program.BotClient.Messages.SendToUserIdsAsync(@params);
+                        _ = await Program.BotClient.Messages.SendToUserIdsAsync(@params);
                         count = 1;
                         Users.Clear();
                     }
@@ -80,7 +80,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands
             }
             @params.UserIds = Users;
             @params.RandomId = rnd.Next();
-            await Program.BotClient.Messages.SendToUserIdsAsync(@params);
+            _ = await Program.BotClient.Messages.SendToUserIdsAsync(@params);
             foreach (long peerID in Chats)
             {
                 @params.RandomId = rnd.Next();
@@ -88,11 +88,11 @@ namespace BigBrother_V2.TelegramBigBro.Commands
                 @params.PeerId = peerID;
                 try
                 {
-                    Program.BotClient.Messages.Send(@params);
+                    _ = Program.BotClient.Messages.Send(@params);
                 }
                 catch
                 {
-                    db.DeleteChat(peerID);
+                    _ = db.DeleteChat(peerID);
                 }
 
             }

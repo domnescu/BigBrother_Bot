@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
+namespace BigBrother_V2.Telegram.Commands.Caffeteria
 {
-    class CaffeteriaScheduleTelegram : CommandTelegram
+    internal class CaffeteriaScheduleTelegram : CommandTelegram
     {
 
         public override string Name => "Расписание столовой";
@@ -14,7 +14,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
             //@params.Message = "Держи, только учти что возможны изменения.";
-            Message sentMessage = await botClient.SendPhotoAsync(
+            _ = await botClient.SendPhotoAsync(
                 chatId: message.Chat.Id,
                 photo: "https://sun9-7.userapi.com/impg/fpR-T2LjMlbZCXNitEREZsZS-TEcevYQwE1UAA/8q0l6hsJxjc.jpg?size=1200x1600&quality=96&sign=2ea8c77cf6e9ee05460d8fada794d2dd&type=album",
                 cancellationToken: cancellationToken
@@ -24,13 +24,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
         public override bool Contatins(Message message)
         {
             string Text = message.Text.ToLower();
-            if (((Text.Contains("во сколько") || Text.Contains("до скольки") || Text.Contains("когда")) && (Text.Contains("завтрак") || Text.Contains("обед") || Text.Contains("ужин"))) ||
-                   (Text.Contains("расписание") && (Text.Contains("столов") || Text.Contains("столов") || Text.Contains("рестора"))))
-            {
-                return true;
-            }
-
-            return false;
+            return ((Text.Contains("во сколько") || Text.Contains("до скольки") || Text.Contains("когда")) && (Text.Contains("завтрак") || Text.Contains("обед") || Text.Contains("ужин"))) ||
+                   (Text.Contains("расписание") && (Text.Contains("столов") || Text.Contains("столов") || Text.Contains("рестора")));
         }
     }
 }

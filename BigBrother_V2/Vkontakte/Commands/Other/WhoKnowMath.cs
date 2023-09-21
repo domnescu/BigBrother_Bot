@@ -6,11 +6,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class WhoKnowMath : Command
+    internal class WhoKnowMath : Command
     {
         public override string Name => "Пустая Команда";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -33,13 +33,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("кто") && (text.Contains("знает") || text.Contains("понимает") || text.Contains("может")) &&
-                (text.Contains("матема") || text.Contains("матан") || text.Contains("вышмат")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("кто") && (text.Contains("знает") || text.Contains("понимает") || text.Contains("может")) &&
+                (text.Contains("матема") || text.Contains("матан") || text.Contains("вышмат"));
         }
     }
 }

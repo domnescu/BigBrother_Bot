@@ -5,9 +5,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class NrOfUsersInDistributionTelegram : CommandTelegram
+    internal class NrOfUsersInDistributionTelegram : CommandTelegram
     {
 
         public override string Name => "Тестовая команда";
@@ -41,7 +41,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
                 long NrOFUsersInChat = UsersInChat.Count;
                 Response += "\n" + chat.ChatSettings.Title + ":" + NrOFUsersInChat + " участников в ВК";
             }
-            Message sentMessage = await botClient.SendTextMessageAsync(
+
+            _ = await botClient.SendTextMessageAsync(
                chatId: message.Chat.Id,
                text: Response,
                cancellationToken: cancellationToken
@@ -52,12 +53,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("сколько") && text.Contains("людей") && text.Contains("подписа") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("сколько") && text.Contains("людей") && text.Contains("подписа") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames"));
         }
     }
 }

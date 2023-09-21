@@ -5,9 +5,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class ChangeOperTelegram : CommandTelegram
+    internal class ChangeOperTelegram : CommandTelegram
     {
         public override string Name => "Принудительное изменение опера";
 
@@ -33,15 +33,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
                     }
                 }
             }
-            else if (message.ForwardFrom != null)
-            {
-                Response = "Для таких \"умников\" как ты, придумали \"защиту ввода\"";
-            }
             else
             {
-                Response = "Ты слишком подозрительная личность! Информации от подозрительных личностей, я чёт не особо верю.";
+                Response = message.ForwardFrom != null
+                    ? "Для таких \"умников\" как ты, придумали \"защиту ввода\""
+                    : "Ты слишком подозрительная личность! Информации от подозрительных личностей, я чёт не особо верю.";
             }
-            Message sentMessage = await botClient.SendTextMessageAsync(
+
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: Response,
                 cancellationToken: cancellationToken
@@ -52,12 +51,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("запомни") && text.Contains("опер") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("запомни") && text.Contains("опер") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames"));
         }
     }
 }

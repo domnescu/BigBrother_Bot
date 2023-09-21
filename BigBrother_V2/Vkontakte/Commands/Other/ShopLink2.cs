@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class ShopLink2 : Command
+    internal class ShopLink2 : Command
     {
         public override string Name => "Ссылка на беседу для продажи.";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -22,12 +22,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("бизнес") && text.Contains("макар"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("бизнес") && text.Contains("макар");
         }
     }
 }

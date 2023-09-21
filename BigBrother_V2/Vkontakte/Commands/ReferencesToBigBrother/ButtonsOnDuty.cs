@@ -8,19 +8,19 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class ButtonsOnDuty : Command
+    internal class ButtonsOnDuty : Command
     {
         public override string Name => "Кнопки наряд";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
             Database db = new();
             if (message.Text.ToLower().Contains("пд") || message.Text.ToLower().Contains("по"))
             {
-                List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>>
-                        {
+                List<List<MessageKeyboardButton>> buttons = new()
+                {
                             new List<MessageKeyboardButton>()
                             {
                                 new MessageKeyboardButton
@@ -58,7 +58,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                             }
                         };
 
-                MessageKeyboard keyboard1 = new MessageKeyboard
+                MessageKeyboard keyboard1 = new()
                 {
                     Inline = false,
                     OneTime = false,
@@ -76,8 +76,8 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             {
                 if (message.Text.ToLower().Contains(location.ToLower()))
                 {
-                    List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>>
-                        {
+                    List<List<MessageKeyboardButton>> buttons = new()
+                    {
                             new List<MessageKeyboardButton>()
                             {
                                 new MessageKeyboardButton
@@ -115,7 +115,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                             }
                         };
 
-                    MessageKeyboard keyboard1 = new MessageKeyboard
+                    MessageKeyboard keyboard1 = new()
                     {
                         Inline = false,
                         OneTime = false,
@@ -134,12 +134,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (message.PeerId.Value < 2000000000 && text.Contains("не ") == false && text.Contains("наряд"))
-            {
-                return true;
-            }
-
-            return false;
+            return message.PeerId.Value < 2000000000 && text.Contains("не ") == false && text.Contains("наряд");
         }
     }
 }

@@ -3,16 +3,16 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Other
 {
     /// <summary>
     /// Данная функция не входит в релизную версию, она используется исключительно для тестирования функций
     /// </summary>
-    class DisableReactionFor_PushAll : Command
+    internal class DisableReactionFor_PushAll : Command
     {
         public override string Name => "Игнорирование All";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -27,7 +27,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                     {
                         @params.Message = "Окей, в данной беседе, я буду игнорировать @all.";
                         Database db = new();
-                        db.AddToDB("INSERT INTO IgnoreAll (PeerID) VALUES (" + message.PeerId.Value + ")");
+                        _ = db.AddToDB("INSERT INTO IgnoreAll (PeerID) VALUES (" + message.PeerId.Value + ")");
                     }
                     else
                     {
@@ -42,12 +42,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("all") && text.Contains("игнорируй") && db.CheckText(text, "BotNames") && message.PeerId.Value > 2000000000)
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("all") && text.Contains("игнорируй") && db.CheckText(text, "BotNames") && message.PeerId.Value > 2000000000;
         }
     }
 }

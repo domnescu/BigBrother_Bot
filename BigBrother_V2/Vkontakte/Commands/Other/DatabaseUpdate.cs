@@ -5,12 +5,12 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class DatabaseUpdate : Command
+    internal class DatabaseUpdate : Command
     {
 
         public override string Name => "Работа с базой данных";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -48,26 +48,20 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 {
                     answer = "Таблица успешно создана.";
                 }
-                else if (message.Text.ToLower().StartsWith("create") && !Succes)
-                {
-                    answer = "При создании таблицы возникла ошибка.";
-                }
-                else if (message.Text.ToLower().StartsWith("alter") && Succes)
-                {
-                    answer = "Обновление таблицы успешно завершено.";
-                }
                 else
                 {
-                    answer = "Что-то пошло не так. Посмотри, может где-то есть очепятка.";
+                    answer = message.Text.ToLower().StartsWith("create") && !Succes
+                        ? "При создании таблицы возникла ошибка."
+                        : message.Text.ToLower().StartsWith("alter") && Succes
+                                            ? "Обновление таблицы успешно завершено."
+                                            : "Что-то пошло не так. Посмотри, может где-то есть очепятка.";
                 }
-            }
-            else if (message.Type == null)
-            {
-                answer = "Если бы я выполнял администраторские команды из пересланных сообщений, вы бы мне испаганили БД. Так что ну вас Нахрен, лучше свяжитесь с админом.";
             }
             else
             {
-                answer = "Хорошая попытка, но НЕТ. Ничего не поменялось от твоего сообщения";
+                answer = message.Type == null
+                    ? "Если бы я выполнял администраторские команды из пересланных сообщений, вы бы мне испаганили БД. Так что ну вас Нахрен, лучше свяжитесь с админом."
+                    : "Хорошая попытка, но НЕТ. Ничего не поменялось от твоего сообщения";
             }
             @params.Message = answer;
             @params.PeerId = message.PeerId.Value;
@@ -79,12 +73,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.StartsWith("insert") || text.StartsWith("update") || text.StartsWith("delete") || text.StartsWith("create") || text.StartsWith("alter"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.StartsWith("insert") || text.StartsWith("update") || text.StartsWith("delete") || text.StartsWith("create") || text.StartsWith("alter");
         }
     }
 }

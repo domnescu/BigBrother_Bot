@@ -1,8 +1,8 @@
 ﻿using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro
+namespace BigBrother_V2.Telegram
 {
-    class UserTelegram
+    internal class UserTelegram
     {
 
         /// <summary>

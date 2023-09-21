@@ -8,11 +8,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Oper
 {
-    class NewInfoAboutOper : Command
+    internal class NewInfoAboutOper : Command
     {
         public override string Name => "Новая информация по оперу";
 
-        MessagesSendParams @params = new();
+        private MessagesSendParams @params = new();
 
         public override async void Execute(Message message, VkApi client)
         {
@@ -35,14 +35,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             string text = message.Text.ToLower();
             string warningType;
             string operinfoupdate;
-            if (text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("Вернулся"))
-            {
-                warningType = db.GetWorkingVariable("CurrentOper");
-            }
-            else
-            {
-                warningType = "проверка";
-            }
+            warningType = text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("Вернулся")
+                ? db.GetWorkingVariable("CurrentOper")
+                : "проверка";
 
             for (int i = 0; i < PossibleLocations.Count; i++)
             {
@@ -53,8 +48,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                     {
                         operinfoupdate = "По последней информации, " + warningType + " пошёл к себе";
                     }
-                    else if (PossibleLocations[i] == "ушёл" || PossibleLocations[i] == "ушел" || PossibleLocations[i] == "ушли" ||
-                        PossibleLocations[i] == "ушла" || PossibleLocations[i] == "вышел" || PossibleLocations[i] == "вышли" || PossibleLocations[i] == "вышла")
+                    else if (PossibleLocations[i] is "ушёл" or "ушел" or "ушли" or
+                        "ушла" or "вышел" or "вышли" or "вышла")
                     {
                         operinfoupdate = warningType + " " + PossibleLocations[i] + " из ";
                         for (int k = i + 1; k < PossibleLocations.Count; k++)
@@ -106,15 +101,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((((text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("ушла")
+            return (((text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("ушла")
                 || text.StartsWith("ушли") || text.StartsWith("вышли") || text.StartsWith("вышла")) &&
                 text.Length < 15 && text.Contains("?") == false && text.Contains("не ") == false && text.Contains("нет") == false)
-                || text == "вернулся") && Regex.Replace(text, @"[^\d]+", "").Length < 5 && message.Payload == null && text.Length < 15)
-            {
-                return true;
-            }
-
-            return false;
+                || text == "вернулся") && Regex.Replace(text, @"[^\d]+", "").Length < 5 && message.Payload == null && text.Length < 15;
         }
     }
 }

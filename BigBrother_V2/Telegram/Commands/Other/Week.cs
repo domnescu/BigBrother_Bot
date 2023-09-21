@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Other
+namespace BigBrother_V2.Telegram.Commands.Other
 {
-    class WeekTelegram : CommandTelegram
+    internal class WeekTelegram : CommandTelegram
     {
         public override string Name => "Какая неделя ?";
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
@@ -42,11 +42,12 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
                 IsEven = "нечётная";
             }
             answer += IsEven + " неделя";
-            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday || DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+            if (DateTime.Now.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 answer = "Сейчас " + IsEven + " неделя. С понедельника начнётся " + IsNotEven + " неделя.";
             }
-            Message sentMessage = await botClient.SendTextMessageAsync(
+
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: answer,
                 cancellationToken: cancellationToken
@@ -56,12 +57,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.StartsWith("какая") && text.Contains("неделя"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.StartsWith("какая") && text.Contains("неделя");
         }
     }
 }

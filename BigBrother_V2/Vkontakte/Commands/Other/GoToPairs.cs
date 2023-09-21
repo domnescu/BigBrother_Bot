@@ -4,13 +4,13 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class GoToPairs : Command
+    internal class GoToPairs : Command
     {
         public override string Name => "Идти на пары ?";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -45,12 +45,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("идти") && text.Contains("пар") && text.Contains("на"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("идти") && text.Contains("пар") && text.Contains("на");
         }
     }
 }

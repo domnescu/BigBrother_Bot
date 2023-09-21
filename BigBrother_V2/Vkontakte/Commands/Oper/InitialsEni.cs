@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Oper
 {
-    class InitialsEni : Command
+    internal class InitialsEni : Command
     {
         public override string Name => "Инициалы Еня";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -23,12 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("инициалы") && (text.Contains("еня") || text.Contains("ень")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("инициалы") && (text.Contains("еня") || text.Contains("ень"));
         }
     }
 }

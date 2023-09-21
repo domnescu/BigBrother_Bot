@@ -6,11 +6,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Oper
 {
-    class WhereIsOper : Command
+    internal class WhereIsOper : Command
     {
         public override string Name => "Где опер?";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -35,12 +35,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("где") && (db.CheckText(text, "WarningList") || text.StartsWith("ень")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("где") && (db.CheckText(text, "WarningList") || text.StartsWith("ень"));
         }
     }
 }

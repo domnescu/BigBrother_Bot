@@ -3,15 +3,14 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Numbers
 {
-    class DocumentovodNumber : Command
+    internal class DocumentovodNumber : Command
     {
         public override string Name => "Номер ведущих документоведов";
 
         public string Number = "Ведущие документоведы: Жукова Юлия Евгеньевна и Власенкова Светлана Николаевна - 8(812)321 - 15 - 92";
-
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -24,12 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && text.Contains("документ"))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && text.Contains("документ");
         }
     }
 }

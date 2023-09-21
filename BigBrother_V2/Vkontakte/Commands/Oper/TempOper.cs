@@ -3,13 +3,13 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Oper
 {
-    class TempOper : Command
+    internal class TempOper : Command
     {
         public override string Name => "Добавление нового опера";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -18,16 +18,14 @@ namespace BigBrother_V2.Vkontakte.Commands
             if (user.IsAdmin && message.Type != null)
             {
                 string temporarText = message.Text.Remove(0, 11);
-                db.AddToDB("INSET INTO WarningList ('warning','type') VALUES ('" + temporarText + "','опер');");
+                _ = db.AddToDB("INSET INTO WarningList ('warning','type') VALUES ('" + temporarText + "','опер');");
                 @params.Message = "Готово, " + temporarText + " добавлен в базу данных как новый опер.";
-            }
-            else if (message.Type != null)
-            {
-                @params.Message = "Администраторские команды не выполняются из пересланных сообщений.";
             }
             else
             {
-                @params.Message = "У тебя нет прав на выполнение данной команды. Свяжись с одним из администраторов для выполнения этой команды.";
+                @params.Message = message.Type != null
+                    ? "Администраторские команды не выполняются из пересланных сообщений."
+                    : "У тебя нет прав на выполнение данной команды. Свяжись с одним из администраторов для выполнения этой команды.";
             }
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
@@ -37,12 +35,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.StartsWith("новый опер"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.StartsWith("новый опер");
         }
     }
 }

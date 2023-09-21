@@ -4,9 +4,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class ChangeVoteStatusTelegram : CommandTelegram
+    internal class ChangeVoteStatusTelegram : CommandTelegram
     {
         public override string Name => "Принудительное изменение опера";
 
@@ -31,16 +31,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
                 }
 
             }
-            else if (user.IsAdmin && message.ForwardFrom != null)
-            {
-                Response = "Пересланное сообщение Админа сообщества ? Серьёзно ? Это так не работает)";
-            }
             else
             {
-                Response = "Только Администраторы сообщества имеют право менять статус голосования";
+                Response = user.IsAdmin && message.ForwardFrom != null
+                    ? "Пересланное сообщение Админа сообщества ? Серьёзно ? Это так не работает)"
+                    : "Только Администраторы сообщества имеют право менять статус голосования";
             }
 
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: Response,
                 cancellationToken: cancellationToken
@@ -51,12 +49,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("голосование") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("голосование") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames"));
         }
     }
 }

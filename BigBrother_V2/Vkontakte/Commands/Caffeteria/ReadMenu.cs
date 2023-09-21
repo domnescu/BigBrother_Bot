@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
 {
-    class ReadMenu : Command
+    internal class ReadMenu : Command
     {
         public override string Name => "Чтение меню столовой из БД";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -65,14 +65,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                     answer = Today + "на ужин: " + ResponseFromDB;
                 }
             }
-            if (ResponseFromDB == null)
-            {
-                @params.Message = db.RandomResponse("RandomCaffeteria");
-            }
-            else
-            {
-                @params.Message = answer;
-            }
+            @params.Message = ResponseFromDB == null ? db.RandomResponse("RandomCaffeteria") : answer;
 
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
@@ -82,13 +75,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (((text.Contains("что ") || text.Contains("чем ") || text.Contains("чё ") || text.Contains("че ")) && ((text.Contains("столов")
-                || text.Contains("рестора") || text.Contains("кормят")) || text.Contains("завтрак") || text.Contains("обед") || text.Contains("ужин"))) || message.Payload != null && message.Payload.Contains("caffeteria"))
-            {
-                return true;
-            }
-
-            return false;
+            return ((text.Contains("что ") || text.Contains("чем ") || text.Contains("чё ") || text.Contains("че ")) && (text.Contains("столов")
+                || text.Contains("рестора") || text.Contains("кормят") || text.Contains("завтрак") || text.Contains("обед") || text.Contains("ужин"))) || (message.Payload != null && message.Payload.Contains("caffeteria"));
         }
     }
 }

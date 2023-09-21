@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class Hello : Command
+    internal class Hello : Command
     {
         public override string Name => "Приветствие";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -19,17 +19,11 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             {
                 text = "Здравья желаю товарищ Администратор!";
             }
-            else if (user.Sex == VkNet.Enums.Sex.Female)
-            {
-                text = "Здравствуйте, мадмуазель " + user.FirstName;
-            }
-            else if (user.Sex == VkNet.Enums.Sex.Male)
-            {
-                text = "Здравствуйте, господин " + user.FirstName;
-            }
             else
             {
-                text = "Ну привет, неопозднанное существо";
+                text = user.Sex == VkNet.Enums.Sex.Female
+                    ? "Здравствуйте, мадмуазель " + user.FirstName
+                    : user.Sex == VkNet.Enums.Sex.Male ? "Здравствуйте, господин " + user.FirstName : "Ну привет, неопозднанное существо";
             }
 
             @params.PeerId = message.PeerId;
@@ -43,12 +37,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.StartsWith("привет") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.StartsWith("привет") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"));
         }
     }
 }

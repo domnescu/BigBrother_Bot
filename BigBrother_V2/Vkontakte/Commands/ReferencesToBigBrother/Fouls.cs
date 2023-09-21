@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class Fouls : Command
+    internal class Fouls : Command
     {
         public override string Name => "Ответ на оскорбление";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -24,13 +24,8 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("id") == false && db.CheckText(text, "fouls") && ((message.PeerId.Value < 2000000000 && text.Contains("ты") && db.CheckText(text, "WarningList") == false)
-                || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("id") == false && db.CheckText(text, "fouls") && ((message.PeerId.Value < 2000000000 && text.Contains("ты") && db.CheckText(text, "WarningList") == false)
+                || db.CheckText(text, "BotNames"));
         }
     }
 }

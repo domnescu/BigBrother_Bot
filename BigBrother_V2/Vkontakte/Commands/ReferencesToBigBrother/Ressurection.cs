@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class Ressurection : Command
+    internal class Ressurection : Command
     {
         public override string Name => "С возвращением";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -19,17 +19,13 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             {
                 text = "Да иди ты! Не дал мне нормально отдохнуть!! ";
             }
-            else if (user.Sex == VkNet.Enums.Sex.Female)
-            {
-                text = user.FirstName + ", ты рада что я вернулся ? Спасибо!!";
-            }
-            else if (user.Sex == VkNet.Enums.Sex.Male)
-            {
-                text = "Братан, я конечно рад вернуться, но только не ебите мозг)";
-            }
             else
             {
-                text = "Ну привет, неопозднанное существо";
+                text = user.Sex == VkNet.Enums.Sex.Female
+                    ? user.FirstName + ", ты рада что я вернулся ? Спасибо!!"
+                    : user.Sex == VkNet.Enums.Sex.Male
+                                    ? "Братан, я конечно рад вернуться, но только не ебите мозг)"
+                                    : "Ну привет, неопозднанное существо";
             }
 
             @params.PeerId = message.PeerId;
@@ -42,12 +38,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (text.Contains("возвращени") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("возвращени") && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"));
         }
     }
 }

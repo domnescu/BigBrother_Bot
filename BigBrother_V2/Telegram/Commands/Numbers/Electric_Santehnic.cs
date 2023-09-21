@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Numbers
+namespace BigBrother_V2.Telegram.Commands.Numbers
 {
-    class Electric_SantehnicNumberTelegram : CommandTelegram
+    internal class Electric_SantehnicNumberTelegram : CommandTelegram
     {
         public override string Name => "Номер вызова сантехника или электрика";
 
@@ -13,7 +13,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Numbers
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: Number,
                 cancellationToken: cancellationToken
@@ -23,12 +23,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Numbers
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("сантехник") || text.Contains("электрик")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("сантехник") || text.Contains("электрик"));
         }
     }
 }

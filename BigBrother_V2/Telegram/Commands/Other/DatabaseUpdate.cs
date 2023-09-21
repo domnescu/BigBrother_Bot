@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Other
+namespace BigBrother_V2.Telegram.Commands.Other
 {
-    class DatabaseUpdateTelegram : CommandTelegram
+    internal class DatabaseUpdateTelegram : CommandTelegram
     {
 
         public override string Name => "Работа с базой данных";
@@ -38,28 +38,23 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
                 {
                     answer = "Элемент из базы данных успешно обновлён.";
                 }
-                else if (message.Text.ToLower().StartsWith("update") && !Succes)
-                {
-                    answer = "Видимо ты где-то ошибся. В базе данных всё осталось в прежнем состоянии.";
-                }
-                else if (message.Text.ToLower().StartsWith("create") && Succes)
-                {
-                    answer = "Таблица успешно создана.";
-                }
                 else
                 {
-                    answer = "Что-то пошло не так. Посмотри, может где-то есть очепятка.";
+                    answer = message.Text.ToLower().StartsWith("update") && !Succes
+                        ? "Видимо ты где-то ошибся. В базе данных всё осталось в прежнем состоянии."
+                        : message.Text.ToLower().StartsWith("create") && Succes
+                                            ? "Таблица успешно создана."
+                                            : "Что-то пошло не так. Посмотри, может где-то есть очепятка.";
                 }
-            }
-            else if (message.ForwardFrom != null)
-            {
-                answer = "Если бы я выполнял администраторские команды из пересланных сообщений, вы бы мне испаганили БД. Так что ну вас Нахрен, лучше свяжитесь с админом.";
             }
             else
             {
-                answer = "Хорошая попытка, но НЕТ. Ничего не поменялось от твоего сообщения";
+                answer = message.ForwardFrom != null
+                    ? "Если бы я выполнял администраторские команды из пересланных сообщений, вы бы мне испаганили БД. Так что ну вас Нахрен, лучше свяжитесь с админом."
+                    : "Хорошая попытка, но НЕТ. Ничего не поменялось от твоего сообщения";
             }
-            Message sentMessage = await botClient.SendTextMessageAsync(
+
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: answer,
                 cancellationToken: cancellationToken
@@ -70,12 +65,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.StartsWith("insert") || text.StartsWith("update") || text.StartsWith("delete") || text.StartsWith("create"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.StartsWith("insert") || text.StartsWith("update") || text.StartsWith("delete") || text.StartsWith("create");
         }
     }
 }

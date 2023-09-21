@@ -3,15 +3,14 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Numbers
 {
-    class DekanNumber : Command
+    internal class DekanNumber : Command
     {
         public override string Name => "Номер Кольцова";
 
         public string Number = "Декан общеинженерного факультета (он же Директор МЦОО) Кольцов Олег Вениаминович 8(812)421-38-97";
-
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -24,13 +23,8 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("декан ") || text.EndsWith("декан") ||
-                text.Contains("директор") || text.EndsWith("декана") || text.Contains("кольцов")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("декан ") || text.EndsWith("декан") ||
+                text.Contains("директор") || text.EndsWith("декана") || text.Contains("кольцов"));
         }
     }
 }

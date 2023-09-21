@@ -1,10 +1,4 @@
-﻿using BigBrother_V2.TelegramBigBro.Commands;
-using BigBrother_V2.TelegramBigBro.Commands.Caffeteria;
-using BigBrother_V2.TelegramBigBro.Commands.Cards;
-using BigBrother_V2.TelegramBigBro.Commands.Numbers;
-using BigBrother_V2.TelegramBigBro.Commands.Oper;
-using BigBrother_V2.TelegramBigBro.Commands.Other;
-using BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother;
+﻿using BigBrother_V2.Telegram.Commands;
 using BigBrother_V2.Vkontakte.Commands;
 using BigBrother_V2.Vkontakte.Commands.Caffeteria;
 using BigBrother_V2.Vkontakte.Commands.Cards;
@@ -29,13 +23,13 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2
 {
-    class Program
+    internal class Program
     {
         /// <summary>
         /// идентификатор сообщества Большой Брат
         /// </summary> 
 #if DEBUG
-        static ulong bigbroID { get; } = 192662250;
+        private static ulong bigbroID { get; } = 192662250;
 #else
         static ulong bigbroID { get; } = 187905748;
 #endif
@@ -43,23 +37,24 @@ namespace BigBrother_V2
         /// Клиент бота
         /// </summary>
         public static VkApi BotClient = new();
+
         /// <summary>
         /// Список всех доступных команд
         /// </summary>
-        static List<Command> ListOfCommands = new();
+        private static readonly List<Command> ListOfCommands = new();
 
 
         public static TelegramBotClient botClient;
-        static List<CommandTelegram> CommandsTelegram = new();
+        private static readonly List<CommandTelegram> CommandsTelegram = new();
 
-        static async Task Main()
+        private static async Task Main()
         {
             Initialize();
             Database db = new();
 
             botClient = new TelegramBotClient(db.GetWorkingVariable("BigBroKeyTelegram"));
-            using CancellationTokenSource cts = new CancellationTokenSource();
-            ReceiverOptions receiverOptions = new ReceiverOptions
+            using CancellationTokenSource cts = new();
+            ReceiverOptions receiverOptions = new()
             {
                 AllowedUpdates = { } // all update types(message, join etc.)
             };
@@ -127,11 +122,12 @@ namespace BigBrother_V2
             }
             cts.Cancel();
         }
+
         /// <summary>
         /// Асинхронная отправка сообщения на обработку, с последующим поиском пересланных сообщений
         /// </summary>
         /// <param name="message">Сообщение пользователя</param>
-        static async void ProcessingMessageAsync(VkNet.Model.Message message)
+        private static async void ProcessingMessageAsync(VkNet.Model.Message message)
         {
             await Task.Run(() => ProcessingMessage(message));
             if (message.ForwardedMessages.Count != 0)
@@ -143,24 +139,26 @@ namespace BigBrother_V2
                 }
             }
         }
+
         /// <summary>
         /// Асинхронный перебор команд
         /// </summary>
         /// <param name="message">Сообщение</param>
-        static async void ProcessingMessage(VkNet.Model.Message message)
+        private static async void ProcessingMessage(VkNet.Model.Message message)
         {
             foreach (Command command in ListOfCommands)
             {
                 await CheckCommandsAsync(command, message);
             }
         }
+
         /// <summary>
         /// Асинхронная проверка сообщения, на соответствие команды
         /// </summary>
         /// <param name="command">Команда</param>
         /// <param name="message">Сообщение</param>
         /// <returns></returns>
-        static Task CheckCommandsAsync(Command command, VkNet.Model.Message message)
+        private static Task CheckCommandsAsync(Command command, VkNet.Model.Message message)
         {
             if (command.Contatins(message))
             {
@@ -200,12 +198,12 @@ namespace BigBrother_V2
             return Task.CompletedTask;
         }
 
-        static async Task HandleUpdateAsync(ITelegramBotClient botClientTelegram, Update update, CancellationToken cancellationToken)
+        private static async Task HandleUpdateAsync(ITelegramBotClient botClientTelegram, Update update, CancellationToken cancellationToken)
         {
             if (update.Type == UpdateType.MyChatMember && update.MyChatMember.OldChatMember.User.Username == "@BigBrother_Makara_Bot")
             {
                 Database db = new();
-                db.DeleteChat(update.MyChatMember.Chat.Id);
+                _ = db.DeleteChat(update.MyChatMember.Chat.Id);
             }
             // Is update type message?
             if (update.Type != UpdateType.Message)
@@ -227,7 +225,7 @@ namespace BigBrother_V2
             }
         }
 
-        static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        private static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             string ErrorMessage = exception switch
             {
@@ -244,7 +242,7 @@ namespace BigBrother_V2
         /// <summary>
         /// В данном методе происходит добавление всех команд в список ListOfCommands и авторизация бота
         /// </summary>
-        static void Initialize()
+        private static void Initialize()
         {
             Database db = new();
             BotClient.Authorize(new ApiAuthParams() { AccessToken = db.GetWorkingVariable("BigBroKey") });

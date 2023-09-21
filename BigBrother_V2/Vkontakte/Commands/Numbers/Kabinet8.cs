@@ -3,15 +3,14 @@ using VkNet;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.Numbers
 {
-    class Kabinet8Number : Command
+    internal class Kabinet8Number : Command
     {
         public override string Name => "Номер 8 кабинета";
 
         public string Number = "8 кабинет - 8(911)721-19-04";
-
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -24,12 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && ((text.Contains("8") || text.Contains("восьм")) && text.Contains("кабинет")))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && (text.Contains("8") || text.Contains("восьм")) && text.Contains("кабинет");
         }
     }
 }

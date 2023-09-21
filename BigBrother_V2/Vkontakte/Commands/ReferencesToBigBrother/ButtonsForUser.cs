@@ -8,15 +8,15 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class ButtonsForUser : Command
+    internal class ButtonsForUser : Command
     {
         public override string Name => "Кнопки";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>> { };
+            List<List<MessageKeyboardButton>> buttons = new() { };
             if (message.Text.ToLower().Contains("опер"))
             {
 
@@ -112,7 +112,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                         };
                 @params.Message = "Я надеюсь не надо объяснять как они работают.";
             }
-            MessageKeyboard keyboard1 = new MessageKeyboard
+            MessageKeyboard keyboard1 = new()
             {
                 Inline = false,
                 OneTime = false,
@@ -127,12 +127,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (message.PeerId.Value < 2000000000 && text.StartsWith("кнопки"))
-            {
-                return true;
-            }
-
-            return false;
+            return message.PeerId.Value < 2000000000 && text.StartsWith("кнопки");
         }
     }
 }

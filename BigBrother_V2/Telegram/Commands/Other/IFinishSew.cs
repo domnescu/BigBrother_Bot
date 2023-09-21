@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Other
+namespace BigBrother_V2.Telegram.Commands.Other
 {
-    class IFinishSewTelegram : CommandTelegram
+    internal class IFinishSewTelegram : CommandTelegram
     {
         public override string Name => "Пустая Команда";
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
@@ -14,16 +14,8 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
             string response;
             bool Succes = db.AddToDB("DELETE FROM WhoSew WHERE domain='@" + message.From.Username + "';");
 
-            if (Succes)
-            {
-                response = "Хорошо, я запомнил что ты больше не шьёшь.";
-            }
-            else
-            {
-                response = "Так тебя и небыло в списке людей которые умеют шить";
-            }
-
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            response = Succes ? "Хорошо, я запомнил что ты больше не шьёшь." : "Так тебя и небыло в списке людей которые умеют шить";
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: response,
                 cancellationToken: cancellationToken
@@ -33,12 +25,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (((text.Contains("могу") && text.Contains(" шить")) || text.Contains("шью")) && text.Contains("не"))
-            {
-                return true;
-            }
-
-            return false;
+            return ((text.Contains("могу") && text.Contains(" шить")) || text.Contains("шью")) && text.Contains("не");
         }
     }
 }

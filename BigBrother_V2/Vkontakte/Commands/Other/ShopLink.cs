@@ -7,11 +7,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    class ShopLink : Command
+    internal class ShopLink : Command
     {
         public override string Name => "Ссылка на беседу для продажи.";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -31,7 +31,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
                             if (UsersInChat.Items[i].CanKick == true)
                             {
-                                client.Messages.RemoveChatUser((ulong)message.PeerId.Value - 2000000000, message.FromId.Value);
+                                _ = client.Messages.RemoveChatUser((ulong)message.PeerId.Value - 2000000000, message.FromId.Value);
                                 @params.Message = "Несите нового! Этот не понял с первого раза!";
                             }
                             else
@@ -43,7 +43,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 }
                 else
                 {
-                    client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
+                    _ = client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
                     @params.Message = user.FirstName + ", для таких сообщений, есть отдельаня беседа. Если попробуешь ещё раз отправить что-то подобное, я тебя кикну.\n https://vk.me/join/AJQ1d5A_1grjDZ0ArYPhk0rr";
                 }
             }
@@ -72,12 +72,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             {
                 string text = message.Text.ToLower();
                 MatchCollection matches = regex.Matches(text);
-                if (matches.Count > 1 && text.Contains("раз") == false && text.Contains("рота") == false)
-                {
-                    return true;
-                }
-
-                return false;
+                return matches.Count > 1 && text.Contains("раз") == false && text.Contains("рота") == false;
             }
             else
             {

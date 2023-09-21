@@ -3,17 +3,17 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
-namespace BigBrother_V2.TelegramBigBro.Commands.Other
+namespace BigBrother_V2.Telegram.Commands.Other
 {
-    class ICanSewTelegram : CommandTelegram
+    internal class ICanSewTelegram : CommandTelegram
     {
         public override string Name => "Пустая Команда";
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
             Database db = new();
-            db.AddToDB("INSERT INTO WhoSew (domain,Platform) VALUES ('@" + message.From.Username + "','Telegram')");
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            _ = db.AddToDB("INSERT INTO WhoSew (domain,Platform) VALUES ('@" + message.From.Username + "','Telegram')");
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: "Хорошо, я запомнил что ты можешь шить",
                 cancellationToken: cancellationToken
@@ -23,12 +23,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("не") == false && (text.Contains("умею") || text.Contains("могу")) && text.Contains("шить"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("не") == false && (text.Contains("умею") || text.Contains("могу")) && text.Contains("шить");
         }
     }
 }

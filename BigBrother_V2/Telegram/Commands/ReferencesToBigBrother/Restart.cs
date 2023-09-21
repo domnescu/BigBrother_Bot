@@ -5,9 +5,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class RestartTelegram : CommandTelegram
+    internal class RestartTelegram : CommandTelegram
     {
         public override string Name => "Перезагрузка";
 
@@ -21,13 +21,9 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
                 new Thread(() => { Thread.Sleep(2000); Environment.Exit(0); }).Start();
 
             }
-            else if (message.ForwardFrom != null)
-            {
-                response = "Лучше свяжитесь с администратором.";
-            }
             else
             {
-                response = "Ты не сможешь меня остановить 😈";
+                response = message.ForwardFrom != null ? "Лучше свяжитесь с администратором." : "Ты не сможешь меня остановить 😈";
             }
 
             Message sentMessage = await botClient.SendTextMessageAsync(
@@ -42,12 +38,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
             string text = message.Text.ToLower();
             Database db = new();
             //Добавить упоминания бота
-            if (text.Contains("перезагруз") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("перезагруз") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames"));
         }
     }
 }

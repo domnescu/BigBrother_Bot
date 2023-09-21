@@ -6,11 +6,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
 {
-    class WriteMenu : Command
+    internal class WriteMenu : Command
     {
         public override string Name => "Запись меню столовой в БД";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -74,17 +74,13 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
                     @params.Message = "БлЭт! Надеюсь я ничего не перепутал и все правильно запомнил...у вас же сейчас " + time + "?";
                 }
             }
-            else if (Regex.Match(text, @"^.*[^A-zА-яЁё].*$").Success)
-            {
-                @params.Message = db.RandomResponse("AltSymbols");
-            }
-            else if (db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2"))
-            {
-                @params.Message = db.RandomResponse("CaffeteriaAltFilter");
-            }
             else
             {
-                @params.Message = db.RandomResponse("NotEat");
+                @params.Message = Regex.Match(text, @"^.*[^A-zА-яЁё].*$").Success
+                    ? db.RandomResponse("AltSymbols")
+                    : db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2")
+                                    ? db.RandomResponse("CaffeteriaAltFilter")
+                                    : db.RandomResponse("NotEat");
             }
 
             @params.PeerId = message.PeerId.Value;
@@ -95,14 +91,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Database db = new();
-            if ((text.StartsWith("на завтрак") || text.StartsWith("на обед") || text.StartsWith("на ужин") || text.StartsWith("сейчас в столовой"))
-                && text.Contains("форм") == false && text.Contains("кто") == false && text.Contains("есть") == false && text.Contains("?") == false)
-            {
-                return true;
-            }
-
-            return false;
+            _ = new Database();
+            return (text.StartsWith("на завтрак") || text.StartsWith("на обед") || text.StartsWith("на ужин") || text.StartsWith("сейчас в столовой"))
+                && text.Contains("форм") == false && text.Contains("кто") == false && text.Contains("есть") == false && text.Contains("?") == false;
         }
     }
 }

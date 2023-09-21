@@ -5,19 +5,19 @@ using VkNet.Model;
 using VkNet.Model.Keyboard;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
-    class DeleteKeyboard : Command
+    internal class DeleteKeyboard : Command
     {
         public override string Name => "Пустая Команда";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
-            List<List<MessageKeyboardButton>> buttons = new List<List<MessageKeyboardButton>> { }; // пустой массив кнопок. Без массива не отправляется клавиатура!!
+            List<List<MessageKeyboardButton>> buttons = new() { }; // пустой массив кнопок. Без массива не отправляется клавиатура!!
 
-            MessageKeyboard keyboard = new MessageKeyboard
+            MessageKeyboard keyboard = new()
             {
                 Inline = false,
                 OneTime = false,
@@ -33,12 +33,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if (text.Contains("наряд закончился") || text.Contains("убери кнопки") || text.Contains("убрать кнопки"))
-            {
-                return true;
-            }
-
-            return false;
+            return text.Contains("наряд закончился") || text.Contains("убери кнопки") || text.Contains("убрать кнопки");
         }
     }
 }

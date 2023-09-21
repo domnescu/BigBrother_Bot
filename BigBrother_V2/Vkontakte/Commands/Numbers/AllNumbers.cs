@@ -5,11 +5,11 @@ using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Numbers
 {
-    class AllNumbers : Command
+    internal class AllNumbers : Command
     {
         public override string Name => "Номера начальства";
 
-        MessagesSendParams @params = new();
+        private readonly MessagesSendParams @params = new();
 
         public override void Execute(Message message, VkApi client)
         {
@@ -38,12 +38,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Numbers
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            if ((text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && text.Contains("начальств"))
-            {
-                return true;
-            }
-
-            return false;
+            return (text.StartsWith("номер") || text.Contains("у кого")) && text.Contains("номер") && text.Contains("начальств");
         }
     }
 }

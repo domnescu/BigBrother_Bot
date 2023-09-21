@@ -4,15 +4,15 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class ListOfCommandsTelegram : CommandTelegram
+    internal class ListOfCommandsTelegram : CommandTelegram
     {
         public override string Name => "Список комманд";
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: "Чтобы мне не приходилось отправлять огромное сообщение, мой создатель написал отдельную статью. \n https://vk.com/@bigbrother_bot-commands",
                 cancellationToken: cancellationToken
@@ -23,12 +23,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if ((text.Contains("команды") && db.CheckText(text, "BotNames")) || message.Text == "/start")
-            {
-                return true;
-            }
-
-            return false;
+            return (text.Contains("команды") && db.CheckText(text, "BotNames")) || message.Text == "/start";
         }
     }
 }

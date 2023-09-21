@@ -4,16 +4,16 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 
 
-namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
+namespace BigBrother_V2.Telegram.Commands.ReferencesToBigBrother
 {
-    class PromotionTelegram : CommandTelegram
+    internal class PromotionTelegram : CommandTelegram
     {
         public override string Name => "Ответ на комплимент";
 
         public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
             Database db = new();
-            Message sentMessage = await botClient.SendTextMessageAsync(
+            _ = await botClient.SendTextMessageAsync(
                 chatId: message.Chat.Id,
                 text: db.RandomResponse("AnswerOnPromotion"),
                 cancellationToken: cancellationToken
@@ -24,12 +24,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            if (db.CheckText(text, "promotions") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames")))
-            {
-                return true;
-            }
-
-            return false;
+            return db.CheckText(text, "promotions") && (message.Chat.Id > 0 || db.CheckText(text, "BotNames"));
         }
     }
 }

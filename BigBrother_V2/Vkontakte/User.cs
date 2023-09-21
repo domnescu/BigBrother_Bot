@@ -8,7 +8,7 @@ namespace BigBrother_V2.Vkontakte
     /// <summary>
     /// Объект с информацией о пользователе который написал
     /// </summary>
-    class User
+    internal class User
     {
         /// <summary>
         /// Имя пользователя

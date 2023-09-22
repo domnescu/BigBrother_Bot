@@ -42,13 +42,13 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                             MessagesSendParams sendParams = new()
                             {
                                 PeerId = UserInMessageDistribution.Id,
-                                RandomId = new Random().Next()
-                            };
-                            sendParams.Message = user.Sex == VkNet.Enums.Sex.Male
+                                RandomId = new Random().Next(),
+                                Message = user.Sex == VkNet.Enums.Sex.Male
                                 ? UserInMessageDistribution.FirstName + ", ты больше 14 дней не читал мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных."
                                 : user.Sex == VkNet.Enums.Sex.Female
                                     ? UserInMessageDistribution.FirstName + ", ты больше 14 дней не читала мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных."
-                                    : UserInMessageDistribution.FirstName + ", ты больше 14 дней не читалО мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных.";
+                                    : UserInMessageDistribution.FirstName + ", ты больше 14 дней не читалО мои сообщения. По требованию администратора, я удалил тебя из своей Базы Данных."
+                            };
 
                             List<List<MessageKeyboardButton>> buttons = new()
                             {

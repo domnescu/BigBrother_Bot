@@ -15,16 +15,11 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text;
             User user = new(message.FromId.Value, client);
-            if (user.IsAdmin)
-            {
-                text = "Здравья желаю товарищ Администратор!";
-            }
-            else
-            {
-                text = user.Sex == VkNet.Enums.Sex.Female
+            text = user.IsAdmin
+                ? "Здравья желаю товарищ Администратор!"
+                : user.Sex == VkNet.Enums.Sex.Female
                     ? "Здравствуйте, мадмуазель " + user.FirstName
                     : user.Sex == VkNet.Enums.Sex.Male ? "Здравствуйте, господин " + user.FirstName : "Ну привет, неопозднанное существо";
-            }
 
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();

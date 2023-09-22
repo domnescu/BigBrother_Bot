@@ -1,4 +1,10 @@
-﻿using BigBrother_V2.Telegram.Commands;
+﻿using BigBrother_V2.TelegramBigBro.Commands;
+using BigBrother_V2.TelegramBigBro.Commands.Caffeteria;
+using BigBrother_V2.TelegramBigBro.Commands.Cards;
+using BigBrother_V2.TelegramBigBro.Commands.Numbers;
+using BigBrother_V2.TelegramBigBro.Commands.Oper;
+using BigBrother_V2.TelegramBigBro.Commands.Other;
+using BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother;
 using BigBrother_V2.Vkontakte.Commands;
 using BigBrother_V2.Vkontakte.Commands.Caffeteria;
 using BigBrother_V2.Vkontakte.Commands.Cards;

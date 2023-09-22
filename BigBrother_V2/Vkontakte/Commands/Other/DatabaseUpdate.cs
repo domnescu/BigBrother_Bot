@@ -40,21 +40,17 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 {
                     answer = "Элемент из базы данных успешно обновлён.";
                 }
-                else if (message.Text.ToLower().StartsWith("update") && !Succes)
-                {
-                    answer = "Видимо ты где-то ошибся. В базе данных всё осталось в прежнем состоянии.";
-                }
-                else if (message.Text.ToLower().StartsWith("create") && Succes)
-                {
-                    answer = "Таблица успешно создана.";
-                }
                 else
                 {
-                    answer = message.Text.ToLower().StartsWith("create") && !Succes
-                        ? "При создании таблицы возникла ошибка."
-                        : message.Text.ToLower().StartsWith("alter") && Succes
-                                            ? "Обновление таблицы успешно завершено."
-                                            : "Что-то пошло не так. Посмотри, может где-то есть очепятка.";
+                    answer = message.Text.ToLower().StartsWith("update") && !Succes
+                        ? "Видимо ты где-то ошибся. В базе данных всё осталось в прежнем состоянии."
+                        : message.Text.ToLower().StartsWith("create") && Succes
+                                            ? "Таблица успешно создана."
+                                            : message.Text.ToLower().StartsWith("create") && !Succes
+                                                                ? "При создании таблицы возникла ошибка."
+                                                                : message.Text.ToLower().StartsWith("alter") && Succes
+                                                                                    ? "Обновление таблицы успешно завершено."
+                                                                                    : "Что-то пошло не так. Посмотри, может где-то есть очепятка.";
                 }
             }
             else

@@ -1,20 +1,18 @@
-﻿using BigBrother_V2.Additional;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Types.Enums;
-using VkNet;
-using VkNet.Model;
+using Telegram.Bot.Types;
 using VkNet.Model.RequestParams;
 
-namespace BigBrother_V2.Vkontakte.Commands
+namespace BigBrother_V2.TelegramBigBro.Commands
 {
     /// <summary>
     /// Абстрактный класс описывающий что должны содержать комманды.
     /// В классах наследуемых от Command комментаррии отсутствуют, т.к. в них нет нужды. Всё что нужно, описано в данном классе.
     /// </summary>
-    public abstract class Command
+    public abstract class CommandTelegram
     {
         /// <summary>
         /// Переменная которая хранит название команды
@@ -25,7 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         /// </summary>
         /// <param name="message">Сообщение полученное из ВК</param>
         /// <param name="client">Авторизованный клиент ВК - от его имени и будет отправлен ответ</param>
-        public abstract void Execute(Message message, VkApi client);
+        public abstract Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken);
         /// <summary>
         /// Метод проверяющий полученное сообщение на соответствие срабатывания команды
         /// </summary>
@@ -33,48 +31,28 @@ namespace BigBrother_V2.Vkontakte.Commands
         /// <returns>True - если в тексте найдена команда
         /// False - если в тексте не найдена команда</returns>
         public abstract bool Contatins(Message message);
-        /// <summary>
-        /// Метод отправляющий сообщения в ВК
-        /// </summary>
-        /// <param name="params">Параметры сообщения (текст,вложения, получатель, RandomId и т.д.) </param>
-        /// <param name="client">Авторизованный клиент от имени которого отправляются сообщения.</param>
-        public void Send(MessagesSendParams @params, VkApi client)
+
+        public async Task MessageDistributionWithTelegram(string text)
         {
-            _ = client.Messages.Send(@params);
-        }
-        /// <summary>
-        /// Асинхронная отправка сообщений 100 пользователям одновременно.
-        /// Асинхронность используется для того, чтобы во время отправки сообщений, одновременно формировался следующий список из 100 человек
-        /// </summary>
-        /// <param name="params">Параметры сообщения</param>
-        /// <param name="client">Клиент через который следует отправить сообщения</param>
-        public async Task SendToUsersIds(MessagesSendParams @params, VkApi client)
-        {
-            _ = await client.Messages.SendToUserIdsAsync(@params);
-        }
-        /// <summary>
-        /// Метод отвечающий за массовые рассылки сообщений
-        /// </summary>
-        /// <param name="params">Параметры сообщения</param>
-        /// <param name="client">Клиент через который следует отправить сообщения</param>
-        public async Task MessageDistribution(MessagesSendParams @params, VkApi client, StringForLink @string = null)
-        {
-            @params.PeerId = null;
-            @params.UserIds = null;
+            MessagesSendParams @params = new()
+            {
+                Message = text,
+                PeerId = null,
+                UserIds = null,
+                DisableMentions = true
+            };
             Database db = new();
             Random rnd = new();
-
             List<long> ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
 
             foreach (long ChatID in ListOfConversations)
             {
                 _ = await Program.botClient.SendTextMessageAsync(
                     chatId: ChatID,
-                    text: @params.Message + @string.Telegram,
-                    parseMode: ParseMode.Html
+                    text: @params.Message
                 );
             }
-            @params.Message += @string.VK;
+
             ListOfConversations.Clear();
             ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
             List<long> Users = new();
@@ -90,7 +68,7 @@ namespace BigBrother_V2.Vkontakte.Commands
                     {
                         @params.UserIds = Users;
                         @params.RandomId = rnd.Next();
-                        await SendToUsersIds(@params, client);
+                        _ = await Program.BotClient.Messages.SendToUserIdsAsync(@params);
                         count = 1;
                         Users.Clear();
                     }
@@ -102,7 +80,7 @@ namespace BigBrother_V2.Vkontakte.Commands
             }
             @params.UserIds = Users;
             @params.RandomId = rnd.Next();
-            await SendToUsersIds(@params, client);
+            _ = await Program.BotClient.Messages.SendToUserIdsAsync(@params);
             foreach (long peerID in Chats)
             {
                 @params.RandomId = rnd.Next();
@@ -110,12 +88,13 @@ namespace BigBrother_V2.Vkontakte.Commands
                 @params.PeerId = peerID;
                 try
                 {
-                    Send(@params, client);
+                    _ = Program.BotClient.Messages.Send(@params);
                 }
                 catch
                 {
                     _ = db.DeleteChat(peerID);
                 }
+
             }
         }
     }

@@ -69,7 +69,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
             foreach (long ChatID in ListOfConversations)
             {
-                Telegram.Bot.Types.Message sentMessage = await Program.botClient.SendTextMessageAsync(
+                _ = await Program.botClient.SendTextMessageAsync(
                     chatId: ChatID,
                     text: @string.Telegram + Text,
                     parseMode: ParseMode.Html

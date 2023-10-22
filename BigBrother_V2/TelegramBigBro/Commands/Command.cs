@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using VkNet.Model.RequestParams;
+using VkNet.Model;
 
 namespace BigBrother_V2.TelegramBigBro.Commands
 {
@@ -23,14 +23,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands
         /// </summary>
         /// <param name="message">Сообщение полученное из ВК</param>
         /// <param name="client">Авторизованный клиент ВК - от его имени и будет отправлен ответ</param>
-        public abstract Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken);
+        public abstract Task Execute(Telegram.Bot.Types.Message message, ITelegramBotClient botClient, CancellationToken cancellationToken);
         /// <summary>
         /// Метод проверяющий полученное сообщение на соответствие срабатывания команды
         /// </summary>
         /// <param name="message">Сообщение полученное из ВК</param>
         /// <returns>True - если в тексте найдена команда
         /// False - если в тексте не найдена команда</returns>
-        public abstract bool Contatins(Message message);
+        public abstract bool Contatins(Telegram.Bot.Types.Message message);
 
         public async Task MessageDistributionWithTelegram(string text)
         {
@@ -68,7 +68,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands
                     {
                         @params.UserIds = Users;
                         @params.RandomId = rnd.Next();
-                        _ = await Program.BotClient.Messages.SendToUserIdsAsync(@params);
+                        _ = await Program.BotClientVK.Messages.SendToUserIdsAsync(@params);
                         count = 1;
                         Users.Clear();
                     }
@@ -80,7 +80,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands
             }
             @params.UserIds = Users;
             @params.RandomId = rnd.Next();
-            _ = await Program.BotClient.Messages.SendToUserIdsAsync(@params);
+            _ = await Program.BotClientVK.Messages.SendToUserIdsAsync(@params);
             foreach (long peerID in Chats)
             {
                 @params.RandomId = rnd.Next();
@@ -88,7 +88,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands
                 @params.PeerId = peerID;
                 try
                 {
-                    _ = Program.BotClient.Messages.Send(@params);
+                    _ = Program.BotClientVK.Messages.Send(@params);
                 }
                 catch
                 {

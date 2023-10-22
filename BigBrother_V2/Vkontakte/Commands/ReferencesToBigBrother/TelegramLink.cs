@@ -1,7 +1,6 @@
 ﻿using System;
 using VkNet;
 using VkNet.Model;
-using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
@@ -15,7 +14,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();
-            VkNet.Model.Attachments.Link link = new();
+            Link link = new();
             Uri uri = new("https://t.me/BigBrother_Makara_Bot?start");
             link.Uri = uri;
             link.Title = "Мой телеграм";

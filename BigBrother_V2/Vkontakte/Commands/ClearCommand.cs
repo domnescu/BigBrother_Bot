@@ -1,6 +1,5 @@
 ﻿using VkNet;
 using VkNet.Model;
-using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands
 {
@@ -11,10 +10,9 @@ namespace BigBrother_V2.Vkontakte.Commands
     {
         public override string Name => "Тестовая команда";
 
-        private readonly MessagesSendParams @params = new();
-
         public override void Execute(Message message, VkApi client)
         {
+            MessagesSendParams @params = new();
         }
 
         public override bool Contatins(Message message)

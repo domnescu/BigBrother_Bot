@@ -14,7 +14,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Cards
         {
             _ = await botClient.SendPhotoAsync(
                 chatId: message.Chat.Id,
-                photo: "https://sun9-77.userapi.com/impg/eqLb1UHLiKRXBiVChkWOPEI9LF80x2nrYILypA/A7oSJuyslUU.jpg?size=750x1334&quality=96&sign=c852c18034668b7710bef511a57211ea&type=album",
+                photo: InputFile.FromUri("https://sun9-77.userapi.com/impg/eqLb1UHLiKRXBiVChkWOPEI9LF80x2nrYILypA/A7oSJuyslUU.jpg?size=750x1334&quality=96&sign=c852c18034668b7710bef511a57211ea&type=album"),
                 cancellationToken: cancellationToken
             );
         }

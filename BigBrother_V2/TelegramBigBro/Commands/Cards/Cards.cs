@@ -44,7 +44,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Cards
 
             _ = await botClient.SendPhotoAsync(
                 chatId: message.Chat.Id,
-                photo: PhotoID,
+                photo: InputFile.FromUri(PhotoID),
                 cancellationToken: cancellationToken
             );
         }

@@ -6,7 +6,6 @@ using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 using VkNet;
 using VkNet.Model;
-using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands
 {
@@ -40,7 +39,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         /// <param name="client">Авторизованный клиент от имени которого отправляются сообщения.</param>
         public void Send(MessagesSendParams @params, VkApi client)
         {
-            _ = client.Messages.Send(@params);
+            client.Messages.Send(@params);
         }
         /// <summary>
         /// Асинхронная отправка сообщений 100 пользователям одновременно.

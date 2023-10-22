@@ -16,7 +16,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Caffeteria
             //@params.Message = "Держи, только учти что возможны изменения.";
             _ = await botClient.SendPhotoAsync(
                 chatId: message.Chat.Id,
-                photo: "https://sun9-7.userapi.com/impg/fpR-T2LjMlbZCXNitEREZsZS-TEcevYQwE1UAA/8q0l6hsJxjc.jpg?size=1200x1600&quality=96&sign=2ea8c77cf6e9ee05460d8fada794d2dd&type=album",
+                photo: InputFile.FromUri("https://sun9-7.userapi.com/impg/fpR-T2LjMlbZCXNitEREZsZS-TEcevYQwE1UAA/8q0l6hsJxjc.jpg?size=1200x1600&quality=96&sign=2ea8c77cf6e9ee05460d8fada794d2dd&type=album"),
                 cancellationToken: cancellationToken
             );
         }

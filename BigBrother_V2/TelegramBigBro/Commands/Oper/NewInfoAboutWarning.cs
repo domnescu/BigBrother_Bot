@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using VkNet.Model.RequestParams;
+using VkNet.Model;
 
 namespace BigBrother_V2.TelegramBigBro.Commands.Oper
 {
@@ -13,7 +13,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
     {
         public override string Name => "Новая информация по оперу";
 
-        public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
+        public override async Task Execute(Telegram.Bot.Types.Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
             Database db = new();
             if (message.ForwardFrom == null)
@@ -66,7 +66,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                                     }
                                     TextForSaveInfo = LocationForSave + "\nВремя получения информации " + DateTime.Now.ToString("HH:mm");
                                     db.InfoUpdate(type, TextForSaveInfo);
-                                    Message sentMessage = await botClient.SendTextMessageAsync(
+                                    Telegram.Bot.Types.Message sentMessage = await botClient.SendTextMessageAsync(
                                         chatId: message.Chat.Id,
                                         text: "Вот что я запомнил:\n" + LocationForSave,
                                         cancellationToken: cancellationToken
@@ -84,7 +84,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                                         };
                                         try
                                         {
-                                            _ = Program.BotClient.Messages.Send(@params);
+                                            _ = Program.BotClientVK.Messages.Send(@params);
                                         }
                                         catch
                                         {
@@ -110,7 +110,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
             }
         }
 
-        public override bool Contatins(Message message)
+        public override bool Contatins(Telegram.Bot.Types.Message message)
         {
             string text = " " + message.Text.ToLower();
             Database db = new();

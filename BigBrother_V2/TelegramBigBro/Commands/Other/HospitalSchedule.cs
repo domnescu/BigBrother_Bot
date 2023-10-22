@@ -13,7 +13,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Other
         {
             _ = await botClient.SendPhotoAsync(
                 chatId: message.Chat.Id,
-                photo: "https://sun9-12.userapi.com/impg/v9lsOgH5nQMLZQCGR8yrQkXXnLkbceQ4zwFVzw/Ol8SdA21IkA.jpg?size=1920x1440&quality=96&sign=032ca8729e51bf85ddd9962970d32067&type=album",
+                photo: InputFile.FromUri("https://sun9-12.userapi.com/impg/v9lsOgH5nQMLZQCGR8yrQkXXnLkbceQ4zwFVzw/Ol8SdA21IkA.jpg?size=1920x1440&quality=96&sign=032ca8729e51bf85ddd9962970d32067&type=album"),
                 cancellationToken: cancellationToken
             );
         }

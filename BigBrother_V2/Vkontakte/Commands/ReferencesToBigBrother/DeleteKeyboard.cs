@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using VkNet;
 using VkNet.Model;
-using VkNet.Model.Keyboard;
-using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {

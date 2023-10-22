@@ -24,8 +24,6 @@ using Telegram.Bot.Types.Enums;
 using VkNet;
 using VkNet.Exception;
 using VkNet.Model;
-using VkNet.Model.GroupUpdate;
-using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2
 {
@@ -42,7 +40,7 @@ namespace BigBrother_V2
         /// <summary>
         /// Клиент бота
         /// </summary>
-        public static VkApi BotClient = new();
+        public static VkApi BotClientVK = new();
 
         /// <summary>
         /// Список всех доступных команд
@@ -58,34 +56,35 @@ namespace BigBrother_V2
             Initialize();
             Database db = new();
 
-            botClient = new TelegramBotClient(db.GetWorkingVariable("BigBroKeyTelegram"));
-            using CancellationTokenSource cts = new();
-            ReceiverOptions receiverOptions = new()
-            {
-                AllowedUpdates = { } // all update types(message, join etc.)
-            };
-            botClient.StartReceiving(HandleUpdateAsync, HandleErrorAsync, receiverOptions, cancellationToken: cts.Token);
-            Telegram.Bot.Types.User me = await botClient.GetMeAsync();
+//            botClient = new TelegramBotClient(db.GetWorkingVariable("BigBroKeyTelegram"));
+//            using CancellationTokenSource cts = new();
+//            ReceiverOptions receiverOptions = new()
+//            {
+//                AllowedUpdates = { } // all update types(message, join etc.)
+//            };
+//            botClient.StartReceiving(HandleUpdateAsync, HandleErrorAsync, receiverOptions, cancellationToken: cts.Token);
+//            Telegram.Bot.Types.User me = await botClient.GetMeAsync();
 
-            Telegram.Bot.Types.Message sentMessage = await botClient.SendTextMessageAsync(
-                chatId: 312191379,
-#if !DEBUG
-                text: "Успешный запуск на сервере"
-#else
-                text: "Успешный запуск на Компе"
-#endif
-            );
-            LongPollServerResponse BigBroLongPollServer = BotClient.Groups.GetLongPollServer(bigbroID);
+//            Telegram.Bot.Types.Message sentMessage = await botClient.SendTextMessageAsync(
+//                chatId: 312191379,
+//#if !DEBUG
+//                text: "Успешный запуск на сервере"
+//#else
+//                text: "Успешный запуск на Компе"
+//#endif
+//            );
+            LongPollServerResponse BigBroLongPollServer = BotClientVK.Groups.GetLongPollServer(bigbroID);
             while (true)
             {
                 try
                 {
-                    BotsLongPollHistoryResponse poll = BotClient.Groups.GetBotsLongPollHistory(
+                    BotsLongPollHistoryResponse poll = BotClientVK.Groups.GetBotsLongPollHistory(
                        new BotsLongPollHistoryParams()
                        {
                            Server = BigBroLongPollServer.Server,
                            Ts = BigBroLongPollServer.Ts,
                            Key = BigBroLongPollServer.Key,
+                           Wait = 25
                        });
                     if (poll.Updates == null)
                     {
@@ -97,6 +96,7 @@ namespace BigBrother_V2
                     {
                         if (update.Instance is MessageNew message)
                         {
+                            Console.WriteLine("Message recived: " + message.Message.Text);
                             //убираем упоминания бота из текста.
                             message.Message.Text = message.Message.Text.Replace("[club187905748|*bigbrother_bot] ", "");
                             message.Message.Text = message.Message.Text.Replace("[club187905748|@bigbrother_bot] ", "");
@@ -122,20 +122,20 @@ namespace BigBrother_V2
                     }
                     else
                     {
-                        BigBroLongPollServer = BotClient.Groups.GetLongPollServer(bigbroID);
+                        BigBroLongPollServer = BotClientVK.Groups.GetLongPollServer(bigbroID);
                     }
                 }
             }
-            cts.Cancel();
+            //cts.Cancel();
         }
 
         /// <summary>
         /// Асинхронная отправка сообщения на обработку, с последующим поиском пересланных сообщений
         /// </summary>
         /// <param name="message">Сообщение пользователя</param>
-        private static async void ProcessingMessageAsync(VkNet.Model.Message message)
+        private static void ProcessingMessageAsync(VkNet.Model.Message message)
         {
-            await Task.Run(() => ProcessingMessage(message));
+            ProcessingMessage(message);
             if (message.ForwardedMessages.Count != 0)
             {
                 for (int i = 0; i < message.ForwardedMessages.Count; i++)
@@ -150,11 +150,11 @@ namespace BigBrother_V2
         /// Асинхронный перебор команд
         /// </summary>
         /// <param name="message">Сообщение</param>
-        private static async void ProcessingMessage(VkNet.Model.Message message)
+        private static void ProcessingMessage(VkNet.Model.Message message)
         {
             foreach (Command command in ListOfCommands)
             {
-                await CheckCommandsAsync(command, message);
+               CheckCommandsAsync(command, message);
             }
         }
 
@@ -164,7 +164,7 @@ namespace BigBrother_V2
         /// <param name="command">Команда</param>
         /// <param name="message">Сообщение</param>
         /// <returns></returns>
-        private static Task CheckCommandsAsync(Command command, VkNet.Model.Message message)
+        private static void CheckCommandsAsync(Command command, VkNet.Model.Message message)
         {
             if (command.Contatins(message))
             {
@@ -176,11 +176,11 @@ namespace BigBrother_V2
                 {
                     try
                     {
-                        command.Execute(message, BotClient);
+                        command.Execute(message, BotClientVK);
                     }
                     catch (Exception e)
                     {
-                        BotClient.Messages.Send(new MessagesSendParams
+                        BotClientVK.Messages.Send(new MessagesSendParams
                         {
                             PeerId = 235052667,
                             RandomId = new Random().Next(),
@@ -191,8 +191,8 @@ namespace BigBrother_V2
                 }
                 else if (db.NrOfCommandsFromUser(message.FromId.Value) == 10)
                 {
-                    Vkontakte.User user = new(message.FromId.Value, BotClient);
-                    BotClient.Messages.Send(new MessagesSendParams
+                    Vkontakte.User user = new(message.FromId.Value, BotClientVK);
+                    BotClientVK.Messages.Send(new MessagesSendParams
                     {
                         RandomId = new Random().Next(),
                         PeerId = message.PeerId,
@@ -201,18 +201,17 @@ namespace BigBrother_V2
                 }
 
             }
-            return Task.CompletedTask;
         }
 
         private static async Task HandleUpdateAsync(ITelegramBotClient botClientTelegram, Update update, CancellationToken cancellationToken)
         {
-            if (update.Type == UpdateType.MyChatMember && update.MyChatMember.OldChatMember.User.Username == "@BigBrother_Makara_Bot")
+            if (update.Type == Telegram.Bot.Types.Enums.UpdateType.MyChatMember && update.MyChatMember.OldChatMember.User.Username == "@BigBrother_Makara_Bot")
             {
                 Database db = new();
                 _ = db.DeleteChat(update.MyChatMember.Chat.Id);
             }
             // Is update type message?
-            if (update.Type != UpdateType.Message)
+            if (update.Type != Telegram.Bot.Types.Enums.UpdateType.Message)
             {
                 return;
             }
@@ -251,7 +250,7 @@ namespace BigBrother_V2
         private static void Initialize()
         {
             Database db = new();
-            BotClient.Authorize(new ApiAuthParams() { AccessToken = db.GetWorkingVariable("BigBroKey") });
+            BotClientVK.Authorize(new ApiAuthParams() { AccessToken = db.GetWorkingVariable("BigBroKey") });
             EventsOn00Scheduler.Start();
             #region Инициализация команд
             #region VK Commands

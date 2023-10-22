@@ -1,7 +1,7 @@
 ﻿using VkNet;
 using VkNet.Enums.Filters;
-using VkNet.Enums.SafetyEnums;
-using VkNet.Model.RequestParams;
+using VkNet.Enums.StringEnums;
+using VkNet.Model;
 
 namespace BigBrother_V2.Vkontakte
 {
@@ -56,7 +56,7 @@ namespace BigBrother_V2.Vkontakte
                 {
                     FirstName = field.FirstName;
                     LastName = field.LastName;
-                    Sex = field.Sex;
+                    Sex = (VkNet.Enums.Sex)field.Sex;
                     Domain = field.Domain;
                     Id = userID;
                 }

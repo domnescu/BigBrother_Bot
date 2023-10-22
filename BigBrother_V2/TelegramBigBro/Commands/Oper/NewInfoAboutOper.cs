@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using VkNet.Model.RequestParams;
+using VkNet.Model;
 
 namespace BigBrother_V2.TelegramBigBro.Commands.Oper
 {
@@ -13,7 +13,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
     {
         public override string Name => "Новая информация по оперу";
 
-        public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
+        public override async Task Execute(Telegram.Bot.Types.Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
             Database db = new();
             _ = new UserTelegram(message);
@@ -68,14 +68,14 @@ namespace BigBrother_V2.TelegramBigBro.Commands.Oper
                             RandomId = new Random().Next(),
                             Message = operinfoupdate + "\nэту инфу я получил из Телеграма от @" + message.From.Username
                         };
-                        _ = Program.BotClient.Messages.Send(@params);
+                        _ = Program.BotClientVK.Messages.Send(@params);
                     }
                     return;
                 }
             }
         }
 
-        public override bool Contatins(Message message)
+        public override bool Contatins(Telegram.Bot.Types.Message message)
         {
             string text = message.Text.ToLower();
             return (((text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("ушла")

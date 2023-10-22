@@ -1,7 +1,6 @@
 ﻿using System;
 using VkNet;
 using VkNet.Model;
-using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 {
@@ -25,7 +24,6 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             @params.RandomId = new Random().Next();
             @params.Message = text;
             Send(@params, client);
-
         }
 
         public override bool Contatins(Message message)

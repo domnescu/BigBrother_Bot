@@ -33,11 +33,11 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
                 }
             }
             Response = "Сейчас на мою рассылку подписаны " + users + " людей и " + Chats + " бесед.";
-            VkNet.Model.ConversationResult chats = Program.BotClient.Messages.GetConversationsById(ChatsForNrOfUsers);
+            VkNet.Model.ConversationResult chats = Program.BotClientVK.Messages.GetConversationsById(ChatsForNrOfUsers);
 
             foreach (VkNet.Model.Conversation chat in chats.Items)
             {
-                VkNet.Model.GetConversationMembersResult UsersInChat = Program.BotClient.Messages.GetConversationMembers(chat.Peer.Id);
+                VkNet.Model.GetConversationMembersResult UsersInChat = Program.BotClientVK.Messages.GetConversationMembers(chat.Peer.Id);
                 long NrOFUsersInChat = UsersInChat.Count;
                 Response += "\n" + chat.ChatSettings.Title + ":" + NrOFUsersInChat + " участников в ВК";
             }

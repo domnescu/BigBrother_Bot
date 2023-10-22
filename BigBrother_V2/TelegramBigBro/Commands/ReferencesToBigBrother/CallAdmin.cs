@@ -2,9 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Types;
-using VkNet.Enums.SafetyEnums;
-using VkNet.Model.RequestParams;
+using VkNet.Enums.StringEnums;
+using VkNet.Model;
 
 namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
 {
@@ -12,18 +11,18 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
     {
         public override string Name => "Вызов администратора";
 
-        public override async Task Execute(Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
+        public override async Task Execute(Telegram.Bot.Types.Message message, ITelegramBotClient botClient, CancellationToken cancellationToken)
         {
             MessagesSendParams @params = new();
             UserTelegram user = new(message);
             @params.RandomId = new Random().Next();
-            VkNet.Utils.VkCollection<VkNet.Model.User> admins = Program.BotClient.Groups.GetMembers(new GroupsGetMembersParams { Filter = GroupsMemberFilters.Managers, GroupId = "187905748", });
-            foreach (VkNet.Model.User admin in admins)
+            VkNet.Utils.VkCollection<User> admins = Program.BotClientVK.Groups.GetMembers(new GroupsGetMembersParams { Filter = GroupsMemberFilters.Managers, GroupId = "187905748", });
+            foreach (User admin in admins)
             {
                 @params.Message = "Выйди пожалуйста на связь с @" + user.Domain + " в Телеграме. У него возникли какие-то проблемы (возможно он наткнулся на ошибку в моей работе)";
                 @params.PeerId = admin.Id;
                 @params.RandomId = new Random().Next();
-                _ = Program.BotClient.Messages.Send(@params);
+                _ = Program.BotClientVK.Messages.Send(@params);
             }
 
             _ = await botClient.SendTextMessageAsync(
@@ -33,7 +32,7 @@ namespace BigBrother_V2.TelegramBigBro.Commands.ReferencesToBigBrother
             );
         }
 
-        public override bool Contatins(Message message)
+        public override bool Contatins(Telegram.Bot.Types.Message message)
         {
             string text = message.Text.ToLower();
             Database db = new();

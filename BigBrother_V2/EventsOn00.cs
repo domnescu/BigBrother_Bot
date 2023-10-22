@@ -4,8 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VkNet;
-using VkNet.Model.Attachments;
-using VkNet.Model.RequestParams;
+using VkNet.Model;
 
 namespace BigBrother_V2
 {
@@ -41,7 +40,7 @@ namespace BigBrother_V2
             }
             if ((DateTime.Now.Day == 31 && DateTime.Now.Month == 12) || (DateTime.Now.Day == 01 && DateTime.Now.Month == 01))
             {
-                VkApi client = Program.BotClient;
+                VkApi client = Program.BotClientVK;
                 Database db = new();
                 MessagesSendParams @params = new();
                 Audio Track = new()

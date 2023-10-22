@@ -1,8 +1,6 @@
 ﻿using System;
 using VkNet;
 using VkNet.Model;
-using VkNet.Model.Attachments;
-using VkNet.Model.RequestParams;
 
 namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
 {

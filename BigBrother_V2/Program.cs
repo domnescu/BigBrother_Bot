@@ -56,23 +56,23 @@ namespace BigBrother_V2
             Initialize();
             Database db = new();
 
-//            botClient = new TelegramBotClient(db.GetWorkingVariable("BigBroKeyTelegram"));
-//            using CancellationTokenSource cts = new();
-//            ReceiverOptions receiverOptions = new()
-//            {
-//                AllowedUpdates = { } // all update types(message, join etc.)
-//            };
-//            botClient.StartReceiving(HandleUpdateAsync, HandleErrorAsync, receiverOptions, cancellationToken: cts.Token);
-//            Telegram.Bot.Types.User me = await botClient.GetMeAsync();
+            botClient = new TelegramBotClient(db.GetWorkingVariable("BigBroKeyTelegram"));
+            using CancellationTokenSource cts = new();
+            ReceiverOptions receiverOptions = new()
+            {
+                AllowedUpdates = { } // all update types(message, join etc.)
+            };
+            botClient.StartReceiving(HandleUpdateAsync, HandleErrorAsync, receiverOptions, cancellationToken: cts.Token);
+            Telegram.Bot.Types.User me = await botClient.GetMeAsync();
 
-//            Telegram.Bot.Types.Message sentMessage = await botClient.SendTextMessageAsync(
-//                chatId: 312191379,
-//#if !DEBUG
-//                text: "Успешный запуск на сервере"
-//#else
-//                text: "Успешный запуск на Компе"
-//#endif
-//            );
+            Telegram.Bot.Types.Message sentMessage = await botClient.SendTextMessageAsync(
+                chatId: 312191379,
+#if !DEBUG
+                text: "Успешный запуск на сервере"
+#else
+                text: "Успешный запуск на Компе"
+#endif
+            );
             LongPollServerResponse BigBroLongPollServer = BotClientVK.Groups.GetLongPollServer(bigbroID);
             while (true)
             {

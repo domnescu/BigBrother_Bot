@@ -126,16 +126,16 @@ namespace BigBrother_V2
                     }
                 }
             }
-            //cts.Cancel();
+            cts.Cancel();
         }
 
         /// <summary>
         /// Асинхронная отправка сообщения на обработку, с последующим поиском пересланных сообщений
         /// </summary>
         /// <param name="message">Сообщение пользователя</param>
-        private static void ProcessingMessageAsync(VkNet.Model.Message message)
+        private static async void ProcessingMessageAsync(VkNet.Model.Message message)
         {
-            ProcessingMessage(message);
+            await Task.Run(() => ProcessingMessage(message));
             if (message.ForwardedMessages.Count != 0)
             {
                 for (int i = 0; i < message.ForwardedMessages.Count; i++)
@@ -150,11 +150,11 @@ namespace BigBrother_V2
         /// Асинхронный перебор команд
         /// </summary>
         /// <param name="message">Сообщение</param>
-        private static void ProcessingMessage(VkNet.Model.Message message)
+        private static async void ProcessingMessage(VkNet.Model.Message message)
         {
             foreach (Command command in ListOfCommands)
             {
-               CheckCommandsAsync(command, message);
+               await CheckCommandsAsync(command, message);
             }
         }
 
@@ -164,7 +164,7 @@ namespace BigBrother_V2
         /// <param name="command">Команда</param>
         /// <param name="message">Сообщение</param>
         /// <returns></returns>
-        private static void CheckCommandsAsync(Command command, VkNet.Model.Message message)
+        private static Task CheckCommandsAsync(Command command, VkNet.Model.Message message)
         {
             if (command.Contatins(message))
             {
@@ -201,6 +201,8 @@ namespace BigBrother_V2
                 }
 
             }
+
+            return Task.CompletedTask;
         }
 
         private static async Task HandleUpdateAsync(ITelegramBotClient botClientTelegram, Update update, CancellationToken cancellationToken)

@@ -12,6 +12,7 @@ using BigBrother_V2.Vkontakte.Commands.Numbers;
 using BigBrother_V2.Vkontakte.Commands.Oper;
 using BigBrother_V2.Vkontakte.Commands.Other;
 using BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -24,6 +25,7 @@ using Telegram.Bot.Types.Enums;
 using VkNet;
 using VkNet.Exception;
 using VkNet.Model;
+using Microsoft.Extensions.Logging;
 
 namespace BigBrother_V2
 {
@@ -40,20 +42,30 @@ namespace BigBrother_V2
         /// <summary>
         /// Клиент бота
         /// </summary>
-        public static VkApi BotClientVK = new();
+        public static VkApi BotClientVK;
 
         /// <summary>
         /// Список всех доступных команд
         /// </summary>
         private static readonly List<Command> ListOfCommands = new();
 
-
         public static TelegramBotClient botClient;
         private static readonly List<CommandTelegram> CommandsTelegram = new();
 
         private static async Task Main()
         {
+            var loggerFactory = LoggerFactory.Create(builder =>
+            {
+                builder
+                .AddFilter("VkNet.VkApi", LogLevel.Trace)
+                .AddConsole();
+            });
+            ILogger<VkApi> logger = loggerFactory.CreateLogger<VkApi>();
+
+            BotClientVK = new(logger);
+
             Initialize();
+
             Database db = new();
 
             botClient = new TelegramBotClient(db.GetWorkingVariable("BigBroKeyTelegram"));

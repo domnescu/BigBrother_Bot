@@ -25,7 +25,6 @@ using Telegram.Bot.Types.Enums;
 using VkNet;
 using VkNet.Exception;
 using VkNet.Model;
-using Microsoft.Extensions.Logging;
 
 namespace BigBrother_V2
 {

@@ -44,9 +44,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Regex regex = new(@"(пиcaть\ cюдa\ \-\ vk\.cc/[\s\S]{6,6})+");
+            Regex regex = new(@"(пиcaть\ cюдa\ \-\ vk\.cc/[\s\S]{6,6})");
             MatchCollection matches = regex.Matches(text);
-            return matches.Count>=1;
+            return matches.Count>=1 && message.PeerId== 2000000014;
         }
     }
 }

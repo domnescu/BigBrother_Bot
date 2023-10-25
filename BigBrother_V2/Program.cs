@@ -25,6 +25,7 @@ using Telegram.Bot.Types.Enums;
 using VkNet;
 using VkNet.Exception;
 using VkNet.Model;
+using NLog.Extensions.Logging;
 
 namespace BigBrother_V2
 {
@@ -57,7 +58,7 @@ namespace BigBrother_V2
             {
                 builder
                 .AddFilter("VkNet.VkApi", LogLevel.Trace)
-                .AddConsole();
+                .AddNLog();
             });
             ILogger<VkApi> logger = loggerFactory.CreateLogger<VkApi>();
 

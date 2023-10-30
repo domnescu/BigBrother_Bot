@@ -18,16 +18,28 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             @params.RandomId = new Random().Next();
             if (message.FromId.Value > 0)
             {
-                @params.Message = "Администратор уведомлён. В ближайшее время он обработает ваш запрос.";
+                @params.Message = "Администраторы уведомлёны. Кто-то из администраторов свяжется с вами.";
                 @params.PeerId = message.PeerId;
                 @params.RandomId = new Random().Next();
                 Send(@params, client);
                 VkNet.Utils.VkCollection<VkNet.Model.User> admins = client.Groups.GetMembers(new GroupsGetMembersParams { Filter = GroupsMemberFilters.Managers, GroupId = "187905748", });
                 foreach (VkNet.Model.User admin in admins)
                 {
-                    @params.Message = message.PeerId.Value < 2000000000
-                        ? user.FirstName + " " + user.LastName + " нуждается в помощи. Посмотри пожалуйста сообщения сообщества и попробуй разобраться."
-                        : "Выйди пожалуйста на связь с [id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]. Этот человек, в какой-то беседе, просил вызвать администратора.";
+                     if(message.PeerId.Value < 2000000000)
+                    {
+                        @params.Message = user.FirstName + " " + user.LastName + " нуждается в помощи. Посмотри пожалуйста сообщения сообщества и попробуй разобраться.";
+                    }
+                    else
+                    {
+                        try
+                        {
+                            @params.Message = "Выйди пожалуйста на связь с [id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]. Этот человек, в какой-то беседе, просил вызвать администратора. Вот пригласительная ссылка на беседу в которой вызвали администратора " + client.Messages.GetInviteLink((ulong)message.PeerId.Value, false);
+                        }
+                        catch {
+                            @params.Message = "Выйди пожалуйста на связь с [id" + user.Id + "|" + user.FirstName + " " + user.LastName + "]. Этот человек, в какой-то беседе, просил вызвать администратора. К сожалению, не могу предоставить ссылку на беседу из которой вызвали администратора.";
+
+                        }
+                    }
                     @params.PeerId = admin.Id;
                     @params.RandomId = new Random().Next();
                     Send(@params, client);
@@ -48,7 +60,6 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         {
             string text = message.Text.ToLower();
             Database db = new();
-            //Добавить упоминания бота
             return (text.Contains("зов") || text.Contains("вызывай")) && (text.Contains("админ") || text.Contains("шефа") || text.Contains("начальника") || text.Contains("шефа")) && (message.PeerId.Value < 2000000000 || db.CheckText(text, "BotNames"));
         }
     }

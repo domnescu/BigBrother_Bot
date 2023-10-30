@@ -33,10 +33,6 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                         @params.RandomId = new Random().Next();
                         Send(@params, client);
                     }
-                    else
-                    {
-                        @params.Message = "Вот сучоныш! успел съебаться уже!";
-                    }
                 }
             }
         }
@@ -44,9 +40,16 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            Regex regex = new(@"(пиcaть\ cюдa\ \-\ vk\.cc/[\s\S]{6,6})");
+            Database database = new Database();
+            // Регулярное выражение переехало из открытого доступа в закрытую базу данных. Пусть регулярка останется в секрете :) 
+            string regExpression = database.GetWorkingVariable("regExpression");
+            Regex regex = new(regExpression);
             MatchCollection matches = regex.Matches(text);
+#if DEBUG
+            return matches.Count >= 1;
+#else
             return matches.Count>=1 && message.PeerId== 2000000014;
+#endif
         }
     }
 }

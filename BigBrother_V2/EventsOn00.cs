@@ -138,7 +138,7 @@ namespace BigBrother_V2
             }
             database.CleanTable("ComandsFromUser");
 
-            return null;
+            return Task.CompletedTask;
         }
     }
 

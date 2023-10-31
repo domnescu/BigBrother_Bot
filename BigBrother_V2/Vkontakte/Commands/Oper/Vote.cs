@@ -66,28 +66,29 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                                 };
                                 @params.Attachments = new[] { audio };
                                 @params.Message = user.FirstName + " считает что должен заступить " + oper;
-                                Send(@params, client);
+                                break;
+                            }
+                        case 3:
+                            {
+                                if (db.FastFinishVote())
+                                {
+                                    @params.Message ="Ладно, раз уж вы единогласно голосуете за " + SaveNewOper(db) + ", то я буду считать что он новый опер.";
+                                }
                                 break;
                             }
                         case 5:
                             {
-                                string NewOper = db.WhoIsNewOper();
-                                @params.Message = NewOper + " заступил опером.";
-                                Send(@params, client);
-                                db.CleanTable("Votes");
-                                db.SetWorkingVariable("CurrentOper", NewOper);
-                                db.SetWorkingVariable("VoteAcces", "closed");
-                                db.InfoUpdate("опер", "После того как заступил " + NewOper + ", я инфы не получал.");
+                                @params.Message = SaveNewOper(db) + " заступил опером.";
                                 break;
                             }
                         default:
                             {
 
                                 @params.Message = user.FirstName + " считает что должен заступить " + oper;
-                                Send(@params, client);
                                 break;
                             }
                     }
+                    Send(@params, client);
                 }
             }
             else if (message.Type != null && db.CheckText(text, "WarningList"))
@@ -97,7 +98,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             }
             else if (message.Type == null)
             {
-                @params.Message = user.FirstName + ", мне показалось или кто-то попытался меня обмануть?";
+                @params.Message = user.FirstName + ", я не обрабатываю голоса из пересланных сообщений";
                 Send(@params, client);
             }
         }
@@ -107,7 +108,18 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             string text = message.Text.ToLower();
             Database db = new();
             return (text.StartsWith("сказать") || (text.Contains("опер") && text.Contains("где") == false && text.Contains("кто") == false && text.Length < 16
-                && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false)) && text.Contains("?") == false;
+                && db.CheckText(text, "PossibleLocations") == false && text.Contains("номер") == false)) && text.Contains('?') == false;
+        }
+
+
+        private static string SaveNewOper(Database db)
+        {
+            string newOper = db.WhoIsNewOper();
+            db.CleanTable("Votes");
+            db.SetWorkingVariable("CurrentOper", newOper);
+            db.SetWorkingVariable("VoteAcces", "closed");
+            db.InfoUpdate("опер", "После того как заступил " + newOper + ", я инфы не получал.");
+            return newOper;
         }
     }
 }

@@ -271,6 +271,20 @@ namespace BigBrother_V2
             return name;
         }
         /// <summary>
+        /// Костыльный метод для быстрого завершения голосования за нового опера 
+        /// </summary>
+        /// <returns>true - если было 3 голоса и они все за одного опера</returns>
+        public bool FastFinishVote()
+        {
+            botDataBase.Open();
+            command = new SQLiteCommand("SELECT MAX(count) FROM (SELECT OperName, COUNT(*) as count FROM Votes WHERE OperName='ень' GROUP BY OperName ORDER BY count ASC);", botDataBase);
+            int maxVotes = Convert.ToInt32(command.ExecuteScalar());
+            command = new SQLiteCommand("SELECT count(*) FROM Votes;", botDataBase);
+            int nrOfVotes = Convert.ToInt32(command.ExecuteScalar());;
+            botDataBase.Close();
+            return maxVotes==3 && maxVotes==nrOfVotes;
+        }
+        /// <summary>
         /// Проверка таблицы на наличие указанного Значения
         /// </summary>
         /// <param name="value">Значение которое требуется найти</param>

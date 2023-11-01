@@ -70,9 +70,9 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                             }
                         case 3:
                             {
-                                if (db.FastFinishVote())
+                                if (db.FastFinishVote(oper))
                                 {
-                                    @params.Message ="Ладно, раз уж вы единогласно голосуете за " + SaveNewOper(db) + ", то я буду считать что он новый опер.";
+                                    @params.Message ="Ладно, раз уж вы единогласно голосуете за то что опер " + SaveNewOper(db) + ", то я буду считать что он новый опер.";
                                 }
                                 break;
                             }

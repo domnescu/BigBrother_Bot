@@ -274,10 +274,10 @@ namespace BigBrother_V2
         /// Костыльный метод для быстрого завершения голосования за нового опера 
         /// </summary>
         /// <returns>true - если было 3 голоса и они все за одного опера</returns>
-        public bool FastFinishVote()
+        public bool FastFinishVote(string operName)
         {
             botDataBase.Open();
-            command = new SQLiteCommand("SELECT MAX(count) FROM (SELECT OperName, COUNT(*) as count FROM Votes WHERE OperName='ень' GROUP BY OperName ORDER BY count ASC);", botDataBase);
+            command = new SQLiteCommand("SELECT MAX(count) FROM (SELECT OperName, COUNT(*) as count FROM Votes WHERE OperName='"+operName+"' GROUP BY OperName ORDER BY count ASC);", botDataBase);
             int maxVotes = Convert.ToInt32(command.ExecuteScalar());
             command = new SQLiteCommand("SELECT count(*) FROM Votes;", botDataBase);
             int nrOfVotes = Convert.ToInt32(command.ExecuteScalar());;

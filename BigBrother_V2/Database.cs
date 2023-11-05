@@ -556,5 +556,42 @@ namespace BigBrother_V2
             botDataBase.Close();
             return number;
         }
+        /// <summary>
+        /// Добавление идентификатора беседы в базу данных
+        /// </summary>
+        /// <param name="peer_id">Идентификатор беседы</param>
+        public void UpdateChatsList(long peer_id)
+        {
+            botDataBase.Open();
+            try
+            {
+                command = new SQLiteCommand("INSERT INTO BigBrotherChats (PeerID) VALUES (" + peer_id + ");", botDataBase);
+                _ = command.ExecuteNonQuery();
+            }
+            catch
+            {
+                botDataBase.Close();
+            }
+            botDataBase.Close();
+        }
+
+        /// <summary>
+        /// Удаление идентификатора беседы из базы данных
+        /// </summary>
+        /// <param name="peer_id">Идентификатор беседы</param>
+        public void DeleteChatFromList(long peer_id)
+        {
+            botDataBase.Open();
+            try
+            {
+                command = new SQLiteCommand("INSERT INTO BigBrotherChats (PeerID) VALUES (" + peer_id + ");", botDataBase);
+                _ = command.ExecuteNonQuery();
+            }
+            catch
+            {
+                botDataBase.Close();
+            }
+            botDataBase.Close();
+        }
     }
 }

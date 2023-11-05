@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using VkNet;
 using VkNet.Model;
 
@@ -18,8 +19,8 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             for(long i = 2000000001; i < 2000000501; i++)
                 possibleChats.Add(i);
             @params.Message = "На данный момент я нахожусь в следующих беседах: \n";
-            
 
+            Database db = new Database();
             foreach(long peer_id in possibleChats)
             {
                 try
@@ -27,9 +28,11 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     ConversationResult chats = client.Messages.GetConversationsById(new[] { peer_id });
                     GetConversationMembersResult UsersInChat = client.Messages.GetConversationMembers(peer_id);
                     @params.Message += "\npeer_id=" + peer_id + " " + chats.Items.ElementAt(0).ChatSettings.Title + ":" + UsersInChat.Count + " участников";
+                    db.UpdateChatsList(peer_id);
 
                 } catch
                 {
+                    db.DeleteChat(peer_id);
                     Console.WriteLine(@"Chat {0} not exists", peer_id);
                 }
             }

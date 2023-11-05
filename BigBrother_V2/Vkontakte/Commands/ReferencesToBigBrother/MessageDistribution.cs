@@ -77,7 +77,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
 
             //ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
             ListOfConversations = db.GetListLong("BigBrotherChats");
-            GetConversationsResult conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 199 });
+            GetConversationsResult conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 200 });
             foreach (ConversationAndLastMessage conversationAndLastMessage in conversations.Items)
             {
                 if(conversationAndLastMessage.Conversation.CanWrite.Allowed)
@@ -103,7 +103,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     {
                         @params.UserIds = Users;
                         @params.RandomId = rnd.Next();
-                        //_ = await client.Messages.SendToUserIdsAsync(@params);
+                        _ = await client.Messages.SendToUserIdsAsync(@params);
                         count = 1;
                         Users.Clear();
                     }
@@ -113,9 +113,12 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     Chats.Add(peerID);
                 }
             }
-            //@params.UserIds = Users;
-            //@params.RandomId = rnd.Next();
-            //_ = await client.Messages.SendToUserIdsAsync(@params);
+            if(Users.Count > 0)
+            {
+                @params.UserIds = Users;
+                @params.RandomId = rnd.Next();
+                _ = await client.Messages.SendToUserIdsAsync(@params);
+            }
             foreach (long peerID in Chats)
             {
                 @params.RandomId = rnd.Next();
@@ -127,7 +130,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             @params.PeerId = message.PeerId.Value;
             @params.Attachments = null;
             @params.RandomId = rnd.Next();
-            @params.Message = "Я отправил, всем кто подписаны на мою инфу.";
+            @params.Message = "Готово, твоё сообщение получили последние 200 человек которые использовали мои команды в ЛС а также все беседы в которых я присутствую.";
             Send(@params, client);
         }
 

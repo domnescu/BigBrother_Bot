@@ -21,7 +21,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                 
                 try
                 {
-                    _ = long.TryParse(message.Text.Substring(16,26), out long peerID);
+                    _ = long.TryParse(message.Text.Substring(16,10), out long peerID);
                     @params.PeerId = peerID;
                     @params.Message = message.Text.Substring(26);
                     @params.RandomId = new Random().Next();
@@ -30,7 +30,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                 }
                 catch
                 {
-                    @params.Message = "Я не могу получить пригласительную ссылку в беседу с указанным идентификатором";
+                    @params.Message = "При попытке отправить сообщение в указанную беседу возникла ошибка";
                 }
             }
             else

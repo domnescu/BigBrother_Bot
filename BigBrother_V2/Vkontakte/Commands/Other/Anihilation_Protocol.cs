@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using VkNet;
 using VkNet.Model;
 
 namespace BigBrother_V2.Vkontakte.Commands.Other
 {
-    /// <summary>
-    /// Данная функция не входит в релизную версию, она используется исключительно для тестирования функций
-    /// </summary>
     internal class Anihilation_Protocol : Command
     {
         public override string Name => "Протокол уничтожения беседы";
@@ -20,10 +18,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
             if (user.IsAdmin && message.Type != null)
             {
                 @params.PeerId = message.PeerId.Value;
-                @params.Message = "‼ ☑ Протокол анигиляции успешно запущен. ‼ ВНИМАНИЕ во время работы протокола анигиляции могут наблюдаться перебои в работе или увеличение времени ответа на запросы.‼";
+                @params.Message = "‼ ☑ Протокол анигиляции успешно запущен. ‼ ВНИМАНИЕ во время работы протокола анигиляции могут наблюдаться перебои в работе или увеличение времени ответа на запросы‼";
                 @params.RandomId = new Random().Next();
                 Send(@params, client);
-                _ = long.TryParse(db.GetWorkingVariable("PeerForAnihilation"), out long AnihilationPeerID);
+                _ = long.TryParse(Regex.Replace(message.Text, @"[^\d]+", ""), out long AnihilationPeerID);
                 GetConversationMembersResult UsersInChat = client.Messages.GetConversationMembers(AnihilationPeerID);
                 for (int i = 0; i < UsersInChat.Count; i++)
                 {
@@ -48,8 +46,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 Send(@params, client);
 
                 @params.PeerId = AnihilationPeerID;
-                @params.Message = "Ввиду того что вы заебали всех, мой администратор запустил протокол анигиляции для данной беседы. Чёт не нравится ? Пошёл нахуй! Вас никто не просил добавлять сюда данного бота. " +
-     "Т.к. администраторы заебались кидать в ЧС всяких пиздюков из этой беседы, было решено уничтожить вашу беседу. Это не займёт много времени, не волнуйтесь 😈";
+                @params.Message = "Этот бот писался не для того чтобы всякие долбоёбы добавляли его в левые беседы. Я буду уничтожать любую беседу не связанную с Макарой - чтобы до вас блять дошло что этот бот не для вас.";
                 @params.RandomId = new Random().Next();
                 Send(@params, client);
                 @params.PeerId = message.PeerId.Value;
@@ -69,7 +66,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 @params.Message = "✅Третий этап протокола анигиляции успешно выполнен. Кикнуты " + cKick.ToString() + " человек, в беседе остались " + (UsersInChat.Count - cKick).ToString() + " человек которые у меня по каким-то причинам не получилось кикнуть.";
                 @params.RandomId = new Random().Next();
                 Send(@params, client);
-                @params.Message = "✅Протокол анигиляции успешно завершился.";
+                @params.Message = "✅Протокол аннигиляции успешно завершился.";
                 @params.RandomId = new Random().Next();
                 Send(@params, client);
             }
@@ -88,7 +85,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
         public override bool Contatins(Message message)
         {
             string text = message.Text.ToLower();
-            return text.Contains("протокол") && text.Contains("анигиляция");
+            return text.Contains("протокол") && text.Contains("аннигиляция") && Regex.Replace(message.Text, @"[^\d]+", "").Length == 10;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 using VkNet;
+using VkNet.Enums.StringEnums;
 using VkNet.Model;
 
 namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
@@ -74,7 +75,16 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                 );
             }
 
-            ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
+            //ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='VK'");
+            ListOfConversations = db.GetListLong("BigBrotherChats");
+            GetConversationsResult conversations = client.Messages.GetConversations(new GetConversationsParams { Count = 199 });
+            foreach (ConversationAndLastMessage conversationAndLastMessage in conversations.Items)
+            {
+                if(conversationAndLastMessage.Conversation.CanWrite.Allowed)
+                {
+                    ListOfConversations.Add(conversationAndLastMessage.Conversation.Peer.Id);
+                }
+            }
             @params.DisableMentions = true;
             foreach (Attachment a in message.Attachments)
             {
@@ -93,7 +103,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     {
                         @params.UserIds = Users;
                         @params.RandomId = rnd.Next();
-                        _ = await client.Messages.SendToUserIdsAsync(@params);
+                        //_ = await client.Messages.SendToUserIdsAsync(@params);
                         count = 1;
                         Users.Clear();
                     }
@@ -103,9 +113,9 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
                     Chats.Add(peerID);
                 }
             }
-            @params.UserIds = Users;
-            @params.RandomId = rnd.Next();
-            _ = await client.Messages.SendToUserIdsAsync(@params);
+            //@params.UserIds = Users;
+            //@params.RandomId = rnd.Next();
+            //_ = await client.Messages.SendToUserIdsAsync(@params);
             foreach (long peerID in Chats)
             {
                 @params.RandomId = rnd.Next();

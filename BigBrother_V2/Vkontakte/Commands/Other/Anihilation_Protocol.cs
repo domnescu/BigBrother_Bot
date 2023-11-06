@@ -23,10 +23,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 Send(@params, client);
                 _ = long.TryParse(Regex.Replace(message.Text, @"[^\d]+", ""), out long AnihilationPeerID);
                 GetConversationMembersResult UsersInChat = client.Messages.GetConversationMembers(AnihilationPeerID);
-                for (int i = 0; i < UsersInChat.Count; i++)
-                {
-                    db.SaveFuckingChat(UsersInChat.Profiles[i].Id, UsersInChat.Items[i].IsAdmin);
-                }
+
                 @params.Message = "✅Первый этап заверщён. Список всех участников беседы успешно выгружен в мою базу данных.";
                 @params.RandomId = new Random().Next();
                 Send(@params, client);

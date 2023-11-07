@@ -34,11 +34,7 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
             }
             List<long> ListOfConversations = db.GetListLong("Chats", condition: "WHERE Platform='Telegram'");
 
-            StringForLink @string = new()
-            {
-                VK = "[id" + user.Id + "|" + user.FirstNameGen + " " + user.LastNameGen + "]",
-                Telegram = "<a href=\"https://vk.com/" + user.Domain + "\">" + user.FirstNameGen + " " + user.LastNameGen + "</a>"
-            };
+            StringForLink @string = new();
 
             @params.Message += @string.VK;
             ListOfConversations.Clear();

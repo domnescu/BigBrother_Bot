@@ -35,8 +35,13 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             string warningType;
             string operinfoupdate;
             warningType = text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("Вернулся")
-                ? db.GetWorkingVariable("CurrentOper")
+                ? "опер"
                 : "проверка";
+            string lastLocation = db.GetString("WarningList", "Type", warningType, 2);
+            if (warningType == "опер")
+            {
+                warningType = db.GetWorkingVariable("CurrentOper");
+            }
 
             for (int i = 0; i < PossibleLocations.Count; i++)
             {
@@ -50,10 +55,10 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                     else if (PossibleLocations[i] is "ушёл" or "ушел" or "ушли" or
                         "ушла" or "вышел" or "вышли" or "вышла")
                     {
-                        operinfoupdate = warningType + " " + PossibleLocations[i] + " из ";
-                        for (int k = i + 1; k < PossibleLocations.Count; k++)
+                        for (int k = 0; k < PossibleLocations.Count; k++)
                         {
-                            if (text.Contains(PossibleLocations[k])
+                            operinfoupdate = warningType + " " + PossibleLocations[i] + " из ";
+                            if (lastLocation.Contains(PossibleLocations[k])
                                 && PossibleLocations[k] != PossibleLocations[i])
                             {
                                 operinfoupdate += PossibleLocations[k];
@@ -61,7 +66,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                             }
                             if (k == PossibleLocations.Count - 1)
                             {
-                                operinfoupdate = warningType + " находится в состоянии суперпозиции!!";
+                                operinfoupdate = warningType + " находится непонятно где!";
                             }
                         }
                     }

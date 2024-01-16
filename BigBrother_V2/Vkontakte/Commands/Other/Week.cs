@@ -38,7 +38,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 int week = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(myDateTime, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
                 string IsEven;
                 string IsNotEven;
-                if (week % 2 == 1)
+                if (week % 2 == 0)
                 {
                     IsNotEven = "нечётная";
                     IsEven = "чётная";

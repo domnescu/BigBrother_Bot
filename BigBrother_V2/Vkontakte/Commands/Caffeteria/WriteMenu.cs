@@ -75,11 +75,21 @@ namespace BigBrother_V2.Vkontakte.Commands.Caffeteria
             }
             else
             {
-                @params.Message = Regex.Match(text, @"^.*[^A-zА-яЁё].*$").Success
-                    ? db.RandomResponse("AltSymbols")
-                    : db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2")
-                                    ? db.RandomResponse("CaffeteriaAltFilter")
-                                    : db.RandomResponse("NotEat");
+                if (Regex.Match(text, @"^.*[^A-zА-яЁё].*$").Success)
+                {
+                    @params.Message = db.RandomResponse("AltSymbols");
+                }
+                else
+                {
+                    if (db.CheckText(message.Text.ToLower(), "CaffetetiaFilter2"))
+                    {
+                        @params.Message = db.RandomResponse("CaffeteriaAltFilter");
+                    }
+                    else
+                    {
+                        @params.Message = db.RandomResponse("NotEat");
+                    }
+                }
             }
 
             @params.PeerId = message.PeerId.Value;

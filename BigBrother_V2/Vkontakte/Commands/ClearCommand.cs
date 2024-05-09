@@ -1,4 +1,5 @@
-﻿using VkNet;
+﻿using System;
+using VkNet;
 using VkNet.Model;
 
 namespace BigBrother_V2.Vkontakte.Commands
@@ -13,6 +14,9 @@ namespace BigBrother_V2.Vkontakte.Commands
         public override void Execute(Message message, VkApi client)
         {
             MessagesSendParams @params = new();
+
+            GetConversationMembersResult UsersInChat = client.Messages.GetConversationMembers(message.PeerId.Value);
+            Console.ReadLine();
         }
 
         public override bool Contatins(Message message)

@@ -370,6 +370,8 @@ namespace BigBrother_V2
             ListOfCommands.Add(new GetInviteLinkToChat());
             ListOfCommands.Add(new SendMessageToPeerID());
             ListOfCommands.Add(new LeaveChat());
+            ListOfCommands.Add(new CleanChat());
+            ListOfCommands.Add(new Clean_Group());
             #endregion
             #region Telegram Commands
 #if DEBUG

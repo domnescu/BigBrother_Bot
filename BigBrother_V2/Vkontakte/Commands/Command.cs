@@ -39,6 +39,7 @@ namespace BigBrother_V2.Vkontakte.Commands
         /// <param name="client">Авторизованный клиент от имени которого отправляются сообщения.</param>
         public void Send(MessagesSendParams @params, VkApi client)
         {
+            @params.RandomId = new Random().Next();
             client.Messages.Send(@params);
         }
         /// <summary>

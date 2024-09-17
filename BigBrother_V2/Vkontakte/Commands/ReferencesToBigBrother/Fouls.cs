@@ -13,9 +13,16 @@ namespace BigBrother_V2.Vkontakte.Commands.ReferencesToBigBrother
         public override void Execute(Message message, VkApi client)
         {
             Database db = new();
+            User user = new User(message.FromId.Value, client);
             @params.PeerId = message.PeerId;
             @params.RandomId = new Random().Next();
-            @params.Message = db.RandomResponse("AnswerOnFoul");
+            if(user.IsAdmin)
+            {
+                @params.Message = db.RandomResponse("AnswerOnAdminFoul");
+            } else
+            {
+                @params.Message = db.RandomResponse("AnswerOnFoul");
+            }
             Send(@params, client);
         }
 

@@ -57,7 +57,7 @@ namespace BigBrother_V2.Vkontakte
                     FirstName = field.FirstName;
                     LastName = field.LastName;
                     Sex = (VkNet.Enums.Sex)field.Sex;
-                    Domain = field.Domain;
+                    Domain = "[id"+userID +"|@" + field.Domain+"]";
                     Id = userID;
                 }
 

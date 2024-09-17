@@ -66,8 +66,8 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                                         LocationForSave = WarningType + " " + Locations[i] + " из ";
                                         for (int j = i + 1; j < Locations.Count; j++)
                                         {
-                                            if ((text.Contains(Locations[j]) || (message.Payload != null && message.Payload.Contains(Locations[j])))
-                                                && Locations[i] != Locations[j])
+                                            if(((text.Contains(Locations[j]) || (message.Payload != null && message.Payload.Contains(Locations[j])))
+                                                && Locations[i] != Locations[j])&& db.GetString("PossibleLocations", "Location", Locations[j], 3) == "yes")
                                             {
                                                 LocationForSave += Locations[j];
                                                 break;
@@ -78,7 +78,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                                             }
                                         }
                                     }
-                                    TextForSaveInfo = LocationForSave + "\nВремя получения информации " + DateTime.Now.ToString("HH:mm");
+                                    TextForSaveInfo = LocationForSave + "\nВремя получения информации " + DateTime.Now.ToString("HH:mm") + "\nИнформация получена от: "+ user.Domain;
                                     db.InfoUpdate(type, TextForSaveInfo);
                                     db.SetWorkingVariable("PeerForAnihilation", message.PeerId.Value.ToString());
                                     @params.UserIds = null;

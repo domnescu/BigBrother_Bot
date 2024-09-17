@@ -52,14 +52,13 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                     {
                         operinfoupdate = "По последней информации, " + warningType + " пошёл к себе";
                     }
-                    else if (PossibleLocations[i] is "ушёл" or "ушел" or "ушли" or
-                        "ушла" or "вышел" or "вышли" or "вышла")
+                    else if (PossibleLocations[i] is "ушёл" or "ушел" or "ушли" or "ушла" or "вышел" or "вышли" or "вышла" or "к себе")
                     {
                         for (int k = 0; k < PossibleLocations.Count; k++)
                         {
                             operinfoupdate = warningType + " " + PossibleLocations[i] + " из ";
-                            if (lastLocation.Contains(PossibleLocations[k])
-                                && PossibleLocations[k] != PossibleLocations[i])
+                            if ((lastLocation.Contains(PossibleLocations[k])
+                                && PossibleLocations[k] != PossibleLocations[i])&& db.GetString("PossibleLocations", "Location", PossibleLocations[k],3) == "yes")
                             {
                                 operinfoupdate += PossibleLocations[k];
                                 break;

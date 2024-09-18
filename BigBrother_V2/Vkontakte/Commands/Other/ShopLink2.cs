@@ -12,7 +12,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
 
         public override void Execute(Message message, VkApi client)
         {
-            @params.Message = "Пожалуйста\nhttps://vk.me/join/AJQ1d5A_1grjDZ0ArYPhk0rr";
+            @params.Message = "Пожалуйста\nhttps://vk.me/join/PodtGJHTlJ2YO2dgjMALfLsuPP92GcvTrFc=";
             @params.PeerId = message.PeerId.Value;
             @params.RandomId = new Random().Next();
             Send(@params, client);

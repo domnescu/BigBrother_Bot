@@ -42,7 +42,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Other
                 else
                 {
                     _ = client.Messages.Delete(conversationMessageIds: new[] { (ulong)message.ConversationMessageId }, (ulong)message.PeerId.Value, deleteForAll: true);
-                    @params.Message = user.FirstName + ", для таких сообщений, есть отдельаня беседа. Если попробуешь ещё раз отправить что-то подобное, я тебя кикну.\n https://vk.me/join/AJQ1d5A_1grjDZ0ArYPhk0rr";
+                    @params.Message = user.FirstName + ", для таких сообщений, есть отдельаня беседа. Если попробуешь ещё раз отправить что-то подобное, я тебя кикну.\n https://vk.me/join/PodtGJHTlJ2YO2dgjMALfLsuPP92GcvTrFc=";
                 }
             }
             else if (message.PeerId.Value < 2000000000)

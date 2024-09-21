@@ -57,7 +57,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                         for (int k = 0; k < PossibleLocations.Count; k++)
                         {
                             operinfoupdate = warningType + " " + PossibleLocations[i] + " из ";
-                            if (((text.Contains(PossibleLocations[k]) || lastLocation.Contains(PossibleLocations[k])
+                            if (((text.Contains(PossibleLocations[k]) || lastLocation.Contains(PossibleLocations[k]))
                                 && PossibleLocations[k] != PossibleLocations[i])&& db.GetString("PossibleLocations", "Location", PossibleLocations[k],3) == "yes")
                             {
                                 operinfoupdate += PossibleLocations[k];

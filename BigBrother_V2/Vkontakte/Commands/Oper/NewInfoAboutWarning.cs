@@ -71,6 +71,12 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                                             {
                                                 LocationForSave += Locations[j];
                                                 break;
+                                            } else if (db.GetString("PossibleLocations", "Location", Locations[j], 3) == "no")
+                                            {
+                                                @params.PeerId = message.PeerId.Value;
+                                                @params.RandomId = new Random().Next();
+                                                @params.Message = "Да ну нахуй! Я этот бред обрабатывать не буду.";
+                                                Send(@params, client);
                                             }
                                             if (j == Locations.Count - 1)
                                             {

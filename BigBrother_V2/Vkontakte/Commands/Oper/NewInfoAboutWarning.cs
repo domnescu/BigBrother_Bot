@@ -64,27 +64,32 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                                         or "ушла" or "вышел" or "вышли" or "вышла")
                                     {
                                         LocationForSave = WarningType + " " + Locations[i] + " из ";
+                                        // Содержит только значения yes/no
+                                        string possibleLocationJ;
                                         for (int j = i + 1; j < Locations.Count; j++)
                                         {
-                                            if(((text.Contains(Locations[j]) || (message.Payload != null && message.Payload.Contains(Locations[j])))
-                                                && Locations[i] != Locations[j])&& db.GetString("PossibleLocations", "Location", Locations[j], 3) == "yes")
+                                            possibleLocationJ = db.GetString("PossibleLocations", "Location", Locations[j], 3);
+                                            if (((text.Contains(Locations[j]) || (message.Payload != null && message.Payload.Contains(Locations[j])))
+                                                && Locations[i] != Locations[j]) && possibleLocationJ == "yes")
                                             {
                                                 LocationForSave += Locations[j];
                                                 break;
-                                            } else if (db.GetString("PossibleLocations", "Location", Locations[j], 3) == "no")
+                                            }
+                                            else if (possibleLocationJ == "no" && Locations[i] != Locations[j] && text.Contains(Locations[j]))
                                             {
                                                 @params.PeerId = message.PeerId.Value;
                                                 @params.RandomId = new Random().Next();
                                                 @params.Message = "Да ну нахуй! Я этот бред обрабатывать не буду.";
                                                 Send(@params, client);
+                                                break;
                                             }
-                                            if (j == Locations.Count - 1)
+                                            else if (j == Locations.Count - 1)
                                             {
                                                 LocationForSave = WarningType + " находится в состоянии суперпозиции!!";
                                             }
                                         }
                                     }
-                                    TextForSaveInfo = LocationForSave + "\nВремя получения информации " + DateTime.Now.ToString("HH:mm") + "\nИнформация получена от: "+ user.Domain;
+                                    TextForSaveInfo = LocationForSave + "\nВремя получения информации " + DateTime.Now.ToString("HH:mm") + "\nИнформация получена от: " + user.Domain;
                                     db.InfoUpdate(type, TextForSaveInfo);
                                     db.SetWorkingVariable("PeerForAnihilation", message.PeerId.Value.ToString());
                                     @params.UserIds = null;

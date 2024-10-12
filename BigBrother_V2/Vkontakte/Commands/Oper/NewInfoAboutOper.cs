@@ -34,7 +34,7 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
             string text = message.Text.ToLower();
             string warningType;
             string operinfoupdate;
-            warningType = text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("Вернулся")
+            warningType = text.StartsWith("вышел") || text.StartsWith("ушёл") || text.StartsWith("ушел") || text.StartsWith("вернулся")
                 ? "опер"
                 : "проверка";
             string lastLocation = db.GetString("WarningList", "Type", warningType, 2);
@@ -53,16 +53,27 @@ namespace BigBrother_V2.Vkontakte.Commands.Oper
                         operinfoupdate = "По последней информации, " + warningType + " пошёл к себе";
                     }
                     else if (PossibleLocations[i] is "ушёл" or "ушел" or "ушли" or "ушла" or "вышел" or "вышли" or "вышла" or "к себе")
-                    {
+                    {                                        // Содержит только значения yes/no
+                        string possibleLocationK;
                         for (int k = 0; k < PossibleLocations.Count; k++)
                         {
+                            possibleLocationK = db.GetString("PossibleLocations", "Location", PossibleLocations[k], 3);
                             operinfoupdate = warningType + " " + PossibleLocations[i] + " из ";
                             if (((text.Contains(PossibleLocations[k]) || lastLocation.Contains(PossibleLocations[k]))
-                                && PossibleLocations[k] != PossibleLocations[i])&& db.GetString("PossibleLocations", "Location", PossibleLocations[k],3) == "yes")
+                                && PossibleLocations[k] != PossibleLocations[i]) && possibleLocationK == "yes")
                             {
                                 operinfoupdate += PossibleLocations[k];
                                 break;
                             }
+                            else if (possibleLocationK == "no" && PossibleLocations[i] != PossibleLocations[k] && text.Contains(PossibleLocations[k]))
+                            {
+                                @params.PeerId = message.PeerId.Value;
+                                @params.RandomId = new Random().Next();
+                                @params.Message = "Да ну нахуй! Я этот бред обрабатывать не буду.";
+                                Send(@params, client);
+                                break;
+                            }
+                            else
                             if (k == PossibleLocations.Count - 1)
                             {
                                 operinfoupdate = warningType + " находится непонятно где!";

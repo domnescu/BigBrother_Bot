@@ -5,11 +5,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using VkNet;
 using VkNet.Model;
+using Flurl;
+using BigBrother_V2.ApiCloud;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace BigBrother_V2
 {
     internal class EventsOn00 : IJob
     {
+        Database database = new();
+        VkApi client = Program.BotClientVK;
         /// <summary>
         /// Действия в 00 Минут каждого часа
         /// </summary>
@@ -17,7 +23,7 @@ namespace BigBrother_V2
         /// <returns></returns>
         public Task Execute(IJobExecutionContext context)
         {
-            Database database = new();
+            MessagesSendParams @params = new();
             if (DateTime.Now.Hour == 00)
             {
                 database.CleanTable("Votes");
@@ -40,9 +46,6 @@ namespace BigBrother_V2
             }
             if ((DateTime.Now.Day == 31 && DateTime.Now.Month == 12) || (DateTime.Now.Day == 01 && DateTime.Now.Month == 01))
             {
-                VkApi client = Program.BotClientVK;
-                Database db = new();
-                MessagesSendParams @params = new();
                 Audio Track = new()
                 {
                     OwnerId = -187905748
@@ -123,7 +126,7 @@ namespace BigBrother_V2
                     Track.Id = 456239023;
                 }
 
-                List<long> Chats = db.GetListLong("MainMakara");
+                List<long> Chats = database.GetListLong("MainMakara");
                 foreach (long chat in Chats)
                 {
                     if (Track.Id != null)
@@ -137,8 +140,68 @@ namespace BigBrother_V2
                 }
             }
             database.CleanTable("ComandsFromUser");
+            CloudApiResponse cloudApiResponse = GetCloudApiResponseAsync().Result;
+            if(cloudApiResponse != null)
+            {
+                if(cloudApiResponse.balance_data.hours_left == 120)
+                {
+                    @params.Message = database.RandomResponse("120Hours");
+                } else if (cloudApiResponse.balance_data.hours_left == 48)
+                {
+                    @params.Message = database.RandomResponse("48Hours");
+                }
+                if (cloudApiResponse.balance_data.hours_left == 24)
+                {
+                    @params.Message = database.RandomResponse("24Hours");
+                }
+                if (cloudApiResponse.balance_data.hours_left == 10)
+                {
+                    @params.Message = database.RandomResponse("10Hours");
+                }
+                if (cloudApiResponse.balance_data.hours_left == 5)
+                {
+                    @params.Message = database.RandomResponse("5Hours");
+                }
+                if (cloudApiResponse.balance_data.hours_left == 4)
+                {
+                    @params.Message = database.RandomResponse("4Hours");
+                }
+                if (cloudApiResponse.balance_data.hours_left == 3)
+                {
+                    @params.Message = database.RandomResponse("3Hours");
+                }
+                if (cloudApiResponse.balance_data.hours_left == 2)
+                {
+                    @params.Message = database.RandomResponse("2Hours");
+                }
+                if (cloudApiResponse.balance_data.hours_left == 1)
+                {
+                    @params.Message = database.RandomResponse("1Hours");
+                }
+
+                if(@params.Message!= null)
+                {
+                    List<long> Chats = database.GetListLong("MainMakara");
+                    foreach (long chat in Chats)
+                    {
+                        @params.RandomId = new Random().Next();
+                        @params.PeerId = chat;
+                        _ = client.Messages.Send(@params);
+                    }
+                }
+
+            }
 
             return Task.CompletedTask;
+        }
+
+        async Task<CloudApiResponse> GetCloudApiResponseAsync()
+        {
+            HttpClient httpClient = new();
+            Uri uri = new Uri("https://api.cloudvps.reg.ru/v1/balance_data");
+            httpClient.DefaultRequestHeaders.Add("Authorization", database.GetWorkingVariable("CloudApiKey"));
+            string strResponse = await httpClient.GetStringAsync(uri);
+            return JsonSerializer.Deserialize<CloudApiResponse>(strResponse);
         }
     }
 
